@@ -41,30 +41,46 @@ class Estitofo_List_Table extends WP_List_Table {
     }
 
     protected function column_default($item, $column_name) {
+        $value = '';
         switch ($column_name) {
             case 'id':
-                return absint($item->id);
+                $value = absint($item->id);
+                break;
             case 'name':
                 $extra = '';
                 if (!empty($item->company)) {
                     $extra = '<br><small style="color:#646970;">' . esc_html($item->company) . '</small>';
                 }
-                return '<strong>' . esc_html($item->name) . '</strong>' . $extra;
+                $value = '<strong>' . esc_html($item->name) . '</strong>' . $extra;
+                break;
             case 'contact':
                 $email = esc_html($item->email);
                 $phone = esc_html($item->phone);
-                return '<a href="mailto:' . esc_attr($item->email) . '">' . $email . '</a><br><span>' . $phone . '</span>';
+                $value = '<a href="mailto:' . esc_attr($item->email) . '">' . $email . '</a><br><span>' . $phone . '</span>';
+                break;
             case 'total':
-                return wp_kses_post(wc_price($item->total));
+                $value = wp_kses_post(wc_price($item->total));
+                break;
             case 'flow':
-                return $this->status_select($item);
+                $value = $this->status_select($item);
+                break;
             case 'date':
-                return esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($item->created_at)));
+                $value = esc_html(date_i18n(get_option('date_format') . ' ' . get_option('time_format'), strtotime($item->created_at)));
+                break;
             case 'actions':
-                return $this->row_actions_html($item);
-            default:
-                return '';
+                $value = $this->row_actions_html($item);
+                break;
         }
+        /**
+         * Filter the rendered HTML for a single column cell. Add-ons hook
+         * this to fill in the cells of columns they registered via the
+         * `estitofo_list_columns` filter.
+         *
+         * @param string $value      Default cell HTML (empty for unknown columns).
+         * @param string $column_name
+         * @param object $item       Submission row.
+         */
+        return apply_filters('estitofo_list_column_value', $value, $column_name, $item);
     }
 
     private function status_select($item) {

@@ -265,10 +265,9 @@ class Estitofo_Settings {
                             do_action('estitofo_settings_tab_' . $current_tab);
                             break;
                     }
-                    if (in_array($current_tab, $core_tabs, true)) {
-                        // Hook for add-ons to append fields below the core ones.
-                        do_action('estitofo_settings_tab_' . $current_tab . '_extra');
-                    }
+                    // Hook for add-ons to append extra fields after any tab — fires
+                    // for ALL tabs (core ones + add-on ones like "pro" / "license").
+                    do_action('estitofo_settings_tab_' . $current_tab . '_extra');
                     ?>
 
                     <?php submit_button(); ?>

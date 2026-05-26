@@ -3,7 +3,7 @@
  * Plugin Name: Estimation Tool for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.16.1
+ * Version: 3.16.2
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -24,7 +24,7 @@ if (!class_exists('Estitofo_Plugin')) {
 
     final class Estitofo_Plugin {
 
-        const VERSION = '3.16.1';
+        const VERSION = '3.16.2';
         const DB_VERSION = '1.2';
         const TEXT_DOMAIN = 'estimation-tool-for-woocommerce';
         const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -303,6 +303,56 @@ if (!class_exists('Estitofo_Plugin')) {
                 wp_die(esc_html__('PDF generation failed.', 'estimation-tool-for-woocommerce'), '', array('response' => 500));
             }
             exit;
+        }
+
+        /**
+         * Read structured "extra meta" attached to a submission. Pro and
+         * other add-ons use this to store per-submission data
+         * (expiration dates, conditional-field answers, Stripe deposit
+         * receipts, etc.) without polluting the customer-facing
+         * `customer_notes` field or admin-facing `admin_notes` field.
+         *
+         * Stored as a single JSON object in the wp_options table at
+         * `estitofo_meta_{submission_id}`.
+         *
+         * @param int    $submission_id
+         * @param string $key      Optional sub-key.
+         * @param mixed  $default
+         * @return mixed
+         */
+        public static function get_submission_meta($submission_id, $key = '', $default = null) {
+            $id = absint($submission_id);
+            if ($id <= 0) return $default;
+            $blob = get_option('estitofo_meta_' . $id, array());
+            if (!is_array($blob)) $blob = array();
+            if ($key === '') return $blob;
+            return array_key_exists($key, $blob) ? $blob[$key] : $default;
+        }
+
+        /**
+         * Update / merge structured meta into a submission record.
+         *
+         * @param int   $submission_id
+         * @param array $values  Key/value pairs to merge.
+         * @return bool
+         */
+        public static function update_submission_meta($submission_id, array $values) {
+            $id = absint($submission_id);
+            if ($id <= 0) return false;
+            $blob = get_option('estitofo_meta_' . $id, array());
+            if (!is_array($blob)) $blob = array();
+            $blob = array_merge($blob, $values);
+            return update_option('estitofo_meta_' . $id, $blob, false);
+        }
+
+        /**
+         * Delete the entire meta blob for a submission (called from
+         * uninstall.php and from row deletes).
+         */
+        public static function delete_submission_meta($submission_id) {
+            $id = absint($submission_id);
+            if ($id <= 0) return false;
+            return delete_option('estitofo_meta_' . $id);
         }
 
         public function plugin_action_links($links) {

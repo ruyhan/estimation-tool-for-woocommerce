@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 5.6
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.16.1
+Stable tag: 3.16.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,9 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.2 =
+* Settings page layout cleanup: the form is now rendered as a single unified card. Previously, tabs with multiple stacked `form-table` blocks (especially Pro Features) showed inconsistent padding, asymmetric borders, and section headings floating between cards. Section `<h2>` headings inside the form are now styled as proper section dividers, row spacing is even across all tabs, and the submit-button row integrates with the card via a hairline rule.
 
 = 3.16.1 =
 * Added an honest "Premium add-on" section to the readme description listing what the optional Pro add-on adds on top of the free plugin (WC order conversion, file uploads, reCAPTCHA, analytics, more PDF templates). Free plugin remains 100% fully functional on its own.

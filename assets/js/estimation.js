@@ -969,10 +969,25 @@ jQuery(function ($) {
                 website: ''
             };
 
-            // Pass through any Pro add-on hidden fields (recaptcha token, file uploads, etc.)
-            this.$form.find('input[type=hidden], select').each(function () {
+            // Pass through any add-on fields (Pro: conditional fields, file uploads,
+            // recaptcha, deposit info, etc.). Excludes the core fields we've
+            // already built into the payload above, and skips submit/button inputs.
+            this.$form.find('input, select, textarea').each(function () {
                 var name = this.name;
                 if (!name || payload.hasOwnProperty(name)) return;
+                var type = (this.type || '').toLowerCase();
+                if (type === 'submit' || type === 'button' || type === 'reset' || type === 'file') return;
+                if (type === 'checkbox' || type === 'radio') {
+                    if (this.checked) {
+                        // For checkbox groups (name[]) collect all values; for radios just take the checked one.
+                        if (/\[\]$/.test(name) && payload.hasOwnProperty(name)) {
+                            payload[name] = [].concat(payload[name], $(this).val());
+                        } else {
+                            payload[name] = $(this).val();
+                        }
+                    }
+                    return;
+                }
                 payload[name] = $(this).val();
             });
 

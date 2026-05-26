@@ -92,27 +92,72 @@
     border-bottom-color: #fff;
 }
 
-/* Settings form panel */
-.wc-estimation-settings form .form-table {
+/* ----------------------------------------------------------------
+   Settings form panel (unified card).
+   The outer <form> is the card. Inside it, multiple `form-table`
+   blocks + `<h2>` section headings flow as one cohesive page —
+   no per-table borders, shadows, or padding seams. This matters
+   for tabs like "Pro Features" that emit ~10 stacked form-tables.
+   ---------------------------------------------------------------- */
+.wc-estimation-settings form {
     background: #fff;
     border: 1px solid #d4d8e0;
     border-top: none;
     border-radius: 0 8px 8px 8px;
-    padding: 24px 28px;
-    margin-top: 0;
     box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+    padding: 8px 28px 0;
+    margin-top: 0;
+}
+
+/* Section heading inside the form — acts as a divider between groups. */
+.wc-estimation-settings form > h2,
+.wc-estimation-settings form .form-table + h2 {
+    margin: 24px 0 4px;
+    padding: 14px 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #0f172a;
+    border-bottom: 1px solid #e2e8f0;
+}
+/* First heading hugs the top of the panel — no extra top margin. */
+.wc-estimation-settings form > h2:first-child {
+    margin-top: 16px;
+}
+
+/* Reset the table chrome itself; padding lives on the wrapping form. */
+.wc-estimation-settings form .form-table {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    margin: 0 0 8px;
+    box-shadow: none;
+}
+.wc-estimation-settings form .form-table tr {
+    border-top: 1px solid #f1f5f9;
+}
+.wc-estimation-settings form .form-table tr:first-child {
+    border-top: none;
 }
 .wc-estimation-settings form .form-table th {
-    width: 220px;
+    width: 240px;
     font-weight: 600;
     color: #1e293b;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding: 18px 20px 18px 0;
     font-size: 14px;
+    vertical-align: top;
 }
 .wc-estimation-settings form .form-table td {
-    padding-top: 14px;
-    padding-bottom: 14px;
+    padding: 16px 0;
+    color: #334155;
+}
+.wc-estimation-settings form .form-table td .description,
+.wc-estimation-settings form .form-table td p.description {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 12.5px;
 }
 .wc-estimation-settings form .form-table input[type="text"],
 .wc-estimation-settings form .form-table input[type="url"],
@@ -123,8 +168,9 @@
 .wc-estimation-settings form .form-table textarea {
     border-radius: 6px;
     border-color: #cbd5e1;
-    padding: 6px 10px;
+    padding: 7px 11px;
     transition: border-color .15s, box-shadow .15s;
+    box-shadow: none;
 }
 .wc-estimation-settings form .form-table input:focus,
 .wc-estimation-settings form .form-table select:focus,
@@ -133,23 +179,28 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
     outline: none;
 }
-.wc-estimation-settings form .form-table h2 {
-    margin: 4px 0 10px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #e2e8f0;
-    font-size: 15px;
-    color: #0f172a;
-    grid-column: 1 / -1;
+/* Inline `<p>` and `<label>` blocks inside td get cleaner spacing. */
+.wc-estimation-settings form .form-table td > p {
+    margin: 8px 0 0;
+}
+.wc-estimation-settings form .form-table td > label {
+    display: inline-block;
 }
 
-/* Submit button row */
+/* Inline notices inside a form (e.g. "Pro is inactive" warning). */
+.wc-estimation-settings form .notice.inline {
+    margin: 16px 0;
+    border-radius: 6px;
+}
+
+/* Submit button row: sits inside the same card, separated by a hairline. */
 .wc-estimation-settings form p.submit {
-    background: #fff;
-    border: 1px solid #d4d8e0;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    padding: 16px 28px;
-    margin-top: -1px;
+    background: transparent;
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    border-radius: 0;
+    padding: 18px 0;
+    margin: 16px 0 0;
 }
 .wc-estimation-settings form p.submit .button-primary {
     border-radius: 6px;
