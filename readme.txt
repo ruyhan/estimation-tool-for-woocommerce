@@ -3,9 +3,9 @@ Contributors: ruyhan
 Donate link: https://ruyhan.com/
 Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 5.6
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.16.2
+Stable tag: 3.16.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,11 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.3 =
+* Upgraded the bundled TCPDF library from 6.10.0 to 6.11.3 (latest stable). Brings PHP 8.5 deprecation fixes (curl_close, null array offset, imagedestroy, xml_parser_free), font-subsetting checksum fix, SVG rendering fix, image-on-footer fix, and the security/path-traversal fixes from 6.9.1–6.9.3. No API changes affect this plugin — generated PDFs are byte-identical aside from a `/Producer` header bump.
+* Bumped "Tested up to" to WordPress 6.9 (was 6.7) so the plugin shows up correctly in the WordPress.org plugin directory's compatibility filter.
+* Trimmed the TCPDF bundle further: dropped the unused `images/` (demo logo), `tools/` (CLI utilities), `Makefile`, and `CHANGELOG.TXT` from the shipped library — plugin remains under 4 MB.
 
 = 3.16.2 =
 * Settings page layout cleanup: the form is now rendered as a single unified card. Previously, tabs with multiple stacked `form-table` blocks (especially Pro Features) showed inconsistent padding, asymmetric borders, and section headings floating between cards. Section `<h2>` headings inside the form are now styled as proper section dividers, row spacing is even across all tabs, and the submit-button row integrates with the card via a hairline rule.
