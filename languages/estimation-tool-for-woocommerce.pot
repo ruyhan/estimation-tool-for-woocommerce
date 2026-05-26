@@ -1,0 +1,498 @@
+# Copyright (C) 2026 ruyhan
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Estimation Tool for WooCommerce 2.1.0\n"
+"Report-Msgid-Bugs-To: https://ruyhan.com/\n"
+"Last-Translator: ruyhan <devtools@marketorr.com.bd>\n"
+"Language-Team: ruyhan <devtools@marketorr.com.bd>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-05-23T18:56:52+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: estimation-tool-for-woocommerce\n"
+
+#. Plugin Name of the plugin
+#: woocommerce-estimation-tool.php
+msgid "Estimation Tool for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: woocommerce-estimation-tool.php
+msgid "https://ruyhan.com/"
+msgstr ""
+
+#. Description of the plugin
+#: woocommerce-estimation-tool.php
+msgid "Adds a WooCommerce product estimation interface with PDF downloads and admin submission management."
+msgstr ""
+
+#. Author of the plugin
+#: woocommerce-estimation-tool.php
+msgid "ruyhan"
+msgstr ""
+
+#: includes/class-elementor-estimation-widget.php:17
+#: woocommerce-estimation-tool.php:253
+msgid "Estimation Tool"
+msgstr ""
+
+#: includes/class-elementor-estimation-widget.php:36
+msgid "Content"
+msgstr ""
+
+#: includes/class-elementor-estimation-widget.php:43
+msgid "Heading"
+msgstr ""
+
+#: includes/class-elementor-estimation-widget.php:45
+#: includes/class-estimation-settings.php:43
+#: includes/class-estimation-settings.php:147
+#: woocommerce-estimation-tool.php:548
+msgid "My plan and price estimation"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:23
+msgid "ID"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:24
+msgid "Name"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:25
+msgid "Email"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:26
+msgid "Phone"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:27
+#: includes/class-estimation-pdf.php:137
+#: woocommerce-estimation-tool.php:199
+msgid "Total"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:28
+msgid "Date"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:29
+msgid "Actions"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:60
+msgid "View Products"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:78
+msgid "Restore"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:79
+msgid "Delete Permanently"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:83
+msgid "Move to Trash"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:146
+msgid "All"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:155
+msgid "Trash"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:11
+#: woocommerce-estimation-tool.php:443
+msgid "Image"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:12
+#: woocommerce-estimation-tool.php:200
+#: woocommerce-estimation-tool.php:442
+#: woocommerce-estimation-tool.php:570
+msgid "Product"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:13
+#: woocommerce-estimation-tool.php:201
+#: woocommerce-estimation-tool.php:444
+#: woocommerce-estimation-tool.php:571
+msgid "Price"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:14
+#: woocommerce-estimation-tool.php:445
+msgid "Qty"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:15
+#: woocommerce-estimation-tool.php:203
+#: woocommerce-estimation-tool.php:446
+#: woocommerce-estimation-tool.php:573
+msgid "Subtotal"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:20
+msgid "WooCommerce is required for PDF generation"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:23
+msgid "TCPDF library is not loaded"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:39
+#: includes/class-estimation-pdf.php:40
+#: includes/class-estimation-pdf.php:79
+msgid "Product Estimation"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:82
+msgid "Prepared for:"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:83
+#: woocommerce-estimation-tool.php:435
+msgid "Email:"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:84
+#: woocommerce-estimation-tool.php:436
+msgid "Phone:"
+msgstr ""
+
+#: includes/class-estimation-pdf.php:85
+#: woocommerce-estimation-tool.php:437
+msgid "Date:"
+msgstr ""
+
+#: includes/class-estimation-settings.php:110
+#: woocommerce-estimation-tool.php:301
+#: woocommerce-estimation-tool.php:363
+#: woocommerce-estimation-tool.php:409
+msgid "Unauthorized access"
+msgstr ""
+
+#: includes/class-estimation-settings.php:114
+msgid "Estimation Tool Settings"
+msgstr ""
+
+#: includes/class-estimation-settings.php:119
+msgid "Company Name"
+msgstr ""
+
+#: includes/class-estimation-settings.php:123
+msgid "PDF Subheading / Tagline"
+msgstr ""
+
+#: includes/class-estimation-settings.php:127
+msgid "PDF Logo URL"
+msgstr ""
+
+#: includes/class-estimation-settings.php:130
+msgid "Choose Image"
+msgstr ""
+
+#: includes/class-estimation-settings.php:131
+msgid "JPG or PNG. Displayed at the top of the generated PDF."
+msgstr ""
+
+#: includes/class-estimation-settings.php:135
+msgid "PDF Footer Note"
+msgstr ""
+
+#: includes/class-estimation-settings.php:139
+msgid "Store / Location List"
+msgstr ""
+
+#: includes/class-estimation-settings.php:142
+msgid "One per line, format: \"Name | Phone\". Shown at the bottom of the PDF. Leave blank to hide."
+msgstr ""
+
+#: includes/class-estimation-settings.php:146
+msgid "Frontend Heading"
+msgstr ""
+
+#: includes/class-estimation-settings.php:150
+msgid "Default Phone Country Code"
+msgstr ""
+
+#: includes/class-estimation-settings.php:153
+msgid "Two-letter ISO code (e.g. \"us\", \"bd\", \"gb\"). Leave blank to auto-detect."
+msgstr ""
+
+#: includes/class-estimation-settings.php:157
+msgid "Restrict to Country"
+msgstr ""
+
+#: includes/class-estimation-settings.php:160
+msgid "Optional. Set a two-letter ISO code to lock the phone input to a single country."
+msgstr ""
+
+#: includes/class-estimation-settings.php:171
+msgid "Select Logo"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:123
+#: woocommerce-estimation-tool.php:280
+#: woocommerce-estimation-tool.php:281
+msgid "Settings"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:146
+msgid "Estimation Tool for WooCommerce requires WooCommerce to be installed and active."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:185
+#: woocommerce-estimation-tool.php:579
+msgid "No products added yet"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:186
+#: woocommerce-estimation-tool.php:647
+msgid "Please fill all required fields correctly."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:187
+msgid "Please enter a valid phone number."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:188
+msgid "Valid number"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:189
+msgid "Please add products to generate the estimation."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:190
+msgid "This product is already in your estimation"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:191
+msgid "Generating your estimation..."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:192
+msgid "Thank you! Your estimation is downloading..."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:193
+msgid "New Estimation"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:194
+msgid "Submission error. Please try again."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:195
+msgid "Could not generate PDF. Please try again."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:196
+msgid "Add More Products"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:197
+msgid "Loading suggestions..."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:198
+msgid "No suggestions available at this time"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:202
+#: woocommerce-estimation-tool.php:572
+msgid "Quantity"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:204
+#: woocommerce-estimation-tool.php:574
+msgid "Action"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:205
+msgid "Remove"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:226
+msgid "Loading..."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:262
+msgid "Estimation Data"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:263
+msgid "Estimations"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:272
+#: woocommerce-estimation-tool.php:273
+msgid "Submissions"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:292
+msgid "Estimations per page"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:310
+msgid "Estimation Submissions"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:316
+msgid "Search"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:323
+msgid "Estimated Products"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:328
+msgid "Download PDF"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:329
+msgid "Close"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:339
+#: woocommerce-estimation-tool.php:695
+#: woocommerce-estimation-tool.php:733
+msgid "WooCommerce is not active."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:367
+msgid "Invalid request"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:371
+#: woocommerce-estimation-tool.php:413
+msgid "Invalid estimation ID"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:377
+#: woocommerce-estimation-tool.php:419
+msgid "Estimation not found"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:381
+msgid "Invalid product data"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:384
+#: woocommerce-estimation-tool.php:729
+msgid "PDF library not loaded"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:402
+#: woocommerce-estimation-tool.php:748
+msgid "PDF generation failed."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:423
+msgid "Invalid product data format"
+msgstr ""
+
+#. translators: %d: estimation submission ID
+#: woocommerce-estimation-tool.php:430
+#, php-format
+msgid "Estimation #%d"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:434
+msgid "Name:"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:452
+msgid "N/A"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:468
+msgid "Total:"
+msgstr ""
+
+#. translators: %d: number of estimations moved to trash
+#: woocommerce-estimation-tool.php:511
+#, php-format
+msgid "%d estimation moved to trash."
+msgid_plural "%d estimations moved to trash."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of estimations permanently deleted
+#: woocommerce-estimation-tool.php:525
+#, php-format
+msgid "%d estimation permanently deleted."
+msgid_plural "%d estimations permanently deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of estimations restored
+#: woocommerce-estimation-tool.php:539
+#, php-format
+msgid "%d estimation restored."
+msgid_plural "%d estimations restored."
+msgstr[0] ""
+msgstr[1] ""
+
+#: woocommerce-estimation-tool.php:552
+msgid "WooCommerce is required for the estimation tool."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:560
+msgid "Search & add more products..."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:565
+msgid "Selected Products"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:586
+msgid "My Estimation Summary"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:588
+#: woocommerce-estimation-tool.php:607
+msgid "Get My Estimation PDF"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:592
+msgid "Name*"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:596
+msgid "Email*"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:600
+msgid "Phone*"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:604
+msgid "Website"
+msgstr ""
+
+#: woocommerce-estimation-tool.php:633
+msgid "Spam detected."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:637
+#: woocommerce-estimation-tool.php:725
+msgid "Too many requests. Please try again in a moment."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:675
+msgid "Failed to save estimation."
+msgstr ""
+
+#: woocommerce-estimation-tool.php:688
+msgid "Estimation saved successfully."
+msgstr ""
