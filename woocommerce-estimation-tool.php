@@ -3,7 +3,7 @@
  * Plugin Name: Estimation Tool for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.16.3
+ * Version: 3.16.4
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -24,7 +24,7 @@ if (!class_exists('Estitofo_Plugin')) {
 
     final class Estitofo_Plugin {
 
-        const VERSION = '3.16.3';
+        const VERSION = '3.16.4';
         const DB_VERSION = '1.2';
         const TEXT_DOMAIN = 'estimation-tool-for-woocommerce';
         const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -109,6 +109,15 @@ if (!class_exists('Estitofo_Plugin')) {
             require_once ESTITOFO_PATH . 'includes/class-estimation-dashboard.php';
             require_once ESTITOFO_PATH . 'includes/class-estimation-rest.php';
             if (!class_exists('TCPDF') && file_exists(ESTITOFO_PATH . 'tcpdf/tcpdf.php')) {
+                // Skip TCPDF's bundled tcpdf_config.php — it calls define() WITHOUT
+                // if (!defined()) guards (regression in 6.11.x), which causes
+                // "Constant already defined" warnings whenever we pre-define a
+                // constant below. tcpdf_autoconfig.php still runs and IS guarded,
+                // so all PDF_* / K_* defaults are still applied — same values,
+                // just without the warnings.
+                if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
+                    define('K_TCPDF_EXTERNAL_CONFIG', true);
+                }
                 // Make TCPDF throw catchable exceptions instead of die()-ing on errors
                 // (e.g. unsupported image formats). Must be defined BEFORE the require.
                 if (!defined('K_TCPDF_THROW_EXCEPTION_ERROR')) {

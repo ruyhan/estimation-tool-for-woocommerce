@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 3.16.3
+Stable tag: 3.16.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,9 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.4 =
+* Fixed "Constant K_TCPDF_THROW_EXCEPTION_ERROR already defined" PHP warning that appeared on the first PDF generation after the 6.11.3 upgrade. TCPDF 6.11.x's `config/tcpdf_config.php` dropped the `if (!defined(...))` guards on its `define()` calls, so any constant the host plugin pre-defines (we set `K_TCPDF_THROW_EXCEPTION_ERROR` to `true` so PDF errors throw catchable exceptions instead of `die()`-ing) triggered a redefinition warning. Fixed by setting `K_TCPDF_EXTERNAL_CONFIG = true` before loading TCPDF — `tcpdf_autoconfig.php` still supplies all the same `PDF_*` / `K_*` defaults but through guarded checks. No TCPDF source files modified.
 
 = 3.16.3 =
 * Upgraded the bundled TCPDF library from 6.10.0 to 6.11.3 (latest stable). Brings PHP 8.5 deprecation fixes (curl_close, null array offset, imagedestroy, xml_parser_free), font-subsetting checksum fix, SVG rendering fix, image-on-footer fix, and the security/path-traversal fixes from 6.9.1–6.9.3. No API changes affect this plugin — generated PDFs are byte-identical aside from a `/Producer` header bump.
