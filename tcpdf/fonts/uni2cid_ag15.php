@@ -1,4 +1,13 @@
 <?php
+/**
+ * Third-party library file (TCPDF, LGPL-3.0).
+ *
+ * Vendored as-is from https://github.com/tecnickcom/TCPDF.
+ * Not subject to this plugin's coding standards.
+ *
+ * @package estimation-tool-for-woocommerce
+ */
+// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
 // unicode to cid conversion table is from
 // ftp://ftp.oreilly.com/pub/examples/nutshell/cjkv/adobe/
 // cid2code.txt in ag15.tar.Z

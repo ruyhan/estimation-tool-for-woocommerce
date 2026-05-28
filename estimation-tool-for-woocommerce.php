@@ -3,7 +3,7 @@
  * Plugin Name: Estimation Tool for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.16.4
+ * Version: 3.16.7
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -24,7 +24,7 @@ if (!class_exists('Estitofo_Plugin')) {
 
     final class Estitofo_Plugin {
 
-        const VERSION = '3.16.4';
+        const VERSION = '3.16.7';
         const DB_VERSION = '1.2';
         const TEXT_DOMAIN = 'estimation-tool-for-woocommerce';
         const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -264,9 +264,14 @@ if (!class_exists('Estitofo_Plugin')) {
          * Streams the PDF for the matching submission when the HMAC token validates.
          */
         public function public_pdf() {
+            // Public token-gated endpoint: the URL itself carries an HMAC token
+            // (validated below via hash_equals) so a WP nonce is neither required
+            // nor possible here — recipients click the link from email.
+            // phpcs:disable WordPress.Security.NonceVerification.Recommended
             $id    = isset($_REQUEST['id']) ? absint($_REQUEST['id']) : 0;
             $token = isset($_REQUEST['token']) ? sanitize_text_field(wp_unslash($_REQUEST['token'])) : '';
             $disp  = (isset($_REQUEST['dl']) && (int) $_REQUEST['dl'] === 0) ? 'I' : 'D';
+            // phpcs:enable WordPress.Security.NonceVerification.Recommended
 
             if ($id <= 0 || !$token || !hash_equals(self::pdf_token($id), $token)) {
                 status_header(403);

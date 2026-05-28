@@ -150,6 +150,7 @@ class Estitofo_REST {
             'no_found_rows'  => true,
         );
         if (!empty($base['category'])) {
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Category filter is opt-in and bounded by posts_per_page.
             $wp_args['tax_query'] = array(array(
                 'taxonomy' => 'product_cat',
                 'field'    => 'slug',

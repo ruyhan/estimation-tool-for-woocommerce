@@ -169,8 +169,14 @@ class Estitofo_Mailer {
             $tmp_dir  = trailingslashit($upload['basedir']) . 'wc-estimation-tmp';
             if (!is_dir($tmp_dir)) {
                 wp_mkdir_p($tmp_dir);
-                // Drop an index.html to prevent directory listing.
-                @file_put_contents($tmp_dir . '/index.html', ''); // phpcs:ignore
+                // Drop an index.html to prevent directory listing — via WP_Filesystem.
+                if (!function_exists('WP_Filesystem')) {
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                }
+                global $wp_filesystem;
+                if (WP_Filesystem()) {
+                    $wp_filesystem->put_contents($tmp_dir . '/index.html', '');
+                }
             }
             $file = $tmp_dir . '/estimation-' . absint($row->id) . '-' . wp_generate_password(8, false) . '.pdf';
             $pdf->Output($file, 'F');

@@ -3,9 +3,9 @@ Contributors: ruyhan
 Donate link: https://ruyhan.com/
 Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 5.6
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.16.4
+Stable tag: 3.16.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,22 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.7 =
+* Renamed the main plugin file from `woocommerce-estimation-tool.php` to `estimation-tool-for-woocommerce.php` so it matches the WordPress.org plugin slug. Plugin Check's "mismatched_plugin_slug" rule (severity 7) was the only critical-level error remaining; this fixes it. Internal references use `__FILE__`/`plugin_basename(__FILE__)` so no other code change was needed; the `.pot` translation template's file-reference comments were updated to match.
+* `uninstall.php` rewritten: all logic is now wrapped in `estitofo_uninstall_cleanup()` so no variables leak into the global scope. `@unlink()` calls replaced with `wp_delete_file()`. The `@rmdir()` call replaced with `$wp_filesystem->rmdir()` after loading `wp-admin/includes/file.php`.
+* `class-estimation-pdf.php`: every `error_log()` call is now tagged with `// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log` (calls remain gated on `WP_DEBUG`, so they only fire in development). The three-line `fopen` / `fread` / `fclose` block in `png_has_alpha()` is now a single bounded `file_get_contents($path, false, null, 0, 26)` call.
+* `class-estimation-settings.php` import handler: `file_get_contents()` of the uploaded JSON file replaced with `$wp_filesystem->get_contents()` via the WP_Filesystem API.
+* `class-estimation-mailer.php`: the `@file_put_contents()` call that drops an empty `index.html` into the tmp directory (to prevent directory listing) replaced with `$wp_filesystem->put_contents()`.
+* `class-estimation-rest.php`: added `// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query` on the optional `tax_query` branch — the query is opt-in and capped by `posts_per_page`.
+* Public PDF endpoint (`Estitofo_Plugin::public_pdf`): wrapped `$_REQUEST` reads in a `phpcs:disable WordPress.Security.NonceVerification.Recommended` block. The endpoint is HMAC-token-gated (validated via `hash_equals()`), so a nonce isn't applicable.
+* TCPDF vendor files: added a proper `/** */` file-level docblock to the top of every PHP file under `tcpdf/` so Plugin Check's `missing_doc_comment` rule (which doesn't honor `phpcs:ignoreFile`) is satisfied. The existing `phpcs:ignoreFile` pragma stays on the next line for PHPCS rules. TCPDF's own header comments below are unchanged.
+
+= 3.16.6 =
+* Plugin Check cleanup: renamed the six intl-tel-input retina image files from `flags@2x.png` / `flags@2x.webp` / `globe@2x.png` / `globe@2x.webp` (and the `_light` variants) to dash-separated names (`flags-2x.*`, `globe-2x.*`). The `@` character isn't allowed in file names per WordPress.org's naming rules. CSS updated to reference the new names.
+* Removed four unused intl-tel-input assets (`globe_light.png/webp`, `globe_light@2x.png/webp`) — never referenced by CSS or JS, removing them shrinks the plugin slightly.
+* Deleted the unused `tcpdf/config/tcpdf_config.php` file (the 3.16.4 release switched TCPDF to load via `K_TCPDF_EXTERNAL_CONFIG = true`, so this config file was no longer loaded by anything and was only triggering Plugin Check noise).
+* Added `// phpcs:ignoreFile` pragma to the top of every PHP file under `tcpdf/` to signal "this is a third-party library, exempt from WordPress coding standards" to Plugin Check / PHPCS / WP.org's automated review. TCPDF's existing C-style file headers are preserved untouched on the lines below.
 
 = 3.16.4 =
 * Fixed "Constant K_TCPDF_THROW_EXCEPTION_ERROR already defined" PHP warning that appeared on the first PDF generation after the 6.11.3 upgrade. TCPDF 6.11.x's `config/tcpdf_config.php` dropped the `if (!defined(...))` guards on its `define()` calls, so any constant the host plugin pre-defines (we set `K_TCPDF_THROW_EXCEPTION_ERROR` to `true` so PDF errors throw catchable exceptions instead of `die()`-ing) triggered a redefinition warning. Fixed by setting `K_TCPDF_EXTERNAL_CONFIG = true` before loading TCPDF — `tcpdf_autoconfig.php` still supplies all the same `PDF_*` / `K_*` defaults but through guarded checks. No TCPDF source files modified.

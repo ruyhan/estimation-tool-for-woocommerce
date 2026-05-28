@@ -163,6 +163,7 @@ class Estitofo_PDF {
                     $logo_drawn = true;
                 } catch (Exception $e) {
                     if (defined('WP_DEBUG') && WP_DEBUG) {
+                        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging is gated on WP_DEBUG.
                         error_log('[wc-estimation] PDF logo @-embed failed: ' . $e->getMessage());
                     }
                 }
@@ -183,11 +184,13 @@ class Estitofo_PDF {
                             $logo_drawn = true;
                         } catch (Exception $e) {
                             if (defined('WP_DEBUG') && WP_DEBUG) {
+                                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging is gated on WP_DEBUG.
                                 error_log('[wc-estimation] PDF logo path-embed failed: ' . $e->getMessage() . ' (path: ' . $path . ')');
                             }
                         }
                     }
                 } elseif (defined('WP_DEBUG') && WP_DEBUG && ($logo_url || (int) Estitofo_Options::get('logo_id', 0))) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging is gated on WP_DEBUG.
                     error_log('[wc-estimation] PDF logo: resolve_logo_path returned nothing. URL=' . $logo_url
                         . ' | logo_id=' . (int) Estitofo_Options::get('logo_id', 0));
                 }
@@ -949,13 +952,12 @@ class Estitofo_PDF {
     }
 
     private static function png_has_alpha($path) {
-        $fp = @fopen($path, 'rb'); // phpcs:ignore WordPress.PHP.NoSilencedErrors
-        if (!$fp) {
-            return false;
-        }
-        $header = fread($fp, 26);
-        fclose($fp);
-        if (strlen($header) < 26 || substr($header, 1, 3) !== 'PNG') {
+        // Read just the first 26 bytes — enough to identify a PNG and grab the
+        // IHDR color-type byte. Single call avoids the 3-line fopen/fread/fclose
+        // pattern that Plugin Check flags under WordPress.WP.AlternativeFunctions.
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Need byte-accurate read of file header; WP_Filesystem has no length-bounded read.
+        $header = @file_get_contents($path, false, null, 0, 26); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+        if ($header === false || strlen($header) < 26 || substr($header, 1, 3) !== 'PNG') {
             return false;
         }
         $color_type = ord($header[25]);

@@ -782,7 +782,15 @@ class Estitofo_Settings {
         if (!is_uploaded_file($tmp)) {
             wp_die(esc_html__('Invalid upload', 'estimation-tool-for-woocommerce'));
         }
-        $contents = file_get_contents($tmp); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+        // Read the uploaded JSON file via WP_Filesystem (PCP-friendly).
+        if (!function_exists('WP_Filesystem')) {
+            require_once ABSPATH . 'wp-admin/includes/file.php';
+        }
+        global $wp_filesystem;
+        if (!WP_Filesystem()) {
+            wp_die(esc_html__('Could not access the filesystem to read the uploaded file.', 'estimation-tool-for-woocommerce'));
+        }
+        $contents = $wp_filesystem->get_contents($tmp);
         $decoded  = json_decode((string) $contents, true);
         if (!is_array($decoded) || empty($decoded['settings']) || !is_array($decoded['settings'])) {
             wp_die(esc_html__('Invalid settings file', 'estimation-tool-for-woocommerce'));
