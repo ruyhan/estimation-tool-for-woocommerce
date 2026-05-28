@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 5.6
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.16.7
+Stable tag: 3.16.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,10 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.8 =
+* Fixed mismatched "Tested up to" header: the plugin file header still said `Tested up to: 6.9` while `readme.txt` had already been bumped to `7.0`. Plugin Check's `mismatched_tested_up_to` rule (severity 7) was the only critical error remaining. Both files are now in sync at `7.0` (current WordPress major release).
+* Plugin Check `missing_direct_file_access_protection` (severity 6) on all TCPDF vendor files: added `defined('ABSPATH') || exit;` immediately after the file-level docblock in each of the 31 PHP files under `tcpdf/`. The check ships expects every PHP file in a plugin to refuse direct access. Since TCPDF is only ever loaded from inside WordPress (where `ABSPATH` is defined), this guard never triggers and library behavior is unchanged.
 
 = 3.16.7 =
 * Renamed the main plugin file from `woocommerce-estimation-tool.php` to `estimation-tool-for-woocommerce.php` so it matches the WordPress.org plugin slug. Plugin Check's "mismatched_plugin_slug" rule (severity 7) was the only critical-level error remaining; this fixes it. Internal references use `__FILE__`/`plugin_basename(__FILE__)` so no other code change was needed; the `.pot` translation template's file-reference comments were updated to match.

@@ -3,7 +3,7 @@
  * Plugin Name: Estimation Tool for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.16.7
+ * Version: 3.16.8
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -11,7 +11,7 @@
  * Text Domain: estimation-tool-for-woocommerce
  * Domain Path: /languages
  * Requires at least: 5.6
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  * WC requires at least: 6.0
@@ -24,7 +24,7 @@ if (!class_exists('Estitofo_Plugin')) {
 
     final class Estitofo_Plugin {
 
-        const VERSION = '3.16.7';
+        const VERSION = '3.16.8';
         const DB_VERSION = '1.2';
         const TEXT_DOMAIN = 'estimation-tool-for-woocommerce';
         const MIN_ELEMENTOR_VERSION = '3.5.0';

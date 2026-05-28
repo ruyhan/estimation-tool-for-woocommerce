@@ -7,6 +7,7 @@
  *
  * @package estimation-tool-for-woocommerce
  */
+defined('ABSPATH') || exit;
 // phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
 //============================================================+
 // File name   : tcpdf_images.php

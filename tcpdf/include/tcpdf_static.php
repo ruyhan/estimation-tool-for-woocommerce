@@ -7,6 +7,7 @@
  *
  * @package estimation-tool-for-woocommerce
  */
+defined('ABSPATH') || exit;
 // phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
 //============================================================+
 // File name   : tcpdf_static.php
@@ -1068,19 +1069,19 @@ class TCPDF_STATIC {
 		// remove empty blocks
 		$cssdata = preg_replace('/([^\}\{]+)\{\}/', '', $cssdata);
 		// replace media type parenthesis
-		$cssdata = preg_replace('/@media[\s]+([^\{]*)\{/i', '@media \\1Ã‚Â§', $cssdata);
-		$cssdata = preg_replace('/\}\}/si', '}Ã‚Â§', $cssdata);
+		$cssdata = preg_replace('/@media[\s]+([^\{]*)\{/i', '@media \\1Ãƒâ€šÃ‚Â§', $cssdata);
+		$cssdata = preg_replace('/\}\}/si', '}Ãƒâ€šÃ‚Â§', $cssdata);
 		// trim string
 		$cssdata = trim($cssdata);
 		// find media blocks (all, braille, embossed, handheld, print, projection, screen, speech, tty, tv)
 		$cssblocks = array();
 		$matches = array();
-		if (preg_match_all('/@media[\s]+([^\Ã‚Â§]*)Ã‚Â§([^Ã‚Â§]*)Ã‚Â§/i', $cssdata, $matches) > 0) {
+		if (preg_match_all('/@media[\s]+([^\Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§([^Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§/i', $cssdata, $matches) > 0) {
 			foreach ($matches[1] as $key => $type) {
 				$cssblocks[$type] = $matches[2][$key];
 			}
 			// remove media blocks
-			$cssdata = preg_replace('/@media[\s]+([^\Ã‚Â§]*)Ã‚Â§([^Ã‚Â§]*)Ã‚Â§/i', '', $cssdata);
+			$cssdata = preg_replace('/@media[\s]+([^\Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§([^Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§/i', '', $cssdata);
 		}
 		// keep 'all' and 'print' media, other media types are discarded
 		if (isset($cssblocks['all']) AND !empty($cssblocks['all'])) {

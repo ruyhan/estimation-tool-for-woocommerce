@@ -7,6 +7,7 @@
  *
  * @package estimation-tool-for-woocommerce
  */
+defined('ABSPATH') || exit;
 // phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
 // unicode to cid conversion table is from
 // ftp://ftp.oreilly.com/pub/examples/nutshell/cjkv/adobe/
