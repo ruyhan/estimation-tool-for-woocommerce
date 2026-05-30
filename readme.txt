@@ -2,10 +2,10 @@
 Contributors: ruyhan
 Donate link: https://ruyhan.com/
 Tags: woocommerce, estimation, quote, pdf, product quote
-Requires at least: 5.6
+Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.16.8
+Stable tag: 3.16.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,12 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.16.9 =
+* Raised the minimum supported WordPress version (`Requires at least`) from `5.6` to `6.4` in both the plugin header and `readme.txt`.
+* Confirmed `Tested up to: 7.0` (current WordPress stable) in both files.
+* Hardened TCPDF loading per WordPress.org review: the library is included only behind a `class_exists('TCPDF')` guard, and TCPDF's own `K_TCPDF_EXTERNAL_CONFIG` / `K_TCPDF_THROW_EXCEPTION_ERROR` constants are wrapped in `defined()` checks to avoid conflicts with other plugins bundling TCPDF.
+* Fixed uninstall cleanup: rate-limit transients are now swept using the correct `estitofo_rl_` key prefix (previously the obsolete `wc_est_rl_` prefix left orphaned rows in `wp_options`).
 
 = 3.16.8 =
 * Fixed mismatched "Tested up to" header: the plugin file header still said `Tested up to: 6.9` while `readme.txt` had already been bumped to `7.0`. Plugin Check's `mismatched_tested_up_to` rule (severity 7) was the only critical error remaining. Both files are now in sync at `7.0` (current WordPress major release).

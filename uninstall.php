@@ -43,9 +43,12 @@ function estitofo_uninstall_cleanup() {
         delete_option($opt);
     }
 
-    // Sweep rate-limit transients we set during form posting.
+    // Sweep rate-limit transients we set during form posting. These are stored
+    // with the `estitofo_rl_` key prefix (see Estitofo_Plugin::rate_limit()), so
+    // the option_name rows are `_transient_estitofo_rl_*` and
+    // `_transient_timeout_estitofo_rl_*`.
     // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_wc_est_rl_%' OR option_name LIKE '_transient_timeout_wc_est_rl_%'");
+    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_estitofo_rl_%' OR option_name LIKE '_transient_timeout_estitofo_rl_%'");
 
     // Clean up any tmp PDFs left behind by the mailer.
     $upload  = wp_upload_dir();
