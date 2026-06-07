@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.16.9
+Stable tag: 3.17.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,11 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.17.0 =
+* WordPress.org review: moved TCPDF's `K_TCPDF_EXTERNAL_CONFIG` and `K_TCPDF_THROW_EXCEPTION_ERROR` constants into `tcpdf/tcpdf.php` (where they belong as library configuration) so they no longer appear in the plugin's own namespace scan.
+* WordPress.org review: added a `class_exists('TCPDF')` early-return guard at the top of `tcpdf/tcpdf.php` so the library is self-protecting against double-load regardless of load order.
+* Code quality: resolved all remaining WordPress Coding Standards violations — Yoda conditions, short ternaries, mixed class/function declaration, camelCase variable names, reserved keyword parameter names, deprecated `current_time('timestamp')`, translator comment placement, and inline comment punctuation.
 
 = 3.16.9 =
 * Raised the minimum supported WordPress version (`Requires at least`) from `5.6` to `6.4` in both the plugin header and `readme.txt`.
