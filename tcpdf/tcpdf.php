@@ -9,6 +9,26 @@
  */
 defined('ABSPATH') || exit;
 // phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+
+// These constants must be set before tcpdf_autoconfig.php runs.
+// K_TCPDF_EXTERNAL_CONFIG=true tells TCPDF to skip looking for an external
+// tcpdf_config.php file. K_TCPDF_THROW_EXCEPTION_ERROR=true makes TCPDF throw
+// catchable exceptions instead of die()-ing on errors (e.g. bad image formats).
+// Both are TCPDF library constants — their names are fixed by the library and
+// cannot be given a plugin prefix. They are guarded with defined() checks so
+// a site-level config loaded by another plugin is respected if already set.
+if ( ! defined( 'K_TCPDF_EXTERNAL_CONFIG' ) ) {
+	define( 'K_TCPDF_EXTERNAL_CONFIG', true );
+}
+if ( ! defined( 'K_TCPDF_THROW_EXCEPTION_ERROR' ) ) {
+	define( 'K_TCPDF_THROW_EXCEPTION_ERROR', true );
+}
+
+// If another plugin has already loaded TCPDF, skip this file entirely to
+// avoid a fatal "Cannot redeclare class TCPDF" error.
+if ( class_exists( 'TCPDF' ) ) {
+	return;
+}
 //============================================================+
 // File name   : tcpdf.php
 // Version     : 6.11.3
