@@ -3,7 +3,7 @@
  * Plugin Name: Estimation Tool for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.17.0
+ * Version: 3.18.0
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 	final class Estitofo_Plugin {
 
-		const VERSION               = '3.17.0';
+		const VERSION               = '3.18.0';
 		const DB_VERSION            = '1.2';
 		const TEXT_DOMAIN           = 'estimation-tool-for-woocommerce';
 		const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -110,8 +110,8 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			require_once ESTITOFO_PATH . 'includes/class-estimation-mailer.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-dashboard.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-rest.php';
-			if ( file_exists( ESTITOFO_PATH . 'tcpdf/tcpdf.php' ) ) {
-				require_once ESTITOFO_PATH . 'tcpdf/tcpdf.php';
+			if ( file_exists( ESTITOFO_PATH . 'lib/autoload.php' ) ) {
+				require_once ESTITOFO_PATH . 'lib/autoload.php';
 			}
 		}
 
@@ -320,7 +320,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				status_header( 403 );
 				wp_die( esc_html__( 'Invalid PDF link.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 403 ) );
 			}
-			if ( ! class_exists( 'TCPDF' ) ) {
+			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
 				status_header( 500 );
 				wp_die( esc_html__( 'PDF library not loaded.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
@@ -769,7 +769,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $products ) ) {
 				wp_die( esc_html__( 'Invalid product data', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 400 ) );
 			}
-			if ( ! class_exists( 'TCPDF' ) ) {
+			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
 				wp_die( esc_html__( 'PDF library not loaded', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
 			try {
@@ -1466,7 +1466,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a moment.', 'estimation-tool-for-woocommerce' ), 429 );
 			}
 
-			if ( ! class_exists( 'TCPDF' ) ) {
+			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
 				wp_send_json_error( esc_html__( 'PDF library not loaded', 'estimation-tool-for-woocommerce' ) );
 				return;
 			}

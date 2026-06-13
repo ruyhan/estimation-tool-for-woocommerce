@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_barcodes_2d.php
 // Version     : 1.0.015
@@ -19,45 +10,45 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2009-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // Description : PHP class to creates array representations for
-//               2D barcodes to be used with TCPDF.
+//               2D barcodes to be used with Estitofo_TCPDF.
 //
 //============================================================+
 
 /**
  * @file
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF.
+ * PHP class to creates array representations for 2D barcodes to be used with Estitofo_TCPDF.
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
  * @version 1.0.015
  */
 
 /**
- * @class TCPDF2DBarcode
- * PHP class to creates array representations for 2D barcodes to be used with TCPDF (http://www.tcpdf.org).
+ * @class Estitofo_TCPDF2DBarcode
+ * PHP class to creates array representations for 2D barcodes to be used with Estitofo_TCPDF (http://www.tcpdf.org).
  * @package com.tecnick.tcpdf
  * @version 1.0.015
  * @author Nicola Asuni
  */
-class TCPDF2DBarcode {
+class Estitofo_TCPDF2DBarcode {
 
 	/**
 	 * Array representation of barcode.
@@ -73,7 +64,7 @@ class TCPDF2DBarcode {
 	 * <li>$arrcode['num_cols'] required number of columns</li>
 	 * <li>$arrcode['bcode'][$r][$c] value of the cell is $r row and $c column (0 = transparent, 1 = black)</li></ul>
 	 * @param string $code code to print
- 	 * @param string $type type of barcode: <ul><li>DATAMATRIX : Datamatrix (ISO/IEC 16022)</li><li>PDF417 : PDF417 (ISO/IEC 15438:2006)</li><li>PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6 : PDF417 with parameters: a = aspect ratio (width/height); e = error correction level (0-8); t = total number of macro segments; s = macro segment index (0-99998); f = file ID; o0 = File Name (text); o1 = Segment Count (numeric); o2 = Time Stamp (numeric); o3 = Sender (text); o4 = Addressee (text); o5 = File Size (numeric); o6 = Checksum (numeric). NOTES: Parameters t, s and f are required for a Macro Control Block, all other parameters are optional. To use a comma character ',' on text options, replace it with the character 255: "\xff".</li><li>QRCODE : QRcode Low error correction</li><li>QRCODE,L : QRcode Low error correction</li><li>QRCODE,M : QRcode Medium error correction</li><li>QRCODE,Q : QRcode Better error correction</li><li>QRCODE,H : QR-CODE Best error correction</li><li>RAW: raw mode - comma-separad list of array rows</li><li>RAW2: raw mode - array rows are surrounded by square parenthesis.</li><li>TEST : Test matrix</li></ul>
+ 	 * @param string $type type of barcode: <ul><li>DATAMATRIX : Estitofo_Datamatrix (ISO/IEC 16022)</li><li>Estitofo_PDF417 : Estitofo_PDF417 (ISO/IEC 15438:2006)</li><li>Estitofo_PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6 : Estitofo_PDF417 with parameters: a = aspect ratio (width/height); e = error correction level (0-8); t = total number of macro segments; s = macro segment index (0-99998); f = file ID; o0 = File Name (text); o1 = Segment Count (numeric); o2 = Time Stamp (numeric); o3 = Sender (text); o4 = Addressee (text); o5 = File Size (numeric); o6 = Checksum (numeric). NOTES: Parameters t, s and f are required for a Macro Control Block, all other parameters are optional. To use a comma character ',' on text options, replace it with the character 255: "\xff".</li><li>QRCODE : Estitofo_QRcode Low error correction</li><li>QRCODE,L : Estitofo_QRcode Low error correction</li><li>QRCODE,M : Estitofo_QRcode Medium error correction</li><li>QRCODE,Q : Estitofo_QRcode Better error correction</li><li>QRCODE,H : QR-CODE Best error correction</li><li>RAW: raw mode - comma-separad list of array rows</li><li>RAW2: raw mode - array rows are surrounded by square parenthesis.</li><li>TEST : Test matrix</li></ul>
 	 */
 	public function __construct($code, $type) {
 		$this->setBarcode($code, $type);
@@ -258,7 +249,7 @@ class TCPDF2DBarcode {
 	/**
 	 * Set the barcode.
 	 * @param string $code code to print
- 	 * @param string $type type of barcode: <ul><li>DATAMATRIX : Datamatrix (ISO/IEC 16022)</li><li>PDF417 : PDF417 (ISO/IEC 15438:2006)</li><li>PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6 : PDF417 with parameters: a = aspect ratio (width/height); e = error correction level (0-8); t = total number of macro segments; s = macro segment index (0-99998); f = file ID; o0 = File Name (text); o1 = Segment Count (numeric); o2 = Time Stamp (numeric); o3 = Sender (text); o4 = Addressee (text); o5 = File Size (numeric); o6 = Checksum (numeric). NOTES: Parameters t, s and f are required for a Macro Control Block, all other parameters are optional. To use a comma character ',' on text options, replace it with the character 255: "\xff".</li><li>QRCODE : QRcode Low error correction</li><li>QRCODE,L : QRcode Low error correction</li><li>QRCODE,M : QRcode Medium error correction</li><li>QRCODE,Q : QRcode Better error correction</li><li>QRCODE,H : QR-CODE Best error correction</li><li>RAW: raw mode - comma-separad list of array rows</li><li>RAW2: raw mode - array rows are surrounded by square parenthesis.</li><li>TEST : Test matrix</li></ul>
+ 	 * @param string $type type of barcode: <ul><li>DATAMATRIX : Estitofo_Datamatrix (ISO/IEC 16022)</li><li>Estitofo_PDF417 : Estitofo_PDF417 (ISO/IEC 15438:2006)</li><li>Estitofo_PDF417,a,e,t,s,f,o0,o1,o2,o3,o4,o5,o6 : Estitofo_PDF417 with parameters: a = aspect ratio (width/height); e = error correction level (0-8); t = total number of macro segments; s = macro segment index (0-99998); f = file ID; o0 = File Name (text); o1 = Segment Count (numeric); o2 = Time Stamp (numeric); o3 = Sender (text); o4 = Addressee (text); o5 = File Size (numeric); o6 = Checksum (numeric). NOTES: Parameters t, s and f are required for a Macro Control Block, all other parameters are optional. To use a comma character ',' on text options, replace it with the character 255: "\xff".</li><li>QRCODE : Estitofo_QRcode Low error correction</li><li>QRCODE,L : Estitofo_QRcode Low error correction</li><li>QRCODE,M : Estitofo_QRcode Medium error correction</li><li>QRCODE,Q : Estitofo_QRcode Better error correction</li><li>QRCODE,H : QR-CODE Best error correction</li><li>RAW: raw mode - comma-separad list of array rows</li><li>RAW2: raw mode - array rows are surrounded by square parenthesis.</li><li>TEST : Test matrix</li></ul>
  	 * @return void
 	 */
 	public function setBarcode($code, $type) {
@@ -267,12 +258,12 @@ class TCPDF2DBarcode {
 		switch ($qrtype) {
 			case 'DATAMATRIX': { // DATAMATRIX (ISO/IEC 16022)
 				require_once(dirname(__FILE__).'/include/barcodes/datamatrix.php');
-				$qrcode = new Datamatrix($code);
+				$qrcode = new Estitofo_Datamatrix($code);
 				$this->barcode_array = $qrcode->getBarcodeArray();
 				$this->barcode_array['code'] = $code;
 				break;
 			}
-			case 'PDF417': { // PDF417 (ISO/IEC 15438:2006)
+			case 'Estitofo_PDF417': { // Estitofo_PDF417 (ISO/IEC 15438:2006)
 				require_once(dirname(__FILE__).'/include/barcodes/pdf417.php');
 				if (!isset($mode[1]) OR ($mode[1] === '')) {
 					$aspectratio = 2; // default aspect ratio (width / height)
@@ -298,7 +289,7 @@ class TCPDF2DBarcode {
 						}
 					}
 				}
-				$qrcode = new PDF417($code, $ecl, $aspectratio, $macro);
+				$qrcode = new Estitofo_PDF417($code, $ecl, $aspectratio, $macro);
 				$this->barcode_array = $qrcode->getBarcodeArray();
 				$this->barcode_array['code'] = $code;
 				break;
@@ -308,7 +299,7 @@ class TCPDF2DBarcode {
 				if (!isset($mode[1]) OR (!in_array($mode[1],array('L','M','Q','H')))) {
 					$mode[1] = 'L'; // Ddefault: Low error correction
 				}
-				$qrcode = new QRcode($code, strtoupper($mode[1]));
+				$qrcode = new Estitofo_QRcode($code, strtoupper($mode[1]));
 				$this->barcode_array = $qrcode->getBarcodeArray();
 				$this->barcode_array['code'] = $code;
 				break;

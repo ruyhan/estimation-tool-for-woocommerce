@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : pdf417.php
 // Version     : 1.0.005
@@ -19,30 +10,30 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2010-2013 2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // DESCRIPTION :
 //
-// Class to create PDF417 barcode arrays for TCPDF class.
-// PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
+// Class to create Estitofo_PDF417 barcode arrays for Estitofo_TCPDF class.
+// Estitofo_PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
 // It is one of the most popular 2D codes because of its ability to be read with slightly modified handheld laser or linear CCD scanners.
-// TECHNICAL DATA / FEATURES OF PDF417:
+// TECHNICAL DATA / FEATURES OF Estitofo_PDF417:
 //		Encodable Character Set:     All 128 ASCII Characters (including extended)
 //		Code Type:                   Continuous, Multi-Row
 //		Symbol Height:               3 - 90 Rows
@@ -55,8 +46,8 @@ defined('ABSPATH') || exit;
 
 /**
  * @file
- * Class to create PDF417 barcode arrays for TCPDF class.
- * PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
+ * Class to create Estitofo_PDF417 barcode arrays for Estitofo_TCPDF class.
+ * Estitofo_PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
  * (requires PHP bcmath extension)
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
@@ -93,17 +84,17 @@ if (!defined('PDF417DEFS')) {
 // #*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#
 
 /**
- * @class PDF417
- * Class to create PDF417 barcode arrays for TCPDF class.
- * PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
+ * @class Estitofo_PDF417
+ * Class to create Estitofo_PDF417 barcode arrays for Estitofo_TCPDF class.
+ * Estitofo_PDF417 (ISO/IEC 15438:2006) is a 2-dimensional stacked bar code created by Symbol Technologies in 1991.
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
  * @version 1.0.003
  */
-class PDF417 {
+class Estitofo_PDF417 {
 
 	/**
-	 * Barcode array to be returned which is readable by TCPDF.
+	 * Barcode array to be returned which is readable by Estitofo_TCPDF.
 	 * @protected
 	 */
 	protected $barcode_array = array();
@@ -532,8 +523,8 @@ class PDF417 {
 
 	/**
 	 * This is the class constructor.
-	 * Creates a PDF417 object
-	 * @param string $code code to represent using PDF417
+	 * Creates a Estitofo_PDF417 object
+	 * @param string $code code to represent using Estitofo_PDF417
 	 * @param int $ecl error correction level (0-8); default -1 = automatic correction level
 	 * @param float $aspectratio the width to height of the symbol (excluding quiet zones)
 	 * @param array $macro information for macro block
@@ -734,8 +725,8 @@ class PDF417 {
 	}
 
 	/**
-	 * Returns a barcode array which is readable by TCPDF
-	 * @return array barcode array readable by TCPDF;
+	 * Returns a barcode array which is readable by Estitofo_TCPDF
+	 * @return array barcode array readable by Estitofo_TCPDF;
 	 * @public
 	 */
 	public function getBarcodeArray() {
@@ -999,7 +990,7 @@ class PDF417 {
 		return $cw;
 	}
 
-} // end PDF417 class
+} // end Estitofo_PDF417 class
 
 //============================================================+
 // END OF FILE

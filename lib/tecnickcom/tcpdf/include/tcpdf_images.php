@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_images.php
 // Version     : 1.0.005
@@ -19,47 +10,47 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2002-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the License
-// along with TCPDF. If not, see
+// along with Estitofo_TCPDF. If not, see
 // <http://www.tecnick.com/pagefiles/tcpdf/LICENSE.TXT>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // Description :
-//   Static image methods used by the TCPDF class.
+//   Static image methods used by the Estitofo_TCPDF class.
 //
 //============================================================+
 
 /**
  * @file
- * This is a PHP class that contains static image methods for the TCPDF class.<br>
+ * This is a PHP class that contains static image methods for the Estitofo_TCPDF class.<br>
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
  * @version 1.0.005
  */
 
 /**
- * @class TCPDF_IMAGES
- * Static image methods used by the TCPDF class.
+ * @class Estitofo_TCPDF_IMAGES
+ * Static image methods used by the Estitofo_TCPDF class.
  * @package com.tecnick.tcpdf
  * @brief PHP class for generating PDF documents without requiring external extensions.
  * @version 1.0.005
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF_IMAGES {
+class Estitofo_TCPDF_IMAGES {
 
 	/**
 	 * Array of hinheritable SVG properties.
@@ -174,7 +165,7 @@ class TCPDF_IMAGES {
 	 */
 	public static function _parsejpeg($file) {
 		// check if is a local file
-		if (!@TCPDF_STATIC::file_exists($file)) {
+		if (!@Estitofo_TCPDF_STATIC::file_exists($file)) {
 			return false;
 		}
 		$a = getimagesize($file);
@@ -221,7 +212,7 @@ class TCPDF_IMAGES {
 		$offset = 0;
 		while (($pos = strpos($data, "ICC_PROFILE\0", $offset)) !== false) {
 			// get ICC sequence length
-			$length = (TCPDF_STATIC::_getUSHORT($data, ($pos - 2)) - 16);
+			$length = (Estitofo_TCPDF_STATIC::_getUSHORT($data, ($pos - 2)) - 16);
 			// marker sequence number
 			$msn = max(1, ord($data[($pos + 12)]));
 			// number of markers (total of APP2 used)
@@ -268,8 +259,8 @@ class TCPDF_IMAGES {
 			//Incorrect PNG file
 			return false;
 		}
-		$w = TCPDF_STATIC::_freadint($f);
-		$h = TCPDF_STATIC::_freadint($f);
+		$w = Estitofo_TCPDF_STATIC::_freadint($f);
+		$h = Estitofo_TCPDF_STATIC::_freadint($f);
 		$bpc = ord(fread($f, 1));
 		$ct = ord(fread($f, 1));
 		if ($ct == 0) {
@@ -306,16 +297,16 @@ class TCPDF_IMAGES {
 		$trns = '';
 		$data = '';
 		$icc = false;
-		$n = TCPDF_STATIC::_freadint($f);
+		$n = Estitofo_TCPDF_STATIC::_freadint($f);
 		do {
 			$type = fread($f, 4);
 			if ($type == 'PLTE') {
 				// read palette
-				$pal = TCPDF_STATIC::rfread($f, $n);
+				$pal = Estitofo_TCPDF_STATIC::rfread($f, $n);
 				fread($f, 4);
 			} elseif ($type == 'tRNS') {
 				// read transparency info
-				$t = TCPDF_STATIC::rfread($f, $n);
+				$t = Estitofo_TCPDF_STATIC::rfread($f, $n);
 				if ($ct == 0) { // DeviceGray
 					$trns = array(ord($t[1]));
 				} elseif ($ct == 2) { // DeviceRGB
@@ -331,7 +322,7 @@ class TCPDF_IMAGES {
 				fread($f, 4);
 			} elseif ($type == 'IDAT') {
 				// read image data block
-				$data .= TCPDF_STATIC::rfread($f, $n);
+				$data .= Estitofo_TCPDF_STATIC::rfread($f, $n);
 				fread($f, 4);
 			} elseif ($type == 'iCCP') {
 				// skip profile name
@@ -346,16 +337,16 @@ class TCPDF_IMAGES {
 					return false;
 				}
 				// read ICC Color Profile
-				$icc = TCPDF_STATIC::rfread($f, ($n - $len - 2));
+				$icc = Estitofo_TCPDF_STATIC::rfread($f, ($n - $len - 2));
 				// decompress profile
 				$icc = gzuncompress($icc);
 				fread($f, 4);
 			} elseif ($type == 'IEND') {
 				break;
 			} else {
-				TCPDF_STATIC::rfread($f, $n + 4);
+				Estitofo_TCPDF_STATIC::rfread($f, $n + 4);
 			}
-			$n = TCPDF_STATIC::_freadint($f);
+			$n = Estitofo_TCPDF_STATIC::_freadint($f);
 		} while ($n);
 		if (($colspace == 'Indexed') AND (empty($pal))) {
 			// Missing palette
@@ -366,7 +357,7 @@ class TCPDF_IMAGES {
 		return array('w' => $w, 'h' => $h, 'ch' => $channels, 'icc' => $icc, 'cs' => $colspace, 'bpc' => $bpc, 'f' => 'FlateDecode', 'parms' => $parms, 'pal' => $pal, 'trns' => $trns, 'data' => $data);
 	}
 
-} // END OF TCPDF_IMAGES CLASS
+} // END OF Estitofo_TCPDF_IMAGES CLASS
 
 //============================================================+
 // END OF FILE

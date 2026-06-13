@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_static.php
 // Version     : 1.1.5
@@ -19,50 +10,50 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2002-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the License
-// along with TCPDF. If not, see
+// along with Estitofo_TCPDF. If not, see
 // <http://www.tecnick.com/pagefiles/tcpdf/LICENSE.TXT>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // Description :
-//   Static methods used by the TCPDF class.
+//   Static methods used by the Estitofo_TCPDF class.
 //
 //============================================================+
 
 /**
  * @file
- * This is a PHP class that contains static methods for the TCPDF class.<br>
+ * This is a PHP class that contains static methods for the Estitofo_TCPDF class.<br>
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
  * @version 1.1.5
  */
 
 /**
- * @class TCPDF_STATIC
- * Static methods used by the TCPDF class.
+ * @class Estitofo_TCPDF_STATIC
+ * Static methods used by the Estitofo_TCPDF class.
  * @package com.tecnick.tcpdf
  * @brief PHP class for generating PDF documents without requiring external extensions.
  * @version 1.1.5
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF_STATIC {
+class Estitofo_TCPDF_STATIC {
 
 	/**
-	 * Current TCPDF version.
+	 * Current Estitofo_TCPDF version.
 	 * @private static
 	 */
 	private static $tcpdf_version = '6.11.3';
@@ -144,8 +135,8 @@ class TCPDF_STATIC {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	/**
-	 * Return the current TCPDF version.
-	 * @return string TCPDF version string
+	 * Return the current Estitofo_TCPDF version.
+	 * @return string Estitofo_TCPDF version string
 	 * @since 5.9.012 (2010-11-10)
 	 * @public static
 	 */
@@ -154,8 +145,8 @@ class TCPDF_STATIC {
 	}
 
 	/**
-	 * Return the current TCPDF producer.
-	 * @return string TCPDF producer string
+	 * Return the current Estitofo_TCPDF producer.
+	 * @return string Estitofo_TCPDF producer string
 	 * @since 6.0.000 (2013-03-16)
 	 * @public static
 	 */
@@ -292,13 +283,13 @@ class TCPDF_STATIC {
 	/**
 	 * Returns a temporary filename for caching object on filesystem.
 	 * @param string $type Type of file (name of the subdir on the tcpdf cache folder).
-	 * @param string $file_id TCPDF file_id.
+	 * @param string $file_id Estitofo_TCPDF file_id.
 	 * @return string filename.
 	 * @since 4.5.000 (2008-12-31)
 	 * @public static
 	 */
 	public static function getObjFilename($type='tmp', $file_id='') {
-		return tempnam(K_PATH_CACHE, '__tcpdf_'.$file_id.'_'.$type.'_'.md5(TCPDF_STATIC::getRandomSeed()).'_');
+		return tempnam(K_PATH_CACHE, '__tcpdf_'.$file_id.'_'.$type.'_'.md5(Estitofo_TCPDF_STATIC::getRandomSeed()).'_');
 	}
 
 	/**
@@ -838,7 +829,7 @@ class TCPDF_STATIC {
 			if (is_array($prop['fillColor'])) {
 				$opt['mk']['bg'] = $prop['fillColor'];
 			} else {
-				$opt['mk']['bg'] = TCPDF_COLORS::convertHTMLColorToDec($prop['fillColor'], $spot_colors);
+				$opt['mk']['bg'] = Estitofo_TCPDF_COLORS::convertHTMLColorToDec($prop['fillColor'], $spot_colors);
 			}
 		}
 		// strokeColor: Specifies the stroke color for a field that is used to stroke the rectangle of the field with a line as large as the line width.
@@ -846,7 +837,7 @@ class TCPDF_STATIC {
 			if (is_array($prop['strokeColor'])) {
 				$opt['mk']['bc'] = $prop['strokeColor'];
 			} else {
-				$opt['mk']['bc'] = TCPDF_COLORS::convertHTMLColorToDec($prop['strokeColor'], $spot_colors);
+				$opt['mk']['bc'] = Estitofo_TCPDF_COLORS::convertHTMLColorToDec($prop['strokeColor'], $spot_colors);
 			}
 		}
 		// rotation: The rotation of a widget in counterclockwise increments.
@@ -1069,19 +1060,19 @@ class TCPDF_STATIC {
 		// remove empty blocks
 		$cssdata = preg_replace('/([^\}\{]+)\{\}/', '', $cssdata);
 		// replace media type parenthesis
-		$cssdata = preg_replace('/@media[\s]+([^\{]*)\{/i', '@media \\1Ãƒâ€šÃ‚Â§', $cssdata);
-		$cssdata = preg_replace('/\}\}/si', '}Ãƒâ€šÃ‚Â§', $cssdata);
+		$cssdata = preg_replace('/@media[\s]+([^\{]*)\{/i', '@media \\1§', $cssdata);
+		$cssdata = preg_replace('/\}\}/si', '}§', $cssdata);
 		// trim string
 		$cssdata = trim($cssdata);
 		// find media blocks (all, braille, embossed, handheld, print, projection, screen, speech, tty, tv)
 		$cssblocks = array();
 		$matches = array();
-		if (preg_match_all('/@media[\s]+([^\Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§([^Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§/i', $cssdata, $matches) > 0) {
+		if (preg_match_all('/@media[\s]+([^\§]*)§([^§]*)§/i', $cssdata, $matches) > 0) {
 			foreach ($matches[1] as $key => $type) {
 				$cssblocks[$type] = $matches[2][$key];
 			}
 			// remove media blocks
-			$cssdata = preg_replace('/@media[\s]+([^\Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§([^Ãƒâ€šÃ‚Â§]*)Ãƒâ€šÃ‚Â§/i', '', $cssdata);
+			$cssdata = preg_replace('/@media[\s]+([^\§]*)§([^§]*)§/i', '', $cssdata);
 		}
 		// keep 'all' and 'print' media, other media types are discarded
 		if (isset($cssblocks['all']) AND !empty($cssblocks['all'])) {
@@ -1154,7 +1145,7 @@ class TCPDF_STATIC {
 	 */
 	public static function fixHTMLCode($html, $default_css, $tagvs, $tidy_options, &$tagvspaces) {
 		// configure parameters for HTML Tidy
-		if (TCPDF_STATIC::empty_string($tidy_options)) {
+		if (Estitofo_TCPDF_STATIC::empty_string($tidy_options)) {
 			$tidy_options = array (
 				'clean' => 1,
 				'drop-empty-paras' => 0,
@@ -1201,7 +1192,7 @@ class TCPDF_STATIC {
 		// remove some empty tag blocks
 		$html = preg_replace('/<div([^\>]*)><\/div>/', '', $html);
 		$html = preg_replace('/<p([^\>]*)><\/p>/', '', $html);
-		if (!TCPDF_STATIC::empty_string($tagvs)) {
+		if (!Estitofo_TCPDF_STATIC::empty_string($tagvs)) {
 			// set vertical space for some XHTML tags
 			$tagvspaces = $tagvs;
 		}
@@ -1554,7 +1545,7 @@ class TCPDF_STATIC {
 		// create new language array of patterns
 		$patterns = array();
 		foreach($patterns_array as $val) {
-			if (!TCPDF_STATIC::empty_string($val)) {
+			if (!Estitofo_TCPDF_STATIC::empty_string($val)) {
 				$val = trim($val);
 				$val = str_replace('\'', '\\\'', $val);
 				$key = preg_replace('/[0-9]+/', '', $val);
@@ -2666,7 +2657,7 @@ class TCPDF_STATIC {
 		return $page_mode;
 	}
 
-} // END OF TCPDF_STATIC CLASS
+} // END OF Estitofo_TCPDF_STATIC CLASS
 
 //============================================================+
 // END OF FILE

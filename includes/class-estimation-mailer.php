@@ -123,7 +123,7 @@ class Estitofo_Mailer {
 		$body    = self::replace_tokens( $body_tpl, $row, $clean_products );
 
 		$attachments = array();
-		if ( (int) Estitofo_Options::get( 'attach_pdf_email', 1 ) && class_exists( 'TCPDF' ) && class_exists( 'Estitofo_PDF' ) ) {
+		if ( (int) Estitofo_Options::get( 'attach_pdf_email', 1 ) && class_exists( 'Estitofo_TCPDF' ) && class_exists( 'Estitofo_PDF' ) ) {
 			$attachments = self::write_pdf_attachment( $row, $clean_products );
 		}
 

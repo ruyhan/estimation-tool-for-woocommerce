@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_fonts.php
 // Version     : 1.1.1
@@ -19,43 +10,43 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2008-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
-// Description :Font methods for TCPDF library.
+// Description :Font methods for Estitofo_TCPDF library.
 //
 //============================================================+
 
 /**
  * @file
- * Unicode data and font methods for TCPDF library.
+ * Unicode data and font methods for Estitofo_TCPDF library.
  * @author Nicola Asuni
  * @package com.tecnick.tcpdf
  */
 
 /**
- * @class TCPDF_FONTS
- * Font methods for TCPDF library.
+ * @class Estitofo_TCPDF_FONTS
+ * Font methods for Estitofo_TCPDF library.
  * @package com.tecnick.tcpdf
  * @version 1.1.1
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF_FONTS {
+class Estitofo_TCPDF_FONTS {
 
 	/**
 	 * Static cache used for speed up uniord performances
@@ -74,19 +65,19 @@ class TCPDF_FONTS {
 	 * @param int $encid Encoding ID for CMAP table to extract (when building a Unicode font for Windows this value should be 1, for Macintosh should be 0). When Platform ID is 3, legal values for Encoding ID are: 0=Symbol, 1=Unicode, 2=ShiftJIS, 3=PRC, 4=Big5, 5=Wansung, 6=Johab, 7=Reserved, 8=Reserved, 9=Reserved, 10=UCS-4.
 	 * @param boolean $addcbbox If true includes the character bounding box information on the php font file.
 	 * @param boolean $link If true link to system font instead of copying the font data (not transportable) - Note: do not work with Type1 fonts.
-	 * @return string|false TCPDF font name or boolean false in case of error.
+	 * @return string|false Estitofo_TCPDF font name or boolean false in case of error.
 	 * @author Nicola Asuni
 	 * @since 5.9.123 (2010-09-30)
 	 * @public static
 	 */
 	public static function addTTFfont($fontfile, $fonttype='', $enc='', $flags=32, $outpath='', $platid=3, $encid=1, $addcbbox=false, $link=false) {
-		if (!TCPDF_STATIC::file_exists($fontfile)) {
+		if (!Estitofo_TCPDF_STATIC::file_exists($fontfile)) {
 			// Could not find file
 			return false;
 		}
 		// font metrics
 		$fmetric = array();
-		// build new font name for TCPDF compatibility
+		// build new font name for Estitofo_TCPDF compatibility
 		$font_path_parts = pathinfo($fontfile);
 		if (!isset($font_path_parts['filename'])) {
 			$font_path_parts['filename'] = substr($font_path_parts['basename'], 0, -(strlen($font_path_parts['extension']) + 1));
@@ -105,7 +96,7 @@ class TCPDF_FONTS {
 			$outpath = self::_getfontpath();
 		}
 		// check if this font already exist
-		if (@TCPDF_STATIC::file_exists($outpath.$font_name.'.php')) {
+		if (@Estitofo_TCPDF_STATIC::file_exists($outpath.$font_name.'.php')) {
 			// this font already exist (delete it from fonts folder to rebuild it)
 			return $font_name;
 		}
@@ -116,7 +107,7 @@ class TCPDF_FONTS {
 		$fmetric['originalsize'] = strlen($font);
 		// autodetect font type
 		if (empty($fonttype)) {
-			if (TCPDF_STATIC::_getULONG($font, 0) == 0x10000) {
+			if (Estitofo_TCPDF_STATIC::_getULONG($font, 0) == 0x10000) {
 				// True Type (Unicode or not)
 				$fonttype = 'TrueTypeUnicode';
 			} elseif (substr($font, 0, 4) == 'OTTO') {
@@ -158,10 +149,10 @@ class TCPDF_FONTS {
 		$fmetric['enc'] = preg_replace('/[^A-Za-z0-9_\-]/', '', $enc);
 		$fmetric['diff'] = '';
 		if (($fmetric['type'] == 'TrueType') OR ($fmetric['type'] == 'Type1')) {
-			if (!empty($enc) AND ($enc != 'cp1252') AND isset(TCPDF_FONT_DATA::$encmap[$enc])) {
+			if (!empty($enc) AND ($enc != 'cp1252') AND isset(Estitofo_TCPDF_FONT_DATA::$encmap[$enc])) {
 				// build differences from reference encoding
-				$enc_ref = TCPDF_FONT_DATA::$encmap['cp1252'];
-				$enc_target = TCPDF_FONT_DATA::$encmap[$enc];
+				$enc_ref = Estitofo_TCPDF_FONT_DATA::$encmap['cp1252'];
+				$enc_target = Estitofo_TCPDF_FONT_DATA::$encmap[$enc];
 				$last = 0;
 				for ($i = 32; $i <= 255; ++$i) {
 					if ($enc_target[$i] != $enc_ref[$i]) {
@@ -196,7 +187,7 @@ class TCPDF_FONTS {
 			$data .= $encrypted;
 			// store compressed font
 			$fmetric['file'] .= '.z';
-			$fp = TCPDF_STATIC::fopenLocal($outpath.$fmetric['file'], 'wb');
+			$fp = Estitofo_TCPDF_STATIC::fopenLocal($outpath.$fmetric['file'], 'wb');
 			fwrite($fp, gzcompress($data));
 			fclose($fp);
 			// get font info
@@ -285,8 +276,8 @@ class TCPDF_FONTS {
 			// get charstring data
 			$eplain = substr($eplain, (strpos($eplain, '/CharStrings') + 1));
 			preg_match_all('#/([A-Za-z0-9\.]*+)[\s][0-9]+[\s]RD[\s](.*)[\s]ND#sU', $eplain, $matches, PREG_SET_ORDER);
-			if (!empty($enc) AND isset(TCPDF_FONT_DATA::$encmap[$enc])) {
-				$enc_map = TCPDF_FONT_DATA::$encmap[$enc];
+			if (!empty($enc) AND isset(Estitofo_TCPDF_FONT_DATA::$encmap[$enc])) {
+				$enc_map = Estitofo_TCPDF_FONT_DATA::$encmap[$enc];
 			} else {
 				$enc_map = false;
 			}
@@ -366,7 +357,7 @@ class TCPDF_FONTS {
 		} else {
 			// ---------- TRUE TYPE ----------
 			$offset = 0; // offset position of the font data
-			if (TCPDF_STATIC::_getULONG($font, $offset) != 0x10000) {
+			if (Estitofo_TCPDF_STATIC::_getULONG($font, $offset) != 0x10000) {
 				// sfnt version must be 0x00010000 for TrueType version 1.0.
 				return false;
 			}
@@ -377,14 +368,14 @@ class TCPDF_FONTS {
 				} else {
 					// store compressed font
 					$fmetric['file'] .= '.z';
-					$fp = TCPDF_STATIC::fopenLocal($outpath.$fmetric['file'], 'wb');
+					$fp = Estitofo_TCPDF_STATIC::fopenLocal($outpath.$fmetric['file'], 'wb');
 					fwrite($fp, gzcompress($font));
 					fclose($fp);
 				}
 			}
 			$offset += 4;
 			// get number of tables
-			$numTables = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$numTables = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			// skip searchRange, entrySelector and rangeShift
 			$offset += 6;
@@ -396,37 +387,37 @@ class TCPDF_FONTS {
 				$tag = substr($font, $offset, 4);
 				$offset += 4;
 				$table[$tag] = array();
-				$table[$tag]['checkSum'] = TCPDF_STATIC::_getULONG($font, $offset);
+				$table[$tag]['checkSum'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 				$offset += 4;
-				$table[$tag]['offset'] = TCPDF_STATIC::_getULONG($font, $offset);
+				$table[$tag]['offset'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 				$offset += 4;
-				$table[$tag]['length'] = TCPDF_STATIC::_getULONG($font, $offset);
+				$table[$tag]['length'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 				$offset += 4;
 			}
 			// check magicNumber
 			$offset = $table['head']['offset'] + 12;
-			if (TCPDF_STATIC::_getULONG($font, $offset) != 0x5F0F3CF5) {
+			if (Estitofo_TCPDF_STATIC::_getULONG($font, $offset) != 0x5F0F3CF5) {
 				// magicNumber must be 0x5F0F3CF5
 				return false;
 			}
 			$offset += 4;
 			$offset += 2; // skip flags
 			// get FUnits
-			$fmetric['unitsPerEm'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$fmetric['unitsPerEm'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			// units ratio constant
 			$urk = (1000 / $fmetric['unitsPerEm']);
 			$offset += 16; // skip created, modified
-			$xMin = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$xMin = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
-			$yMin = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$yMin = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
-			$xMax = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$xMax = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
-			$yMax = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$yMax = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
 			$fmetric['bbox'] = ''.$xMin.' '.$yMin.' '.$xMax.' '.$yMax.'';
-			$macStyle = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$macStyle = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			// PDF font flags
 			$fmetric['Flags'] = $flags;
@@ -436,7 +427,7 @@ class TCPDF_FONTS {
 			}
 			// get offset mode (indexToLocFormat : 0 = short, 1 = long)
 			$offset = $table['head']['offset'] + 50;
-			$short_offset = (TCPDF_STATIC::_getSHORT($font, $offset) == 0);
+			$short_offset = (Estitofo_TCPDF_STATIC::_getSHORT($font, $offset) == 0);
 			$offset += 2;
 			// get the offsets to the locations of the glyphs in the font, relative to the beginning of the glyphData table
 			$indexToLoc = array();
@@ -445,7 +436,7 @@ class TCPDF_FONTS {
 				// short version
 				$tot_num_glyphs = floor($table['loca']['length'] / 2); // numGlyphs + 1
 				for ($i = 0; $i < $tot_num_glyphs; ++$i) {
-					$indexToLoc[$i] = TCPDF_STATIC::_getUSHORT($font, $offset) * 2;
+					$indexToLoc[$i] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) * 2;
 					if (isset($indexToLoc[($i - 1)]) && ($indexToLoc[$i] == $indexToLoc[($i - 1)])) {
 						// the last glyph didn't have an outline
 						unset($indexToLoc[($i - 1)]);
@@ -456,7 +447,7 @@ class TCPDF_FONTS {
 				// long version
 				$tot_num_glyphs = floor($table['loca']['length'] / 4); // numGlyphs + 1
 				for ($i = 0; $i < $tot_num_glyphs; ++$i) {
-					$indexToLoc[$i] = TCPDF_STATIC::_getULONG($font, $offset);
+					$indexToLoc[$i] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 					if (isset($indexToLoc[($i - 1)]) && ($indexToLoc[$i] == $indexToLoc[($i - 1)])) {
 						// the last glyph didn't have an outline
 						unset($indexToLoc[($i - 1)]);
@@ -466,31 +457,31 @@ class TCPDF_FONTS {
 			}
 			// get glyphs indexes of chars from cmap table
 			$offset = $table['cmap']['offset'] + 2;
-			$numEncodingTables = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$numEncodingTables = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			$encodingTables = array();
 			for ($i = 0; $i < $numEncodingTables; ++$i) {
-				$encodingTables[$i]['platformID'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+				$encodingTables[$i]['platformID'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 				$offset += 2;
-				$encodingTables[$i]['encodingID'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+				$encodingTables[$i]['encodingID'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 				$offset += 2;
-				$encodingTables[$i]['offset'] = TCPDF_STATIC::_getULONG($font, $offset);
+				$encodingTables[$i]['offset'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 				$offset += 4;
 			}
 			// ---------- get os/2 metrics ----------
 			$offset = $table['OS/2']['offset'];
 			$offset += 2; // skip version
 			// xAvgCharWidth
-			$fmetric['AvgWidth'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['AvgWidth'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
 			// usWeightClass
-			$usWeightClass = round(TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
+			$usWeightClass = round(Estitofo_TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
 			// estimate StemV and StemH (400 = usWeightClass for Normal - Regular font)
 			$fmetric['StemV'] = round((70 * $usWeightClass) / 400);
 			$fmetric['StemH'] = round((30 * $usWeightClass) / 400);
 			$offset += 2;
 			$offset += 2; // usWidthClass
-			$fsType = TCPDF_STATIC::_getSHORT($font, $offset);
+			$fsType = Estitofo_TCPDF_STATIC::_getSHORT($font, $offset);
 			$offset += 2;
 			if ($fsType == 2) {
 				// This Font cannot be modified, embedded or exchanged in any manner without first obtaining permission of the legal owner.
@@ -501,22 +492,22 @@ class TCPDF_FONTS {
 			$offset = $table['name']['offset'];
 			$offset += 2; // skip Format selector (=0).
 			// Number of NameRecords that follow n.
-			$numNameRecords = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$numNameRecords = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			// Offset to start of string storage (from start of table).
-			$stringStorageOffset = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$stringStorageOffset = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			for ($i = 0; $i < $numNameRecords; ++$i) {
 				$offset += 6; // skip Platform ID, Platform-specific encoding ID, Language ID.
 				// Name ID.
-				$nameID = TCPDF_STATIC::_getUSHORT($font, $offset);
+				$nameID = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 				$offset += 2;
 				if ($nameID == 6) {
 					// String length (in bytes).
-					$stringLength = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$stringLength = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
 					// String offset from start of storage area (in bytes).
-					$stringOffset = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$stringOffset = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
 					$offset = ($table['name']['offset'] + $stringStorageOffset + $stringOffset);
 					$fmetric['name'] = substr($font, $offset, $stringLength);
@@ -532,13 +523,13 @@ class TCPDF_FONTS {
 			// ---------- get post data ----------
 			$offset = $table['post']['offset'];
 			$offset += 4; // skip Format Type
-			$fmetric['italicAngle'] = TCPDF_STATIC::_getFIXED($font, $offset);
+			$fmetric['italicAngle'] = Estitofo_TCPDF_STATIC::_getFIXED($font, $offset);
 			$offset += 4;
-			$fmetric['underlinePosition'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['underlinePosition'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
-			$fmetric['underlineThickness'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['underlineThickness'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
-			$isFixedPitch = (TCPDF_STATIC::_getULONG($font, $offset) == 0) ? false : true;
+			$isFixedPitch = (Estitofo_TCPDF_STATIC::_getULONG($font, $offset) == 0) ? false : true;
 			$offset += 2;
 			if ($isFixedPitch) {
 				$fmetric['Flags'] |= 1;
@@ -547,25 +538,25 @@ class TCPDF_FONTS {
 			$offset = $table['hhea']['offset'];
 			$offset += 4; // skip Table version number
 			// Ascender
-			$fmetric['Ascent'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['Ascent'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
 			// Descender
-			$fmetric['Descent'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['Descent'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
 			// LineGap
-			$fmetric['Leading'] = round(TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
+			$fmetric['Leading'] = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset) * $urk);
 			$offset += 2;
 			// advanceWidthMax
-			$fmetric['MaxWidth'] = round(TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
+			$fmetric['MaxWidth'] = round(Estitofo_TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
 			$offset += 2;
 			$offset += 22; // skip some values
 			// get the number of hMetric entries in hmtx table
-			$numberOfHMetrics = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$numberOfHMetrics = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			// ---------- get maxp data ----------
 			$offset = $table['maxp']['offset'];
 			$offset += 4; // skip Table version number
 			// get the the number of glyphs in the font.
-			$numGlyphs = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$numGlyphs = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			// ---------- get CIDToGIDMap ----------
 			$ctg = array();
 			$c = 0;
@@ -573,13 +564,13 @@ class TCPDF_FONTS {
 				// get only specified Platform ID and Encoding ID
 				if (($enctable['platformID'] == $platid) AND ($enctable['encodingID'] == $encid)) {
 					$offset = $table['cmap']['offset'] + $enctable['offset'];
-					$format = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$format = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
 					switch ($format) {
 						case 0: { // Format 0: Byte encoding table
 							$offset += 4; // skip length and version/language
 							for ($c = 0; $c < 256; ++$c) {
-								$g = TCPDF_STATIC::_getBYTE($font, $offset);
+								$g = Estitofo_TCPDF_STATIC::_getBYTE($font, $offset);
 								$ctg[$c] = $g;
 								++$offset;
 							}
@@ -590,7 +581,7 @@ class TCPDF_FONTS {
 							$numSubHeaders = 0;
 							for ($i = 0; $i < 256; ++$i) {
 								// Array that maps high bytes to subHeaders: value is subHeader index * 8.
-								$subHeaderKeys[$i] = (TCPDF_STATIC::_getUSHORT($font, $offset) / 8);
+								$subHeaderKeys[$i] = (Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) / 8);
 								$offset += 2;
 								if ($numSubHeaders < $subHeaderKeys[$i]) {
 									$numSubHeaders = $subHeaderKeys[$i];
@@ -602,20 +593,20 @@ class TCPDF_FONTS {
 							$subHeaders = array();
 							$numGlyphIndexArray = 0;
 							for ($k = 0; $k < $numSubHeaders; ++$k) {
-								$subHeaders[$k]['firstCode'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$subHeaders[$k]['firstCode'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
-								$subHeaders[$k]['entryCount'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$subHeaders[$k]['entryCount'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
-								$subHeaders[$k]['idDelta'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$subHeaders[$k]['idDelta'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
-								$subHeaders[$k]['idRangeOffset'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$subHeaders[$k]['idRangeOffset'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 								$subHeaders[$k]['idRangeOffset'] -= (2 + (($numSubHeaders - $k - 1) * 8));
 								$subHeaders[$k]['idRangeOffset'] /= 2;
 								$numGlyphIndexArray += $subHeaders[$k]['entryCount'];
 							}
 							for ($k = 0; $k < $numGlyphIndexArray; ++$k) {
-								$glyphIndexArray[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$glyphIndexArray[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							for ($i = 0; $i < 256; ++$i) {
@@ -644,37 +635,37 @@ class TCPDF_FONTS {
 							break;
 						}
 						case 4: { // Format 4: Segment mapping to delta values
-							$length = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$length = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$offset += 2;
 							$offset += 2; // skip version/language
-							$segCount = floor(TCPDF_STATIC::_getUSHORT($font, $offset) / 2);
+							$segCount = floor(Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) / 2);
 							$offset += 2;
 							$offset += 6; // skip searchRange, entrySelector, rangeShift
 							$endCount = array(); // array of end character codes for each segment
 							for ($k = 0; $k < $segCount; ++$k) {
-								$endCount[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$endCount[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							$offset += 2; // skip reservedPad
 							$startCount = array(); // array of start character codes for each segment
 							for ($k = 0; $k < $segCount; ++$k) {
-								$startCount[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$startCount[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							$idDelta = array(); // delta for all character codes in segment
 							for ($k = 0; $k < $segCount; ++$k) {
-								$idDelta[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$idDelta[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							$idRangeOffset = array(); // Offsets into glyphIdArray or 0
 							for ($k = 0; $k < $segCount; ++$k) {
-								$idRangeOffset[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$idRangeOffset[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							$gidlen = (floor($length / 2) - 8 - (4 * $segCount));
 							$glyphIdArray = array(); // glyph index array
 							for ($k = 0; $k < $gidlen; ++$k) {
-								$glyphIdArray[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$glyphIdArray[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 							}
 							for ($k = 0; $k < $segCount - 1; ++$k) {
@@ -695,13 +686,13 @@ class TCPDF_FONTS {
 						}
 						case 6: { // Format 6: Trimmed table mapping
 							$offset += 4; // skip length and version/language
-							$firstCode = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$firstCode = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$offset += 2;
-							$entryCount = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$entryCount = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$offset += 2;
 							for ($k = 0; $k < $entryCount; ++$k) {
 								$c = ($k + $firstCode);
-								$g = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$g = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$offset += 2;
 								$ctg[$c] = $g;
 							}
@@ -710,17 +701,17 @@ class TCPDF_FONTS {
 						case 8: { // Format 8: Mixed 16-bit and 32-bit coverage
 							$offset += 10; // skip reserved, length and version/language
 							for ($k = 0; $k < 8192; ++$k) {
-								$is32[$k] = TCPDF_STATIC::_getBYTE($font, $offset);
+								$is32[$k] = Estitofo_TCPDF_STATIC::_getBYTE($font, $offset);
 								++$offset;
 							}
-							$nGroups = TCPDF_STATIC::_getULONG($font, $offset);
+							$nGroups = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 							$offset += 4;
 							for ($i = 0; $i < $nGroups; ++$i) {
-								$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+								$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
-								$endCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+								$endCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
-								$startGlyphID = TCPDF_STATIC::_getULONG($font, $offset);
+								$startGlyphID = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
 								for ($k = $startCharCode; $k <= $endCharCode; ++$k) {
 									$is32idx = floor($c / 8);
@@ -741,13 +732,13 @@ class TCPDF_FONTS {
 						}
 						case 10: { // Format 10: Trimmed array
 							$offset += 10; // skip reserved, length and version/language
-							$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+							$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 							$offset += 4;
-							$numChars = TCPDF_STATIC::_getULONG($font, $offset);
+							$numChars = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 							$offset += 4;
 							for ($k = 0; $k < $numChars; ++$k) {
 								$c = ($k + $startCharCode);
-								$g = TCPDF_STATIC::_getUSHORT($font, $offset);
+								$g = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 								$ctg[$c] = $g;
 								$offset += 2;
 							}
@@ -755,14 +746,14 @@ class TCPDF_FONTS {
 						}
 						case 12: { // Format 12: Segmented coverage
 							$offset += 10; // skip length and version/language
-							$nGroups = TCPDF_STATIC::_getULONG($font, $offset);
+							$nGroups = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 							$offset += 4;
 							for ($k = 0; $k < $nGroups; ++$k) {
-								$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+								$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
-								$endCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+								$endCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
-								$startGlyphCode = TCPDF_STATIC::_getULONG($font, $offset);
+								$startGlyphCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 								$offset += 4;
 								for ($c = $startCharCode; $c <= $endCharCode; ++$c) {
 									$ctg[$c] = $startGlyphCode;
@@ -787,23 +778,23 @@ class TCPDF_FONTS {
 			}
 			// get xHeight (height of x)
 			$offset = ($table['glyf']['offset'] + $indexToLoc[$ctg[120]] + 4);
-			$yMin = TCPDF_STATIC::_getFWORD($font, $offset);
+			$yMin = Estitofo_TCPDF_STATIC::_getFWORD($font, $offset);
 			$offset += 4;
-			$yMax = TCPDF_STATIC::_getFWORD($font, $offset);
+			$yMax = Estitofo_TCPDF_STATIC::_getFWORD($font, $offset);
 			$offset += 2;
 			$fmetric['XHeight'] = round(($yMax - $yMin) * $urk);
 			// get CapHeight (height of H)
 			$offset = ($table['glyf']['offset'] + $indexToLoc[$ctg[72]] + 4);
-			$yMin = TCPDF_STATIC::_getFWORD($font, $offset);
+			$yMin = Estitofo_TCPDF_STATIC::_getFWORD($font, $offset);
 			$offset += 4;
-			$yMax = TCPDF_STATIC::_getFWORD($font, $offset);
+			$yMax = Estitofo_TCPDF_STATIC::_getFWORD($font, $offset);
 			$offset += 2;
 			$fmetric['CapHeight'] = round(($yMax - $yMin) * $urk);
 			// ceate widths array
 			$cw = array();
 			$offset = $table['hmtx']['offset'];
 			for ($i = 0 ; $i < $numberOfHMetrics; ++$i) {
-				$cw[$i] = round(TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
+				$cw[$i] = round(Estitofo_TCPDF_STATIC::_getUFWORD($font, $offset) * $urk);
 				$offset += 4; // skip lsb
 			}
 			if ($numberOfHMetrics < $numGlyphs) {
@@ -820,10 +811,10 @@ class TCPDF_FONTS {
 					}
 					if ($addcbbox AND isset($indexToLoc[$ctg[$cid]])) {
 						$offset = ($table['glyf']['offset'] + $indexToLoc[$ctg[$cid]]);
-						$xMin = round(TCPDF_STATIC::_getFWORD($font, $offset + 2) * $urk);
-						$yMin = round(TCPDF_STATIC::_getFWORD($font, $offset + 4) * $urk);
-						$xMax = round(TCPDF_STATIC::_getFWORD($font, $offset + 6) * $urk);
-						$yMax = round(TCPDF_STATIC::_getFWORD($font, $offset + 8) * $urk);
+						$xMin = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset + 2) * $urk);
+						$yMin = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset + 4) * $urk);
+						$xMax = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset + 6) * $urk);
+						$yMax = round(Estitofo_TCPDF_STATIC::_getFWORD($font, $offset + 8) * $urk);
 						$fmetric['cbbox'] .= ','.$cid.'=>array('.$xMin.','.$yMin.','.$xMax.','.$yMax.')';
 					}
 				}
@@ -834,7 +825,7 @@ class TCPDF_FONTS {
 		}
 		// ---------- create php font file ----------
 		$pfile = '<'.'?'.'php'."\n";
-		$pfile .= '// TCPDF FONT FILE DESCRIPTION'."\n";
+		$pfile .= '// Estitofo_TCPDF FONT FILE DESCRIPTION'."\n";
 		$pfile .= '$type=\''.$fmetric['type'].'\';'."\n";
 		$pfile .= '$name=\''.$fmetric['name'].'\';'."\n";
 		$pfile .= '$up='.$fmetric['underlinePosition'].';'."\n";
@@ -897,7 +888,7 @@ class TCPDF_FONTS {
 					$cidtogidmap = self::updateCIDtoGIDmap($cidtogidmap, $cid, $ctg[$cid]);
 				}
 				// store compressed CIDToGIDMap
-				$fp = TCPDF_STATIC::fopenLocal($outpath.$fmetric['ctg'], 'wb');
+				$fp = Estitofo_TCPDF_STATIC::fopenLocal($outpath.$fmetric['ctg'], 'wb');
 				fwrite($fp, gzcompress($cidtogidmap));
 				fclose($fp);
 			}
@@ -923,10 +914,10 @@ class TCPDF_FONTS {
 		$pfile .= '$cw=array('.substr($fmetric['cw'], 1).');'."\n";
 		$pfile .= '// --- EOF ---'."\n";
 		// store file
-		$fp = TCPDF_STATIC::fopenLocal($outpath.$font_name.'.php', 'w');
+		$fp = Estitofo_TCPDF_STATIC::fopenLocal($outpath.$font_name.'.php', 'w');
 		fwrite($fp, $pfile);
 		fclose($fp);
-		// return TCPDF font name
+		// return Estitofo_TCPDF font name
 		return $font_name;
 	}
 
@@ -964,14 +955,14 @@ class TCPDF_FONTS {
 	public static function _getTrueTypeFontSubset($font, $subsetchars) {
 		ksort($subsetchars);
 		$offset = 0; // offset position of the font data
-		if (TCPDF_STATIC::_getULONG($font, $offset) != 0x10000) {
+		if (Estitofo_TCPDF_STATIC::_getULONG($font, $offset) != 0x10000) {
 			// sfnt version must be 0x00010000 for TrueType version 1.0.
 			return $font;
 		}
 		$c = 0;
 		$offset += 4;
 		// get number of tables
-		$numTables = TCPDF_STATIC::_getUSHORT($font, $offset);
+		$numTables = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 		$offset += 2;
 		// skip searchRange, entrySelector and rangeShift
 		$offset += 6;
@@ -983,23 +974,23 @@ class TCPDF_FONTS {
 			$tag = substr($font, $offset, 4);
 			$offset += 4;
 			$table[$tag] = array();
-			$table[$tag]['checkSum'] = TCPDF_STATIC::_getULONG($font, $offset);
+			$table[$tag]['checkSum'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 			$offset += 4;
-			$table[$tag]['offset'] = TCPDF_STATIC::_getULONG($font, $offset);
+			$table[$tag]['offset'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 			$offset += 4;
-			$table[$tag]['length'] = TCPDF_STATIC::_getULONG($font, $offset);
+			$table[$tag]['length'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 			$offset += 4;
 		}
 		// check magicNumber
 		$offset = $table['head']['offset'] + 12;
-		if (TCPDF_STATIC::_getULONG($font, $offset) != 0x5F0F3CF5) {
+		if (Estitofo_TCPDF_STATIC::_getULONG($font, $offset) != 0x5F0F3CF5) {
 			// magicNumber must be 0x5F0F3CF5
 			return $font;
 		}
 		$offset += 4;
 		// get offset mode (indexToLocFormat : 0 = short, 1 = long)
 		$offset = $table['head']['offset'] + 50;
-		$short_offset = (TCPDF_STATIC::_getSHORT($font, $offset) == 0);
+		$short_offset = (Estitofo_TCPDF_STATIC::_getSHORT($font, $offset) == 0);
 		$offset += 2;
 		// get the offsets to the locations of the glyphs in the font, relative to the beginning of the glyphData table
 		$indexToLoc = array();
@@ -1008,14 +999,14 @@ class TCPDF_FONTS {
 			// short version
 			$tot_num_glyphs = floor($table['loca']['length'] / 2); // numGlyphs + 1
 			for ($i = 0; $i < $tot_num_glyphs; ++$i) {
-				$indexToLoc[$i] = TCPDF_STATIC::_getUSHORT($font, $offset) * 2;
+				$indexToLoc[$i] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) * 2;
 				$offset += 2;
 			}
 		} else {
 			// long version
 			$tot_num_glyphs = ($table['loca']['length'] / 4); // numGlyphs + 1
 			for ($i = 0; $i < $tot_num_glyphs; ++$i) {
-				$indexToLoc[$i] = TCPDF_STATIC::_getULONG($font, $offset);
+				$indexToLoc[$i] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 				$offset += 4;
 			}
 		}
@@ -1023,28 +1014,28 @@ class TCPDF_FONTS {
 		$subsetglyphs = array(); // glyph IDs on key
 		$subsetglyphs[0] = true; // character codes that do not correspond to any glyph in the font should be mapped to glyph index 0
 		$offset = $table['cmap']['offset'] + 2;
-		$numEncodingTables = TCPDF_STATIC::_getUSHORT($font, $offset);
+		$numEncodingTables = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 		$offset += 2;
 		$encodingTables = array();
 		for ($i = 0; $i < $numEncodingTables; ++$i) {
-			$encodingTables[$i]['platformID'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$encodingTables[$i]['platformID'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
-			$encodingTables[$i]['encodingID'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$encodingTables[$i]['encodingID'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
-			$encodingTables[$i]['offset'] = TCPDF_STATIC::_getULONG($font, $offset);
+			$encodingTables[$i]['offset'] = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 			$offset += 4;
 		}
 		foreach ($encodingTables as $enctable) {
 			// get all platforms and encodings
 			$offset = $table['cmap']['offset'] + $enctable['offset'];
-			$format = TCPDF_STATIC::_getUSHORT($font, $offset);
+			$format = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 			$offset += 2;
 			switch ($format) {
 				case 0: { // Format 0: Byte encoding table
 					$offset += 4; // skip length and version/language
 					for ($c = 0; $c < 256; ++$c) {
 						if (isset($subsetchars[$c])) {
-							$g = TCPDF_STATIC::_getBYTE($font, $offset);
+							$g = Estitofo_TCPDF_STATIC::_getBYTE($font, $offset);
 							$subsetglyphs[$g] = true;
 						}
 						++$offset;
@@ -1056,7 +1047,7 @@ class TCPDF_FONTS {
 					$numSubHeaders = 0;
 					for ($i = 0; $i < 256; ++$i) {
 						// Array that maps high bytes to subHeaders: value is subHeader index * 8.
-						$subHeaderKeys[$i] = (TCPDF_STATIC::_getUSHORT($font, $offset) / 8);
+						$subHeaderKeys[$i] = (Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) / 8);
 						$offset += 2;
 						if ($numSubHeaders < $subHeaderKeys[$i]) {
 							$numSubHeaders = $subHeaderKeys[$i];
@@ -1068,20 +1059,20 @@ class TCPDF_FONTS {
 					$subHeaders = array();
 					$numGlyphIndexArray = 0;
 					for ($k = 0; $k < $numSubHeaders; ++$k) {
-						$subHeaders[$k]['firstCode'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$subHeaders[$k]['firstCode'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
-						$subHeaders[$k]['entryCount'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$subHeaders[$k]['entryCount'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
-						$subHeaders[$k]['idDelta'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$subHeaders[$k]['idDelta'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
-						$subHeaders[$k]['idRangeOffset'] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$subHeaders[$k]['idRangeOffset'] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 						$subHeaders[$k]['idRangeOffset'] -= (2 + (($numSubHeaders - $k - 1) * 8));
 						$subHeaders[$k]['idRangeOffset'] /= 2;
 						$numGlyphIndexArray += $subHeaders[$k]['entryCount'];
 					}
 					for ($k = 0; $k < $numGlyphIndexArray; ++$k) {
-						$glyphIndexArray[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$glyphIndexArray[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					for ($i = 0; $i < 256; ++$i) {
@@ -1114,37 +1105,37 @@ class TCPDF_FONTS {
 					break;
 				}
 				case 4: { // Format 4: Segment mapping to delta values
-					$length = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$length = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
 					$offset += 2; // skip version/language
-					$segCount = floor(TCPDF_STATIC::_getUSHORT($font, $offset) / 2);
+					$segCount = floor(Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset) / 2);
 					$offset += 2;
 					$offset += 6; // skip searchRange, entrySelector, rangeShift
 					$endCount = array(); // array of end character codes for each segment
 					for ($k = 0; $k < $segCount; ++$k) {
-						$endCount[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$endCount[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					$offset += 2; // skip reservedPad
 					$startCount = array(); // array of start character codes for each segment
 					for ($k = 0; $k < $segCount; ++$k) {
-						$startCount[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$startCount[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					$idDelta = array(); // delta for all character codes in segment
 					for ($k = 0; $k < $segCount; ++$k) {
-						$idDelta[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$idDelta[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					$idRangeOffset = array(); // Offsets into glyphIdArray or 0
 					for ($k = 0; $k < $segCount; ++$k) {
-						$idRangeOffset[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$idRangeOffset[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					$gidlen = (floor($length / 2) - 8 - (4 * $segCount));
 					$glyphIdArray = array(); // glyph index array
 					for ($k = 0; $k < $gidlen; ++$k) {
-						$glyphIdArray[$k] = TCPDF_STATIC::_getUSHORT($font, $offset);
+						$glyphIdArray[$k] = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 						$offset += 2;
 					}
 					for ($k = 0; $k < $segCount; ++$k) {
@@ -1167,14 +1158,14 @@ class TCPDF_FONTS {
 				}
 				case 6: { // Format 6: Trimmed table mapping
 					$offset += 4; // skip length and version/language
-					$firstCode = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$firstCode = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
-					$entryCount = TCPDF_STATIC::_getUSHORT($font, $offset);
+					$entryCount = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 					$offset += 2;
 					for ($k = 0; $k < $entryCount; ++$k) {
 						$c = ($k + $firstCode);
 						if (isset($subsetchars[$c])) {
-							$g = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$g = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$subsetglyphs[$g] = true;
 						}
 						$offset += 2;
@@ -1184,17 +1175,17 @@ class TCPDF_FONTS {
 				case 8: { // Format 8: Mixed 16-bit and 32-bit coverage
 					$offset += 10; // skip reserved, length and version/language
 					for ($k = 0; $k < 8192; ++$k) {
-						$is32[$k] = TCPDF_STATIC::_getBYTE($font, $offset);
+						$is32[$k] = Estitofo_TCPDF_STATIC::_getBYTE($font, $offset);
 						++$offset;
 					}
-					$nGroups = TCPDF_STATIC::_getULONG($font, $offset);
+					$nGroups = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 					$offset += 4;
 					for ($i = 0; $i < $nGroups; ++$i) {
-						$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+						$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
-						$endCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+						$endCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
-						$startGlyphID = TCPDF_STATIC::_getULONG($font, $offset);
+						$startGlyphID = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
 						for ($k = $startCharCode; $k <= $endCharCode; ++$k) {
 							$is32idx = floor($c / 8);
@@ -1217,14 +1208,14 @@ class TCPDF_FONTS {
 				}
 				case 10: { // Format 10: Trimmed array
 					$offset += 10; // skip reserved, length and version/language
-					$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+					$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 					$offset += 4;
-					$numChars = TCPDF_STATIC::_getULONG($font, $offset);
+					$numChars = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 					$offset += 4;
 					for ($k = 0; $k < $numChars; ++$k) {
 						$c = ($k + $startCharCode);
 						if (isset($subsetchars[$c])) {
-							$g = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$g = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$subsetglyphs[$g] = true;
 						}
 						$offset += 2;
@@ -1233,14 +1224,14 @@ class TCPDF_FONTS {
 				}
 				case 12: { // Format 12: Segmented coverage
 					$offset += 10; // skip length and version/language
-					$nGroups = TCPDF_STATIC::_getULONG($font, $offset);
+					$nGroups = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 					$offset += 4;
 					for ($k = 0; $k < $nGroups; ++$k) {
-						$startCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+						$startCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
-						$endCharCode = TCPDF_STATIC::_getULONG($font, $offset);
+						$endCharCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
-						$startGlyphCode = TCPDF_STATIC::_getULONG($font, $offset);
+						$startGlyphCode = Estitofo_TCPDF_STATIC::_getULONG($font, $offset);
 						$offset += 4;
 						for ($c = $startCharCode; $c <= $endCharCode; ++$c) {
 							if (isset($subsetchars[$c])) {
@@ -1269,14 +1260,14 @@ class TCPDF_FONTS {
 			foreach ($sga as $key => $val) {
 				if (isset($indexToLoc[$key])) {
 					$offset = ($table['glyf']['offset'] + $indexToLoc[$key]);
-					$numberOfContours = TCPDF_STATIC::_getSHORT($font, $offset);
+					$numberOfContours = Estitofo_TCPDF_STATIC::_getSHORT($font, $offset);
 					$offset += 2;
 					if ($numberOfContours < 0) { // composite glyph
 						$offset += 8; // skip xMin, yMin, xMax, yMax
 						do {
-							$flags = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$flags = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$offset += 2;
-							$glyphIndex = TCPDF_STATIC::_getUSHORT($font, $offset);
+							$glyphIndex = Estitofo_TCPDF_STATIC::_getUSHORT($font, $offset);
 							$offset += 2;
 							if (!isset($subsetglyphs[$glyphIndex])) {
 								// add missing glyphs
@@ -1556,11 +1547,11 @@ class TCPDF_FONTS {
 	public static function getFontFullPath($file, $fontdir=false) {
 		$fontfile = '';
 		// search files on various directories
-		if (($fontdir !== false) AND @TCPDF_STATIC::file_exists($fontdir.$file)) {
+		if (($fontdir !== false) AND @Estitofo_TCPDF_STATIC::file_exists($fontdir.$file)) {
 			$fontfile = $fontdir.$file;
-		} elseif (@TCPDF_STATIC::file_exists(self::_getfontpath().$file)) {
+		} elseif (@Estitofo_TCPDF_STATIC::file_exists(self::_getfontpath().$file)) {
 			$fontfile = self::_getfontpath().$file;
-		} elseif (@TCPDF_STATIC::file_exists($file)) {
+		} elseif (@Estitofo_TCPDF_STATIC::file_exists($file)) {
 			$fontfile = $file;
 		}
 		return $fontfile;
@@ -1855,9 +1846,9 @@ class TCPDF_FONTS {
 		foreach ($unicode as $char) {
 			if ($char < 256) {
 				$outarr[] = $char;
-			} elseif (array_key_exists($char, TCPDF_FONT_DATA::$uni_utf8tolatin)) {
+			} elseif (array_key_exists($char, Estitofo_TCPDF_FONT_DATA::$uni_utf8tolatin)) {
 				// map from UTF-8
-				$outarr[] = TCPDF_FONT_DATA::$uni_utf8tolatin[$char];
+				$outarr[] = Estitofo_TCPDF_FONT_DATA::$uni_utf8tolatin[$char];
 			} elseif ($char == 0xFFFD) {
 				// skip
 			} else {
@@ -1880,9 +1871,9 @@ class TCPDF_FONTS {
 		foreach ($unicode as $char) {
 			if ($char < 256) {
 				$outstr .= chr($char);
-			} elseif (array_key_exists($char, TCPDF_FONT_DATA::$uni_utf8tolatin)) {
+			} elseif (array_key_exists($char, Estitofo_TCPDF_FONT_DATA::$uni_utf8tolatin)) {
 				// map from UTF-8
-				$outstr .= chr(TCPDF_FONT_DATA::$uni_utf8tolatin[$char]);
+				$outstr .= chr(Estitofo_TCPDF_FONT_DATA::$uni_utf8tolatin[$char]);
 			} elseif ($char == 0xFFFD) {
 				// skip
 			} else {
@@ -2012,7 +2003,7 @@ class TCPDF_FONTS {
 		$str = is_null($str) ? '' : $str;
 		if ($isunicode) {
 			// requires PCRE unicode support turned on
-			$chars = TCPDF_STATIC::pregSplit('//','u', $str, -1, PREG_SPLIT_NO_EMPTY);
+			$chars = Estitofo_TCPDF_STATIC::pregSplit('//','u', $str, -1, PREG_SPLIT_NO_EMPTY);
 			$carr = array_map(static::class.'::uniord', $chars);
 		} else {
 			$chars = str_split($str);
@@ -2109,18 +2100,18 @@ class TCPDF_FONTS {
 		$pel = 0;
 		// max level
 		$maxlevel = 0;
-		if (TCPDF_STATIC::empty_string($str)) {
+		if (Estitofo_TCPDF_STATIC::empty_string($str)) {
 			// create string from array
 			$str = self::UTF8ArrSubString($ta, '', '', $isunicode);
 		}
 		// check if string contains arabic text
-		if (preg_match(TCPDF_FONT_DATA::$uni_RE_PATTERN_ARABIC, $str)) {
+		if (preg_match(Estitofo_TCPDF_FONT_DATA::$uni_RE_PATTERN_ARABIC, $str)) {
 			$arabic = true;
 		} else {
 			$arabic = false;
 		}
 		// check if string contains RTL text
-		if (!($forcertl OR $arabic OR preg_match(TCPDF_FONT_DATA::$uni_RE_PATTERN_RTL, $str))) {
+		if (!($forcertl OR $arabic OR preg_match(Estitofo_TCPDF_FONT_DATA::$uni_RE_PATTERN_RTL, $str))) {
 			return $ta;
 		}
 
@@ -2135,7 +2126,7 @@ class TCPDF_FONTS {
 			// P2. In each paragraph, find the first character of type L, AL, or R.
 			// P3. If a character is found in P2 and it is of type AL or R, then set the paragraph embedding level to one; otherwise, set it to zero.
 			for ($i=0; $i < $numchars; ++$i) {
-				$type = TCPDF_FONT_DATA::$uni_type[$ta[$i]];
+				$type = Estitofo_TCPDF_FONT_DATA::$uni_type[$ta[$i]];
 				if ($type == 'L') {
 					$pel = 0;
 					break;
@@ -2161,62 +2152,62 @@ class TCPDF_FONTS {
 		// X1. Begin by setting the current embedding level to the paragraph embedding level. Set the directional override status to neutral. Process each character iteratively, applying rules X2 through X9. Only embedding levels from 0 to 61 are valid in this phase.
 		// In the resolution of levels in rules I1 and I2, the maximum embedding level of 62 can be reached.
 		for ($i=0; $i < $numchars; ++$i) {
-			if ($ta[$i] == TCPDF_FONT_DATA::$uni_RLE) {
+			if ($ta[$i] == Estitofo_TCPDF_FONT_DATA::$uni_RLE) {
 				// X2. With each RLE, compute the least greater odd embedding level.
 				//	a. If this new level would be valid, then this embedding code is valid. Remember (push) the current embedding level and override status. Reset the current level to this new level, and reset the override status to neutral.
 				//	b. If the new level would not be valid, then this code is invalid. Do not change the current level or override status.
 				$next_level = $cel + ($cel % 2) + 1;
 				if ($next_level < 62) {
-					$remember[] = array('num' => TCPDF_FONT_DATA::$uni_RLE, 'cel' => $cel, 'dos' => $dos);
+					$remember[] = array('num' => Estitofo_TCPDF_FONT_DATA::$uni_RLE, 'cel' => $cel, 'dos' => $dos);
 					$cel = $next_level;
 					$dos = 'N';
 					$sor = $eor;
 					$eor = $cel % 2 ? 'R' : 'L';
 				}
-			} elseif ($ta[$i] == TCPDF_FONT_DATA::$uni_LRE) {
+			} elseif ($ta[$i] == Estitofo_TCPDF_FONT_DATA::$uni_LRE) {
 				// X3. With each LRE, compute the least greater even embedding level.
 				//	a. If this new level would be valid, then this embedding code is valid. Remember (push) the current embedding level and override status. Reset the current level to this new level, and reset the override status to neutral.
 				//	b. If the new level would not be valid, then this code is invalid. Do not change the current level or override status.
 				$next_level = $cel + 2 - ($cel % 2);
 				if ( $next_level < 62 ) {
-					$remember[] = array('num' => TCPDF_FONT_DATA::$uni_LRE, 'cel' => $cel, 'dos' => $dos);
+					$remember[] = array('num' => Estitofo_TCPDF_FONT_DATA::$uni_LRE, 'cel' => $cel, 'dos' => $dos);
 					$cel = $next_level;
 					$dos = 'N';
 					$sor = $eor;
 					$eor = $cel % 2 ? 'R' : 'L';
 				}
-			} elseif ($ta[$i] == TCPDF_FONT_DATA::$uni_RLO) {
+			} elseif ($ta[$i] == Estitofo_TCPDF_FONT_DATA::$uni_RLO) {
 				// X4. With each RLO, compute the least greater odd embedding level.
 				//	a. If this new level would be valid, then this embedding code is valid. Remember (push) the current embedding level and override status. Reset the current level to this new level, and reset the override status to right-to-left.
 				//	b. If the new level would not be valid, then this code is invalid. Do not change the current level or override status.
 				$next_level = $cel + ($cel % 2) + 1;
 				if ($next_level < 62) {
-					$remember[] = array('num' => TCPDF_FONT_DATA::$uni_RLO, 'cel' => $cel, 'dos' => $dos);
+					$remember[] = array('num' => Estitofo_TCPDF_FONT_DATA::$uni_RLO, 'cel' => $cel, 'dos' => $dos);
 					$cel = $next_level;
 					$dos = 'R';
 					$sor = $eor;
 					$eor = $cel % 2 ? 'R' : 'L';
 				}
-			} elseif ($ta[$i] == TCPDF_FONT_DATA::$uni_LRO) {
+			} elseif ($ta[$i] == Estitofo_TCPDF_FONT_DATA::$uni_LRO) {
 				// X5. With each LRO, compute the least greater even embedding level.
 				//	a. If this new level would be valid, then this embedding code is valid. Remember (push) the current embedding level and override status. Reset the current level to this new level, and reset the override status to left-to-right.
 				//	b. If the new level would not be valid, then this code is invalid. Do not change the current level or override status.
 				$next_level = $cel + 2 - ($cel % 2);
 				if ( $next_level < 62 ) {
-					$remember[] = array('num' => TCPDF_FONT_DATA::$uni_LRO, 'cel' => $cel, 'dos' => $dos);
+					$remember[] = array('num' => Estitofo_TCPDF_FONT_DATA::$uni_LRO, 'cel' => $cel, 'dos' => $dos);
 					$cel = $next_level;
 					$dos = 'L';
 					$sor = $eor;
 					$eor = $cel % 2 ? 'R' : 'L';
 				}
-			} elseif ($ta[$i] == TCPDF_FONT_DATA::$uni_PDF) {
+			} elseif ($ta[$i] == Estitofo_TCPDF_FONT_DATA::$uni_PDF) {
 				// X7. With each PDF, determine the matching embedding or override code. If there was a valid matching code, restore (pop) the last remembered (pushed) embedding level and directional override.
 				if (count($remember)) {
 					$last = count($remember ) - 1;
-					if (($remember[$last]['num'] == TCPDF_FONT_DATA::$uni_RLE) OR
-						($remember[$last]['num'] == TCPDF_FONT_DATA::$uni_LRE) OR
-						($remember[$last]['num'] == TCPDF_FONT_DATA::$uni_RLO) OR
-						($remember[$last]['num'] == TCPDF_FONT_DATA::$uni_LRO)) {
+					if (($remember[$last]['num'] == Estitofo_TCPDF_FONT_DATA::$uni_RLE) OR
+						($remember[$last]['num'] == Estitofo_TCPDF_FONT_DATA::$uni_LRE) OR
+						($remember[$last]['num'] == Estitofo_TCPDF_FONT_DATA::$uni_RLO) OR
+						($remember[$last]['num'] == Estitofo_TCPDF_FONT_DATA::$uni_LRO)) {
 						$match = array_pop($remember);
 						$cel = $match['cel'];
 						$dos = $match['dos'];
@@ -2224,19 +2215,19 @@ class TCPDF_FONTS {
 						$eor = ($cel > $match['cel'] ? $cel : $match['cel']) % 2 ? 'R' : 'L';
 					}
 				}
-			} elseif (($ta[$i] != TCPDF_FONT_DATA::$uni_RLE) AND
-							 ($ta[$i] != TCPDF_FONT_DATA::$uni_LRE) AND
-							 ($ta[$i] != TCPDF_FONT_DATA::$uni_RLO) AND
-							 ($ta[$i] != TCPDF_FONT_DATA::$uni_LRO) AND
-							 ($ta[$i] != TCPDF_FONT_DATA::$uni_PDF)) {
+			} elseif (($ta[$i] != Estitofo_TCPDF_FONT_DATA::$uni_RLE) AND
+							 ($ta[$i] != Estitofo_TCPDF_FONT_DATA::$uni_LRE) AND
+							 ($ta[$i] != Estitofo_TCPDF_FONT_DATA::$uni_RLO) AND
+							 ($ta[$i] != Estitofo_TCPDF_FONT_DATA::$uni_LRO) AND
+							 ($ta[$i] != Estitofo_TCPDF_FONT_DATA::$uni_PDF)) {
 				// X6. For all types besides RLE, LRE, RLO, LRO, and PDF:
 				//	a. Set the level of the current character to the current embedding level.
 				//	b. Whenever the directional override status is not neutral, reset the current character type to the directional override status.
 				if ($dos != 'N') {
 					$chardir = $dos;
 				} else {
-					if (isset(TCPDF_FONT_DATA::$uni_type[$ta[$i]])) {
-						$chardir = TCPDF_FONT_DATA::$uni_type[$ta[$i]];
+					if (isset(Estitofo_TCPDF_FONT_DATA::$uni_type[$ta[$i]])) {
+						$chardir = Estitofo_TCPDF_FONT_DATA::$uni_type[$ta[$i]];
 					} else {
 						$chardir = 'L';
 					}
@@ -2489,7 +2480,7 @@ class TCPDF_FONTS {
 			$charAL = array();
 			$x = 0;
 			for ($i=0; $i < $numchars; ++$i) {
-				if ((TCPDF_FONT_DATA::$uni_type[$chardata[$i]['char']] == 'AL') OR ($chardata[$i]['char'] == 32) OR ($chardata[$i]['char'] == 8204)) {
+				if ((Estitofo_TCPDF_FONT_DATA::$uni_type[$chardata[$i]['char']] == 'AL') OR ($chardata[$i]['char'] == 32) OR ($chardata[$i]['char'] == 8204)) {
 					$charAL[$x] = $chardata[$i];
 					$charAL[$x]['i'] = $i;
 					$chardata[$i]['x'] = $x;
@@ -2509,7 +2500,7 @@ class TCPDF_FONTS {
 				} else {
 					$nextchar = false;
 				}
-				if (TCPDF_FONT_DATA::$uni_type[$thischar['char']] == 'AL') {
+				if (Estitofo_TCPDF_FONT_DATA::$uni_type[$thischar['char']] == 'AL') {
 					$x = $thischar['x'];
 					if ($x > 0) {
 						$prevchar = $charAL[($x-1)];
@@ -2523,7 +2514,7 @@ class TCPDF_FONTS {
 					}
 					// if laa letter
 					if (($prevchar !== false) AND ($prevchar['char'] == 1604) AND (in_array($thischar['char'], $alfletter))) {
-						$arabicarr = TCPDF_FONT_DATA::$uni_laa_array;
+						$arabicarr = Estitofo_TCPDF_FONT_DATA::$uni_laa_array;
 						$laaletter = true;
 						if ($x > 1) {
 							$prevchar = $charAL[($x-2)];
@@ -2531,12 +2522,12 @@ class TCPDF_FONTS {
 							$prevchar = false;
 						}
 					} else {
-						$arabicarr = TCPDF_FONT_DATA::$uni_arabicsubst;
+						$arabicarr = Estitofo_TCPDF_FONT_DATA::$uni_arabicsubst;
 						$laaletter = false;
 					}
 					if (($prevchar !== false) AND ($nextchar !== false) AND
-						((TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'AL') OR (TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'NSM')) AND
-						((TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'AL') OR (TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'NSM')) AND
+						((Estitofo_TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'AL') OR (Estitofo_TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'NSM')) AND
+						((Estitofo_TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'AL') OR (Estitofo_TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'NSM')) AND
 						($prevchar['type'] == $thischar['type']) AND
 						($nextchar['type'] == $thischar['type']) AND
 						($nextchar['char'] != 1567)) {
@@ -2552,7 +2543,7 @@ class TCPDF_FONTS {
 							}
 						}
 					} elseif (($nextchar !== false) AND
-						((TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'AL') OR (TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'NSM')) AND
+						((Estitofo_TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'AL') OR (Estitofo_TCPDF_FONT_DATA::$uni_type[$nextchar['char']] == 'NSM')) AND
 						($nextchar['type'] == $thischar['type']) AND
 						($nextchar['char'] != 1567)) {
 						if (isset($arabicarr[$chardata[$i]['char']][2])) {
@@ -2560,7 +2551,7 @@ class TCPDF_FONTS {
 							$chardata2[$i]['char'] = $arabicarr[$thischar['char']][2];
 						}
 					} elseif ((($prevchar !== false) AND
-						((TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'AL') OR (TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'NSM')) AND
+						((Estitofo_TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'AL') OR (Estitofo_TCPDF_FONT_DATA::$uni_type[$prevchar['char']] == 'NSM')) AND
 						($prevchar['type'] == $thischar['type'])) OR
 						(($nextchar !== false) AND ($nextchar['char'] == 1567))) {
 						// final
@@ -2601,11 +2592,11 @@ class TCPDF_FONTS {
 			 * Putting the combining mark and shadda in the same glyph allows us to avoid the two marks overlapping each other in an illegible manner.
 			 */
 			for ($i = 0; $i < ($numchars-1); ++$i) {
-				if (($chardata2[$i]['char'] == 1617) AND (isset(TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])]))) {
+				if (($chardata2[$i]['char'] == 1617) AND (isset(Estitofo_TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])]))) {
 					// check if the subtitution font is defined on current font
-					if (isset($currentfont['cw'][(TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])])])) {
+					if (isset($currentfont['cw'][(Estitofo_TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])])])) {
 						$chardata2[$i]['char'] = false;
-						$chardata2[$i+1]['char'] = TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])];
+						$chardata2[$i+1]['char'] = Estitofo_TCPDF_FONT_DATA::$uni_diacritics[($chardata2[$i+1]['char'])];
 					}
 				}
 			}
@@ -2631,9 +2622,9 @@ class TCPDF_FONTS {
 			for ($i=0; $i < $numchars; ++$i) {
 				if ($chardata[$i]['level'] >= $j) {
 					$onlevel = true;
-					if (isset(TCPDF_FONT_DATA::$uni_mirror[$chardata[$i]['char']])) {
+					if (isset(Estitofo_TCPDF_FONT_DATA::$uni_mirror[$chardata[$i]['char']])) {
 						// L4. A character is depicted by a mirrored glyph if and only if (a) the resolved directionality of that character is R, and (b) the Bidi_Mirrored property value of that character is true.
-						$chardata[$i]['char'] = TCPDF_FONT_DATA::$uni_mirror[$chardata[$i]['char']];
+						$chardata[$i]['char'] = Estitofo_TCPDF_FONT_DATA::$uni_mirror[$chardata[$i]['char']];
 					}
 					$revarr[] = $chardata[$i];
 				} else {
@@ -2661,7 +2652,7 @@ class TCPDF_FONTS {
 		return $ordarray;
 	}
 
-} // END OF TCPDF_FONTS CLASS
+} // END OF Estitofo_TCPDF_FONTS CLASS
 
 //============================================================+
 // END OF FILE

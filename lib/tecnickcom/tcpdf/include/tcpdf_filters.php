@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_filters.php
 // Version     : 1.0.001
@@ -19,20 +10,20 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2011-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the License
-// along with TCPDF. If not, see
+// along with Estitofo_TCPDF. If not, see
 // <http://www.tecnick.com/pagefiles/tcpdf/LICENSE.TXT>.
 //
 // See LICENSE.TXT file for more information.
@@ -51,14 +42,14 @@ defined('ABSPATH') || exit;
  */
 
 /**
- * @class TCPDF_FILTERS
+ * @class Estitofo_TCPDF_FILTERS
  * This is a PHP class for decoding common PDF filters (PDF 32000-2008 - 7.4 Filters).<br>
  * @package com.tecnick.tcpdf
  * @brief This is a PHP class for decoding common PDF filters.
  * @version 1.0.001
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF_FILTERS {
+class Estitofo_TCPDF_FILTERS {
 
 	/**
 	 * Define a list of available filter decoders.
@@ -484,7 +475,7 @@ class TCPDF_FILTERS {
 		throw new Exception('TCPDF_PARSER ERROR: '.$msg);
 	}
 
-} // END OF TCPDF_FILTERS CLASS
+} // END OF Estitofo_TCPDF_FILTERS CLASS
 
 //============================================================+
 // END OF FILE

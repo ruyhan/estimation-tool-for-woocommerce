@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : qrcode.php
 // Version     : 1.0.010
@@ -19,27 +10,27 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2010-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // DESCRIPTION :
 //
-// Class to create QR-code arrays for TCPDF class.
+// Class to create QR-code arrays for Estitofo_TCPDF class.
 // QR Code symbol is a 2D barcode that can be scanned by
 // handy terminals such as a mobile phone with CCD.
 // The capacity of QR Code is up to 7000 digits or 4000
@@ -75,7 +66,7 @@ defined('ABSPATH') || exit;
 
 /**
  * @file
- * Class to create QR-code arrays for TCPDF class.
+ * Class to create QR-code arrays for Estitofo_TCPDF class.
  * QR Code symbol is a 2D barcode that can be scanned by handy terminals such as a mobile phone with CCD.
  * The capacity of QR Code is up to 7000 digits or 4000 characters, and has high robustness.
  * This class supports QR Code model 2, described in JIS (Japanese Industrial Standards) X0510:2004 or ISO/IEC 18004.
@@ -99,7 +90,7 @@ if (!defined('QRCODEDEFS')) {
 
 	// -----------------------------------------------------
 
-	// Encoding modes (characters which can be encoded in QRcode)
+	// Encoding modes (characters which can be encoded in Estitofo_QRcode)
 
 	/**
 	 * Encoding mode
@@ -107,22 +98,22 @@ if (!defined('QRCODEDEFS')) {
 	define('QR_MODE_NL', -1);
 
 	/**
-	 * Encoding mode numeric (0-9). 3 characters are encoded to 10bit length. In theory, 7089 characters or less can be stored in a QRcode.
+	 * Encoding mode numeric (0-9). 3 characters are encoded to 10bit length. In theory, 7089 characters or less can be stored in a Estitofo_QRcode.
 	 */
 	define('QR_MODE_NM', 0);
 
 	/**
-	 * Encoding mode alphanumeric (0-9A-Z $%*+-./:) 45characters. 2 characters are encoded to 11bit length. In theory, 4296 characters or less can be stored in a QRcode.
+	 * Encoding mode alphanumeric (0-9A-Z $%*+-./:) 45characters. 2 characters are encoded to 11bit length. In theory, 4296 characters or less can be stored in a Estitofo_QRcode.
 	 */
 	define('QR_MODE_AN', 1);
 
 	/**
-	 * Encoding mode 8bit byte data. In theory, 2953 characters or less can be stored in a QRcode.
+	 * Encoding mode 8bit byte data. In theory, 2953 characters or less can be stored in a Estitofo_QRcode.
 	 */
 	define('QR_MODE_8B', 2);
 
 	/**
-	 * Encoding mode KANJI. A KANJI character (multibyte character) is encoded to 13bit length. In theory, 1817 characters or less can be stored in a QRcode.
+	 * Encoding mode KANJI. A KANJI character (multibyte character) is encoded to 13bit length. In theory, 1817 characters or less can be stored in a Estitofo_QRcode.
 	 */
 	define('QR_MODE_KJ', 3);
 
@@ -134,7 +125,7 @@ if (!defined('QRCODEDEFS')) {
 	// -----------------------------------------------------
 
 	// Levels of error correction.
-	// QRcode has a function of an error correcting for miss reading that white is black.
+	// Estitofo_QRcode has a function of an error correcting for miss reading that white is black.
 	// Error correcting is defined in 4 level as below.
 
 	/**
@@ -159,7 +150,7 @@ if (!defined('QRCODEDEFS')) {
 
 	// -----------------------------------------------------
 
-	// Version. Size of QRcode is defined as version.
+	// Version. Size of Estitofo_QRcode is defined as version.
 	// Version is from 1 to 40.
 	// Version 1 is 21*21 matrix. And 4 modules increases whenever 1 version increases.
 	// So version 40 is 177*177 matrix.
@@ -258,8 +249,8 @@ if (!defined('QRCODEDEFS')) {
 } // end of definitions
 
 /**
- * @class QRcode
- * Class to create QR-code arrays for TCPDF class.
+ * @class Estitofo_QRcode
+ * Class to create QR-code arrays for Estitofo_TCPDF class.
  * QR Code symbol is a 2D barcode that can be scanned by handy terminals such as a mobile phone with CCD.
  * The capacity of QR Code is up to 7000 digits or 4000 characters, and has high robustness.
  * This class supports QR Code model 2, described in JIS (Japanese Industrial Standards) X0510:2004 or ISO/IEC 18004.
@@ -272,16 +263,16 @@ if (!defined('QRCODEDEFS')) {
  * @author Nicola Asuni
  * @version 1.0.010
  */
-class QRcode {
+class Estitofo_QRcode {
 
 	/**
-	 * Barcode array to be returned which is readable by TCPDF.
+	 * Barcode array to be returned which is readable by Estitofo_TCPDF.
 	 * @protected
 	 */
 	protected $barcode_array = array();
 
 	/**
-	 * QR code version. Size of QRcode is defined as version. Version is from 1 to 40. Version 1 is 21*21 matrix. And 4 modules increases whenever 1 version increases. So version 40 is 177*177 matrix.
+	 * QR code version. Size of Estitofo_QRcode is defined as version. Version is from 1 to 40. Version 1 is 21*21 matrix. And 4 modules increases whenever 1 version increases. So version 40 is 177*177 matrix.
 	 * @protected
 	 */
 	protected $version = 0;
@@ -614,8 +605,8 @@ class QRcode {
 
 	/**
 	 * This is the class constructor.
-	 * Creates a QRcode object
-	 * @param string $code code to represent using QRcode
+	 * Creates a Estitofo_QRcode object
+	 * @param string $code code to represent using Estitofo_QRcode
 	 * @param string $eclevel error level: <ul><li>L : About 7% or less errors can be corrected.</li><li>M : About 15% or less errors can be corrected.</li><li>Q : About 25% or less errors can be corrected.</li><li>H : About 30% or less errors can be corrected.</li></ul>
 	 * @public
 	 * @since 1.0.000
@@ -657,8 +648,8 @@ class QRcode {
 	}
 
 	/**
-	 * Returns a barcode array which is readable by TCPDF
-	 * @return array barcode array readable by TCPDF;
+	 * Returns a barcode array which is readable by Estitofo_TCPDF
+	 * @return array barcode array readable by Estitofo_TCPDF;
 	 * @public
 	 */
 	public function getBarcodeArray() {
@@ -2846,7 +2837,7 @@ class QRcode {
 		return $parity;
 	}
 
-} // end QRcode class
+} // end Estitofo_QRcode class
 
 //============================================================+
 // END OF FILE

@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_colors.php
 // Version     : 1.0.004
@@ -19,20 +10,20 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2002-2013 2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
@@ -43,19 +34,19 @@ defined('ABSPATH') || exit;
 
 /**
  * @file
- * PHP color class for TCPDF
+ * PHP color class for Estitofo_TCPDF
  * @author Nicola Asuni
  * @package com.tecnick.tcpdf
  */
 
 /**
- * @class TCPDF_COLORS
- * PHP color class for TCPDF
+ * @class Estitofo_TCPDF_COLORS
+ * PHP color class for Estitofo_TCPDF
  * @package com.tecnick.tcpdf
  * @version 1.0.004
  * @author Nicola Asuni - info@tecnick.com
  */
-class TCPDF_COLORS {
+class Estitofo_TCPDF_COLORS {
 
 	/**
 	 * Array of WEB safe colors
@@ -485,7 +476,7 @@ class TCPDF_COLORS {
 	}
 
 
-} // END OF TCPDF_COLORS CLASS
+} // END OF Estitofo_TCPDF_COLORS CLASS
 
 //============================================================+
 // END OF FILE

@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.17.0
+Stable tag: 3.18.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,11 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.18.0 =
+* WordPress.org review: replaced the bundled `tcpdf/` directory with a Composer + Strauss-managed copy under `lib/` where the main class is prefixed to `Estitofo_TCPDF` (and all sub-classes likewise). This eliminates the naming conflict that would occur if another plugin bundles a different TCPDF version — the classes are now completely isolated under the plugin's own namespace.
+* All plugin code updated to reference `Estitofo_TCPDF` instead of `TCPDF`.
+* All files under `lib/` include a `defined('ABSPATH') || exit;` direct-access guard as required by WordPress.org.
 
 = 3.17.0 =
 * WordPress.org review: moved TCPDF's `K_TCPDF_EXTERNAL_CONFIG` and `K_TCPDF_THROW_EXCEPTION_ERROR` constants into `tcpdf/tcpdf.php` (where they belong as library configuration) so they no longer appear in the plugin's own namespace scan.

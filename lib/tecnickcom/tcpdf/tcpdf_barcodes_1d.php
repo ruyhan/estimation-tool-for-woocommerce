@@ -1,14 +1,5 @@
 <?php
-/**
- * Third-party library file (TCPDF, LGPL-3.0).
- *
- * Vendored as-is from https://github.com/tecnickcom/TCPDF.
- * Not subject to this plugin's coding standards.
- *
- * @package estimation-tool-for-woocommerce
- */
-defined('ABSPATH') || exit;
-// phpcs:ignoreFile -- Third-party library (TCPDF). Exempt from WordPress coding standards.
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 //============================================================+
 // File name   : tcpdf_barcodes_1d.php
 // Version     : 1.0.027
@@ -19,45 +10,45 @@ defined('ABSPATH') || exit;
 // -------------------------------------------------------------------
 // Copyright (C) 2008-2026 Nicola Asuni - Tecnick.com LTD
 //
-// This file is part of TCPDF software library.
+// This file is part of Estitofo_TCPDF software library.
 //
-// TCPDF is free software: you can redistribute it and/or modify it
+// Estitofo_TCPDF is free software: you can redistribute it and/or modify it
 // under the terms of the GNU Lesser General Public License as
 // published by the Free Software Foundation, either version 3 of the
 // License, or (at your option) any later version.
 //
-// TCPDF is distributed in the hope that it will be useful, but
+// Estitofo_TCPDF is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with TCPDF.  If not, see <https://www.gnu.org/licenses/>.
+// along with Estitofo_TCPDF.  If not, see <https://www.gnu.org/licenses/>.
 //
 // See LICENSE.TXT file for more information.
 // -------------------------------------------------------------------
 //
 // Description : PHP class to creates array representations for
-//               common 1D barcodes to be used with TCPDF.
+//               common 1D barcodes to be used with Estitofo_TCPDF.
 //
 //============================================================+
 
 /**
  * @file
- * PHP class to creates array representations for common 1D barcodes to be used with TCPDF.
+ * PHP class to creates array representations for common 1D barcodes to be used with Estitofo_TCPDF.
  * @package com.tecnick.tcpdf
  * @author Nicola Asuni
  * @version 1.0.027
  */
 
 /**
- * @class TCPDFBarcode
- * PHP class to creates array representations for common 1D barcodes to be used with TCPDF (http://www.tcpdf.org).<br>
+ * @class Estitofo_TCPDFBarcode
+ * PHP class to creates array representations for common 1D barcodes to be used with Estitofo_TCPDF (http://www.tcpdf.org).<br>
  * @package com.tecnick.tcpdf
  * @version 1.0.027
  * @author Nicola Asuni
  */
-class TCPDFBarcode {
+class Estitofo_TCPDFBarcode {
 
 	/**
 	 * Array representation of barcode.
@@ -499,7 +490,7 @@ class TCPDFBarcode {
 		$encode = array(
 			chr(0) => '%U', chr(1) => '$A', chr(2) => '$B', chr(3) => '$C',
 			chr(4) => '$D', chr(5) => '$E', chr(6) => '$F', chr(7) => '$G',
-			chr(8) => '$H', chr(9) => '$I', chr(10) => '$J', chr(11) => 'Ãƒâ€šÃ‚Â£K',
+			chr(8) => '$H', chr(9) => '$I', chr(10) => '$J', chr(11) => '£K',
 			chr(12) => '$L', chr(13) => '$M', chr(14) => '$N', chr(15) => '$O',
 			chr(16) => '$P', chr(17) => '$Q', chr(18) => '$R', chr(19) => '$S',
 			chr(20) => '$T', chr(21) => '$U', chr(22) => '$V', chr(23) => '$W',
@@ -622,7 +613,7 @@ class TCPDFBarcode {
 		$encode = array(
 			chr(0) => chr(131).'U', chr(1) => chr(128).'A', chr(2) => chr(128).'B', chr(3) => chr(128).'C',
 			chr(4) => chr(128).'D', chr(5) => chr(128).'E', chr(6) => chr(128).'F', chr(7) => chr(128).'G',
-			chr(8) => chr(128).'H', chr(9) => chr(128).'I', chr(10) => chr(128).'J', chr(11) => 'Ãƒâ€šÃ‚Â£K',
+			chr(8) => chr(128).'H', chr(9) => chr(128).'I', chr(10) => chr(128).'J', chr(11) => '£K',
 			chr(12) => chr(128).'L', chr(13) => chr(128).'M', chr(14) => chr(128).'N', chr(15) => chr(128).'O',
 			chr(16) => chr(128).'P', chr(17) => chr(128).'Q', chr(18) => chr(128).'R', chr(19) => chr(128).'S',
 			chr(20) => chr(128).'T', chr(21) => chr(128).'U', chr(22) => chr(128).'V', chr(23) => chr(128).'W',
@@ -2057,7 +2048,7 @@ class TCPDFBarcode {
 	 * IMB - Intelligent Mail Barcode - Onecode - USPS-B-3200
 	 * (requires PHP bcmath extension)
 	 * Intelligent Mail barcode is a 65-bar code for use on mail in the United States.
-	 * The fields are described as follows:<ul><li>The Barcode Identifier shall be assigned by USPS to encode the presort identification that is currently printed in human readable form on the optional endorsement line (OEL) as well as for future USPS use. This shall be two digits, with the second digit in the range of 0ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“4. The allowable encoding ranges shall be 00ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“04, 10ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“14, 20ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“24, 30ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“34, 40ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“44, 50ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“54, 60ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“64, 70ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“74, 80ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“84, and 90ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“94.</li><li>The Service Type Identifier shall be assigned by USPS for any combination of services requested on the mailpiece. The allowable encoding range shall be 000http://it2.php.net/manual/en/function.dechex.phpÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“999. Each 3-digit value shall correspond to a particular mail class with a particular combination of service(s). Each service program, such as OneCode Confirm and OneCode ACS, shall provide the list of Service Type Identifier values.</li><li>The Mailer or Customer Identifier shall be assigned by USPS as a unique, 6 or 9 digit number that identifies a business entity. The allowable encoding range for the 6 digit Mailer ID shall be 000000- 899999, while the allowable encoding range for the 9 digit Mailer ID shall be 900000000-999999999.</li><li>The Serial or Sequence Number shall be assigned by the mailer for uniquely identifying and tracking mailpieces. The allowable encoding range shall be 000000000ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“999999999 when used with a 6 digit Mailer ID and 000000-999999 when used with a 9 digit Mailer ID. e. The Delivery Point ZIP Code shall be assigned by the mailer for routing the mailpiece. This shall replace POSTNET for routing the mailpiece to its final delivery point. The length may be 0, 5, 9, or 11 digits. The allowable encoding ranges shall be no ZIP Code, 00000ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“99999,  000000000ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“999999999, and 00000000000ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“99999999999.</li></ul>
+	 * The fields are described as follows:<ul><li>The Barcode Identifier shall be assigned by USPS to encode the presort identification that is currently printed in human readable form on the optional endorsement line (OEL) as well as for future USPS use. This shall be two digits, with the second digit in the range of 0–4. The allowable encoding ranges shall be 00–04, 10–14, 20–24, 30–34, 40–44, 50–54, 60–64, 70–74, 80–84, and 90–94.</li><li>The Service Type Identifier shall be assigned by USPS for any combination of services requested on the mailpiece. The allowable encoding range shall be 000http://it2.php.net/manual/en/function.dechex.php–999. Each 3-digit value shall correspond to a particular mail class with a particular combination of service(s). Each service program, such as OneCode Confirm and OneCode ACS, shall provide the list of Service Type Identifier values.</li><li>The Mailer or Customer Identifier shall be assigned by USPS as a unique, 6 or 9 digit number that identifies a business entity. The allowable encoding range for the 6 digit Mailer ID shall be 000000- 899999, while the allowable encoding range for the 9 digit Mailer ID shall be 900000000-999999999.</li><li>The Serial or Sequence Number shall be assigned by the mailer for uniquely identifying and tracking mailpieces. The allowable encoding range shall be 000000000–999999999 when used with a 6 digit Mailer ID and 000000-999999 when used with a 9 digit Mailer ID. e. The Delivery Point ZIP Code shall be assigned by the mailer for routing the mailpiece. This shall replace POSTNET for routing the mailpiece to its final delivery point. The length may be 0, 5, 9, or 11 digits. The allowable encoding ranges shall be no ZIP Code, 00000–99999,  000000000–999999999, and 00000000000–99999999999.</li></ul>
 	 * @param string $code code to print, separate the ZIP (routing code) from the rest using a minus char '-' (BarcodeID_ServiceTypeID_MailerID_SerialNumber-RoutingCode)
 	 * @return array barcode representation.
 	 * @protected

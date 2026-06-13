@@ -1,0 +1,48 @@
+{
+    "name": "ruyhan/estimation-tool-for-woocommerce",
+    "description": "Estimation Tool for WooCommerce",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "tecnickcom/tcpdf": "^6.11"
+    },
+    "require-dev": {
+        "brianhenryie/strauss": "^0.20"
+    },
+    "extra": {
+        "strauss": {
+            "target_directory": "lib",
+            "classmap_prefix": "Estitofo_",
+            "packages": [
+                "tecnickcom/tcpdf"
+            ],
+            "delete_vendor_packages": true,
+            "exclude_from_copy": {
+                "file_patterns": [
+                    "/examples/",
+                    "/tools/",
+                    "/doc/",
+                    "/test/"
+                ]
+            }
+        }
+    },
+    "scripts": {
+        "strauss": [
+            "vendor/bin/strauss"
+        ],
+        "post-install-cmd": [
+            "@strauss"
+        ],
+        "post-update-cmd": [
+            "@strauss"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "brianhenryie/strauss": true
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

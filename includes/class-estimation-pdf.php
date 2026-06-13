@@ -34,7 +34,7 @@ class Estitofo_PDF {
 		if ( ! function_exists( 'get_woocommerce_currency' ) ) {
 			throw new Exception( esc_html__( 'WooCommerce is required for PDF generation', 'estimation-tool-for-woocommerce' ) );
 		}
-		if ( ! class_exists( 'TCPDF' ) ) {
+		if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
 			throw new Exception( esc_html__( 'TCPDF library is not loaded', 'estimation-tool-for-woocommerce' ) );
 		}
 
@@ -59,7 +59,7 @@ class Estitofo_PDF {
 		$footer_text    = (string) Estitofo_Options::get( 'footer_text', '' );
 		$locations      = Estitofo_Settings::get_locations_array();
 
-		$pdf = new TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false );
+		$pdf = new Estitofo_TCPDF( PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false );
 		// TCPDF 6.10 + PHP 8.2 + opcache: some properties declared with default
 		// values (protected $fontkeys = array()) read as NULL at runtime because
 		// the default never lands on the instance. The constructor doesn't
@@ -754,7 +754,7 @@ class Estitofo_PDF {
 			'pages'           => array(),
 		);
 		try {
-			$ref = new ReflectionClass( 'TCPDF' );
+			$ref = new ReflectionClass( 'Estitofo_TCPDF' );
 		} catch ( Exception $e ) {
 			return;
 		}
@@ -873,7 +873,7 @@ class Estitofo_PDF {
 			'ext'           => '',
 			'gd_available'  => function_exists( 'imagecreatefrompng' ) ? 'yes' : 'no',
 			'imagick'       => extension_loaded( 'imagick' ) ? 'yes' : 'no',
-			'tcpdf_loaded'  => class_exists( 'TCPDF' ) ? 'yes' : 'no',
+			'tcpdf_loaded'  => class_exists( 'Estitofo_TCPDF' ) ? 'yes' : 'no',
 			'safe_path'     => '',
 			'bytes_loaded'  => 0,
 		);
