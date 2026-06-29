@@ -2,7 +2,7 @@
 /**
  * Email dispatcher.
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -69,12 +69,12 @@ class Estitofo_Mailer {
 		}
 		return sprintf(
 			'<table style="width:100%%;border-collapse:collapse;font-family:sans-serif;font-size:14px;"><thead><tr><th style="text-align:left;padding:6px 10px;border-bottom:2px solid #333;">%s</th><th style="padding:6px 10px;border-bottom:2px solid #333;">%s</th><th style="text-align:right;padding:6px 10px;border-bottom:2px solid #333;">%s</th><th style="text-align:right;padding:6px 10px;border-bottom:2px solid #333;">%s</th></tr></thead><tbody>%s</tbody><tfoot><tr><td colspan="3" style="text-align:right;padding:10px;font-weight:bold;">%s</td><td style="text-align:right;padding:10px;font-weight:bold;">%s</td></tr></tfoot></table>',
-			esc_html__( 'Product', 'estimation-tool-for-woocommerce' ),
-			esc_html__( 'Qty', 'estimation-tool-for-woocommerce' ),
-			esc_html__( 'Price', 'estimation-tool-for-woocommerce' ),
-			esc_html__( 'Subtotal', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'Product', 'quotely-estimates-for-woocommerce' ),
+			esc_html__( 'Qty', 'quotely-estimates-for-woocommerce' ),
+			esc_html__( 'Price', 'quotely-estimates-for-woocommerce' ),
+			esc_html__( 'Subtotal', 'quotely-estimates-for-woocommerce' ),
 			$rows,
-			esc_html__( 'Total', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'Total', 'quotely-estimates-for-woocommerce' ),
 			esc_html( number_format_i18n( (float) $total, 2 ) )
 		);
 	}
@@ -96,16 +96,16 @@ class Estitofo_Mailer {
 	private static function default_subject() {
 		return sprintf(
 			/* translators: %s: site name */
-			__( 'Your estimation from %s', 'estimation-tool-for-woocommerce' ),
+			__( 'Your estimation from %s', 'quotely-estimates-for-woocommerce' ),
 			get_bloginfo( 'name' )
 		);
 	}
 
 	private static function default_body() {
-		return '<p>' . esc_html__( 'Hi {{name}},', 'estimation-tool-for-woocommerce' ) . '</p>'
-			. '<p>' . esc_html__( 'Thanks for your interest. Your estimation total is {{total}}. Details below:', 'estimation-tool-for-woocommerce' ) . '</p>'
+		return '<p>' . esc_html__( 'Hi {{name}},', 'quotely-estimates-for-woocommerce' ) . '</p>'
+			. '<p>' . esc_html__( 'Thanks for your interest. Your estimation total is {{total}}. Details below:', 'quotely-estimates-for-woocommerce' ) . '</p>'
 			. '{{products_table}}'
-			. '<p>' . esc_html__( 'We will be in touch shortly.', 'estimation-tool-for-woocommerce' ) . '</p>'
+			. '<p>' . esc_html__( 'We will be in touch shortly.', 'quotely-estimates-for-woocommerce' ) . '</p>'
 			. '<p>{{site}}</p>';
 	}
 
@@ -141,19 +141,19 @@ class Estitofo_Mailer {
 		}
 		$subject = sprintf(
 			/* translators: %s: customer name */
-			__( 'New estimation from %s', 'estimation-tool-for-woocommerce' ),
+			__( 'New estimation from %s', 'quotely-estimates-for-woocommerce' ),
 			$row->name
 		);
 		$admin_url = admin_url( 'admin.php?page=estimation-data' );
 		$body      = '<p>' . sprintf(
 			/* translators: 1: customer name, 2: customer email, 3: customer phone */
-			esc_html__( 'A new estimation was submitted by %1$s (%2$s, %3$s).', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'A new estimation was submitted by %1$s (%2$s, %3$s).', 'quotely-estimates-for-woocommerce' ),
 			esc_html( $row->name ),
 			esc_html( $row->email ),
 			esc_html( $row->phone )
 		) . '</p>';
 		$body .= self::products_html_table( $clean_products, $row->total );
-		$body .= '<p><a href="' . esc_url( $admin_url ) . '">' . esc_html__( 'View in admin', 'estimation-tool-for-woocommerce' ) . '</a></p>';
+		$body .= '<p><a href="' . esc_url( $admin_url ) . '">' . esc_html__( 'View in admin', 'quotely-estimates-for-woocommerce' ) . '</a></p>';
 
 		wp_mail( $recipients, $subject, $body, self::from_headers() );
 	}
@@ -198,13 +198,13 @@ class Estitofo_Mailer {
 		}
 		$subject = sprintf(
 			/* translators: %s: site name */
-			__( 'Estimation Tool test email from %s', 'estimation-tool-for-woocommerce' ),
+			__( 'Estimation Tool test email from %s', 'quotely-estimates-for-woocommerce' ),
 			get_bloginfo( 'name' )
 		);
-		$body  = '<p>' . esc_html__( 'If you can read this, the Estimation Tool plugin can send email from this site.', 'estimation-tool-for-woocommerce' ) . '</p>';
+		$body  = '<p>' . esc_html__( 'If you can read this, the Estimation Tool plugin can send email from this site.', 'quotely-estimates-for-woocommerce' ) . '</p>';
 		$body .= '<p>' . sprintf(
 			/* translators: %s: timestamp */
-			esc_html__( 'Sent at %s.', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'Sent at %s.', 'quotely-estimates-for-woocommerce' ),
 			esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) )
 		) . '</p>';
 		return (bool) wp_mail( $to, $subject, $body, self::from_headers() );

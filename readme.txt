@@ -1,11 +1,11 @@
-=== Estimation Tool for WooCommerce ===
+=== Quotely Estimates for WooCommerce ===
 Contributors: ruyhan
 Donate link: https://ruyhan.com/
 Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.18.0
+Stable tag: 3.19.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Let visitors build a WooCommerce product estimate, capture their contact details
 
 == Description ==
 
-Estimation Tool for WooCommerce adds a frontend interface where customers can search your catalog, add products and quantities to a worksheet, and download a PDF estimate. Submissions are stored in WordPress so you can review, restore, or permanently delete them later, and you can re-download the PDF for any submission from the admin.
+Quotely Estimates for WooCommerce adds a frontend interface where customers can search your catalog, add products and quantities to a worksheet, and download a PDF estimate. Submissions are stored in WordPress so you can review, restore, or permanently delete them later, and you can re-download the PDF for any submission from the admin.
 
 **Features**
 
@@ -38,7 +38,7 @@ Estimation Tool for WooCommerce adds a frontend interface where customers can se
 
 The free plugin is a complete estimation / quotation tool — every feature listed above is fully usable without paying anything.
 
-If your business needs more, **Estimation Tool for WooCommerce — Pro** is a separately-sold add-on that extends the free plugin with:
+If your business needs more, **Quotely Estimates for WooCommerce — Pro** is a separately-sold add-on that extends the free plugin with:
 
 * **Convert estimations to WooCommerce orders** — manually from the admin list, or automatically on submission, with your chosen initial order status.
 * **File uploads on the customer form** — let customers attach drawings, spec sheets or photos. Configurable max size and allowed extensions.
@@ -92,6 +92,9 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 5. Settings screen for company branding
 
 == Changelog ==
+
+= 3.19.0 =
+* WordPress.org review: renamed the plugin from the generic "Estimation Tool for WooCommerce" to the distinctive **Quotely Estimates for WooCommerce**, with a matching slug/text domain of `quotely-estimates-for-woocommerce`. The internal `estitofo_` code prefix, the `[estitofo_form]` shortcode and stored option keys are unchanged, so existing installs upgrade without data loss.
 
 = 3.18.0 =
 * WordPress.org review: replaced the bundled `tcpdf/` directory with a Composer + Strauss-managed copy under `lib/` where the main class is prefixed to `Estitofo_TCPDF` (and all sub-classes likewise). This eliminates the naming conflict that would occur if another plugin bundles a different TCPDF version — the classes are now completely isolated under the plugin's own namespace.

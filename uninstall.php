@@ -5,7 +5,7 @@
  * Drops the submissions table, removes the plugin's options, sweeps rate-limit
  * transients, and cleans the tmp PDF directory.
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

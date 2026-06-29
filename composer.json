@@ -1,6 +1,6 @@
 {
-    "name": "ruyhan/estimation-tool-for-woocommerce",
-    "description": "Estimation Tool for WooCommerce",
+    "name": "ruyhan/quotely-estimates-for-woocommerce",
+    "description": "Quotely Estimates for WooCommerce",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require": {

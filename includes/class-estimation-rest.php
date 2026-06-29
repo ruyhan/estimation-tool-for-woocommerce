@@ -2,7 +2,7 @@
 /**
  * REST API endpoints for the estimation tool.
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -80,7 +80,7 @@ class Estitofo_REST {
 
 	public static function search_products( WP_REST_Request $r ) {
 		if ( ! function_exists( 'wc_get_products' ) ) {
-			return new WP_Error( 'wc_missing', __( 'WooCommerce is not active.', 'estimation-tool-for-woocommerce' ), array( 'status' => 503 ) );
+			return new WP_Error( 'wc_missing', __( 'WooCommerce is not active.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 503 ) );
 		}
 		$term = (string) $r->get_param( 'term' );
 		if ( mb_strlen( $term ) < 2 ) {
@@ -236,7 +236,7 @@ class Estitofo_REST {
 	public static function save_estimation( WP_REST_Request $r ) {
 		$nonce = $r->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new WP_Error( 'bad_nonce', __( 'Invalid nonce', 'estimation-tool-for-woocommerce' ), array( 'status' => 403 ) );
+			return new WP_Error( 'bad_nonce', __( 'Invalid nonce', 'quotely-estimates-for-woocommerce' ), array( 'status' => 403 ) );
 		}
 		$payload = $r->get_json_params();
 		if ( ! empty( $payload['website'] ) ) {
@@ -253,7 +253,7 @@ class Estitofo_REST {
 		$products = isset( $payload['products'] ) && is_array( $payload['products'] ) ? $payload['products'] : array();
 
 		if ( empty( $name ) || ! is_email( $email ) || empty( $phone ) || empty( $products ) ) {
-			return new WP_Error( 'invalid_input', __( 'Please fill all required fields correctly.', 'estimation-tool-for-woocommerce' ), array( 'status' => 400 ) );
+			return new WP_Error( 'invalid_input', __( 'Please fill all required fields correctly.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 400 ) );
 		}
 
 		$clean = array();
@@ -288,7 +288,7 @@ class Estitofo_REST {
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Custom plugin table.
 		$result = $wpdb->insert( $table, $row );
 		if ( false === $result ) {
-			return new WP_Error( 'save_failed', __( 'Failed to save estimation.', 'estimation-tool-for-woocommerce' ), array( 'status' => 500 ) );
+			return new WP_Error( 'save_failed', __( 'Failed to save estimation.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 500 ) );
 		}
 		$id = (int) $wpdb->insert_id;
 
@@ -298,28 +298,28 @@ class Estitofo_REST {
 			array(
 				'success' => true,
 				'id'      => $id,
-				'message' => __( 'Estimation saved.', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'Estimation saved.', 'quotely-estimates-for-woocommerce' ),
 			)
 		);
 	}
 
 	public static function resume( WP_REST_Request $r ) {
 		if ( ! (int) Estitofo_Options::get( 'enable_save_resume', 1 ) ) {
-			return new WP_Error( 'disabled', __( 'Save & resume is disabled.', 'estimation-tool-for-woocommerce' ), array( 'status' => 404 ) );
+			return new WP_Error( 'disabled', __( 'Save & resume is disabled.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 404 ) );
 		}
 		$token = (string) $r->get_param( 'token' );
 		if ( strlen( $token ) < 16 ) {
-			return new WP_Error( 'bad_token', __( 'Invalid token.', 'estimation-tool-for-woocommerce' ), array( 'status' => 400 ) );
+			return new WP_Error( 'bad_token', __( 'Invalid token.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 400 ) );
 		}
 		global $wpdb;
 		$table = $wpdb->prefix . 'estimation_submissions';
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE resume_token = %s AND status = %s LIMIT 1", $token, 'publish' ) );
 		if ( ! $row ) {
-			return new WP_Error( 'not_found', __( 'Estimation not found or already expired.', 'estimation-tool-for-woocommerce' ), array( 'status' => 404 ) );
+			return new WP_Error( 'not_found', __( 'Estimation not found or already expired.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 404 ) );
 		}
 		if ( $row->resume_expires && strtotime( $row->resume_expires ) < time() ) {
-			return new WP_Error( 'expired', __( 'This resume link has expired.', 'estimation-tool-for-woocommerce' ), array( 'status' => 410 ) );
+			return new WP_Error( 'expired', __( 'This resume link has expired.', 'quotely-estimates-for-woocommerce' ), array( 'status' => 410 ) );
 		}
 		$products = json_decode( (string) $row->products, true );
 		return rest_ensure_response(

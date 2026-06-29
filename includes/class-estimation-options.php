@@ -5,7 +5,7 @@
  * All plugin settings live under a single `estitofo_settings` option
  * (associative array). Migrated from v2.1 individual options once.
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

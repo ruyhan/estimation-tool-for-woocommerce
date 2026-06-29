@@ -2,7 +2,7 @@
 /**
  * Dashboard widget with recent submissions and 30-day stats.
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -24,7 +24,7 @@ class Estitofo_Dashboard {
 		}
 		wp_add_dashboard_widget(
 			'estitofo_dashboard',
-			__( 'Estimation Tool', 'estimation-tool-for-woocommerce' ),
+			__( 'Estimation Tool', 'quotely-estimates-for-woocommerce' ),
 			array( __CLASS__, 'render' )
 		);
 	}
@@ -50,15 +50,15 @@ class Estitofo_Dashboard {
 		<div class="wc-est-dash">
 			<div class="wc-est-dash-stats" style="display:flex;gap:20px;margin-bottom:12px;">
 				<div><strong style="font-size:22px;display:block;"><?php echo esc_html( number_format_i18n( $total ) ); ?></strong>
-					<span style="color:#646970;"><?php esc_html_e( 'All-time submissions', 'estimation-tool-for-woocommerce' ); ?></span></div>
+					<span style="color:#646970;"><?php esc_html_e( 'All-time submissions', 'quotely-estimates-for-woocommerce' ); ?></span></div>
 				<div><strong style="font-size:22px;display:block;"><?php echo esc_html( number_format_i18n( $recent_count ) ); ?></strong>
-					<span style="color:#646970;"><?php esc_html_e( 'Last 30 days', 'estimation-tool-for-woocommerce' ); ?></span></div>
+					<span style="color:#646970;"><?php esc_html_e( 'Last 30 days', 'quotely-estimates-for-woocommerce' ); ?></span></div>
 				<div><strong style="font-size:22px;display:block;"><?php echo function_exists( 'wc_price' ) ? wp_kses_post( wc_price( $recent_total ) ) : esc_html( number_format_i18n( $recent_total, 2 ) ); ?></strong>
-					<span style="color:#646970;"><?php esc_html_e( 'Value (30 days)', 'estimation-tool-for-woocommerce' ); ?></span></div>
+					<span style="color:#646970;"><?php esc_html_e( 'Value (30 days)', 'quotely-estimates-for-woocommerce' ); ?></span></div>
 			</div>
 
 			<?php if ( $recent_rows ) : ?>
-				<h3 style="margin-top:14px;"><?php esc_html_e( 'Latest', 'estimation-tool-for-woocommerce' ); ?></h3>
+				<h3 style="margin-top:14px;"><?php esc_html_e( 'Latest', 'quotely-estimates-for-woocommerce' ); ?></h3>
 				<ul class="wc-est-dash-recent" style="margin:0;padding:0;list-style:none;">
 					<?php
 					foreach ( $recent_rows as $row ) :
@@ -77,7 +77,7 @@ class Estitofo_Dashboard {
 			<?php endif; ?>
 
 			<?php if ( $top_products ) : ?>
-				<h3 style="margin-top:14px;"><?php esc_html_e( 'Top products (30d)', 'estimation-tool-for-woocommerce' ); ?></h3>
+				<h3 style="margin-top:14px;"><?php esc_html_e( 'Top products (30d)', 'quotely-estimates-for-woocommerce' ); ?></h3>
 				<ol style="padding-left:20px;margin:0;">
 					<?php foreach ( $top_products as $title => $count ) : ?>
 						<li><?php echo esc_html( $title ); ?> &mdash; <?php echo esc_html( number_format_i18n( $count ) ); ?></li>
@@ -97,11 +97,11 @@ class Estitofo_Dashboard {
 		return apply_filters(
 			'estitofo_workflow_statuses',
 			array(
-				'new'       => __( 'New', 'estimation-tool-for-woocommerce' ),
-				'contacted' => __( 'Contacted', 'estimation-tool-for-woocommerce' ),
-				'quoted'    => __( 'Quoted', 'estimation-tool-for-woocommerce' ),
-				'won'       => __( 'Won', 'estimation-tool-for-woocommerce' ),
-				'lost'      => __( 'Lost', 'estimation-tool-for-woocommerce' ),
+				'new'       => __( 'New', 'quotely-estimates-for-woocommerce' ),
+				'contacted' => __( 'Contacted', 'quotely-estimates-for-woocommerce' ),
+				'quoted'    => __( 'Quoted', 'quotely-estimates-for-woocommerce' ),
+				'won'       => __( 'Won', 'quotely-estimates-for-woocommerce' ),
+				'lost'      => __( 'Lost', 'quotely-estimates-for-woocommerce' ),
 			)
 		);
 	}

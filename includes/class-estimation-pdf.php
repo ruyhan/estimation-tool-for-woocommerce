@@ -32,10 +32,10 @@ class Estitofo_PDF {
 
 	public function generate( $products, $total, $user_info = array() ) {
 		if ( ! function_exists( 'get_woocommerce_currency' ) ) {
-			throw new Exception( esc_html__( 'WooCommerce is required for PDF generation', 'estimation-tool-for-woocommerce' ) );
+			throw new Exception( esc_html__( 'WooCommerce is required for PDF generation', 'quotely-estimates-for-woocommerce' ) );
 		}
 		if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
-			throw new Exception( esc_html__( 'TCPDF library is not loaded', 'estimation-tool-for-woocommerce' ) );
+			throw new Exception( esc_html__( 'TCPDF library is not loaded', 'quotely-estimates-for-woocommerce' ) );
 		}
 
 		$this->currency = get_woocommerce_currency();
@@ -77,8 +77,8 @@ class Estitofo_PDF {
 
 		$pdf->SetCreator( PDF_CREATOR );
 		$pdf->SetAuthor( $pdf_author );
-		$pdf->SetTitle( __( 'Product Estimation', 'estimation-tool-for-woocommerce' ) );
-		$pdf->SetSubject( __( 'Product Estimation', 'estimation-tool-for-woocommerce' ) );
+		$pdf->SetTitle( __( 'Product Estimation', 'quotely-estimates-for-woocommerce' ) );
+		$pdf->SetSubject( __( 'Product Estimation', 'quotely-estimates-for-woocommerce' ) );
 		$pdf->SetKeywords( 'PDF, Quotation, Estimation' );
 
 		$pdf->SetMargins( 15, 52, 15 );
@@ -258,7 +258,7 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, 'B', 24 );
 		$pdf->SetTextColor( $r, $g, $b );
 		$pdf->SetXY( 15, $title_y );
-		$pdf->Cell( 110, 12, strtoupper( __( 'Estimation', 'estimation-tool-for-woocommerce' ) ), 0, 0, 'L' );
+		$pdf->Cell( 110, 12, strtoupper( __( 'Estimation', 'quotely-estimates-for-woocommerce' ) ), 0, 0, 'L' );
 
 		// ---- Meta on the right, vertically centred against the title.
 		$date = ! empty( $user_info['date'] )
@@ -272,10 +272,10 @@ class Estitofo_PDF {
 		$meta_w = 70;
 		$meta_y = $title_y + 1;
 		$pdf->SetXY( $meta_x, $meta_y );
-		$pdf->Cell( $meta_w, 5, __( 'Date', 'estimation-tool-for-woocommerce' ) . ': ' . $date, 0, 1, 'R' );
+		$pdf->Cell( $meta_w, 5, __( 'Date', 'quotely-estimates-for-woocommerce' ) . ': ' . $date, 0, 1, 'R' );
 		if ( '' !== $ref ) {
 			$pdf->SetXY( $meta_x, $meta_y + 5 );
-			$pdf->Cell( $meta_w, 5, __( 'Reference', 'estimation-tool-for-woocommerce' ) . ': ' . $ref, 0, 1, 'R' );
+			$pdf->Cell( $meta_w, 5, __( 'Reference', 'quotely-estimates-for-woocommerce' ) . ': ' . $ref, 0, 1, 'R' );
 		}
 
 		// Move the cursor *below* the title block so the next section doesn't overlap.
@@ -297,7 +297,7 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, 'B', 9 );
 		$pdf->SetTextColor( $r, $g, $b );
 		$pdf->SetXY( $x + 5, $y + 4 );
-		$pdf->Cell( 50, 4, strtoupper( __( 'Bill To', 'estimation-tool-for-woocommerce' ) ), 0, 1 );
+		$pdf->Cell( 50, 4, strtoupper( __( 'Bill To', 'quotely-estimates-for-woocommerce' ) ), 0, 1 );
 
 		$pdf->SetFont( $this->font, 'B', 11 );
 		$pdf->SetTextColor( 20, 20, 20 );
@@ -334,10 +334,10 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, 'B', 10 );
 		$head_h = 9;
 		$pdf->Cell( $col_img, $head_h, '', 0, 0, 'C', 1 );
-		$pdf->Cell( $col_title, $head_h, __( 'Product', 'estimation-tool-for-woocommerce' ), 0, 0, 'L', 1 );
-		$pdf->Cell( $col_qty, $head_h, __( 'Qty', 'estimation-tool-for-woocommerce' ), 0, 0, 'C', 1 );
-		$pdf->Cell( $col_price, $head_h, __( 'Price', 'estimation-tool-for-woocommerce' ), 0, 0, 'R', 1 );
-		$pdf->Cell( $col_sub, $head_h, __( 'Subtotal', 'estimation-tool-for-woocommerce' ), 0, 1, 'R', 1 );
+		$pdf->Cell( $col_title, $head_h, __( 'Product', 'quotely-estimates-for-woocommerce' ), 0, 0, 'L', 1 );
+		$pdf->Cell( $col_qty, $head_h, __( 'Qty', 'quotely-estimates-for-woocommerce' ), 0, 0, 'C', 1 );
+		$pdf->Cell( $col_price, $head_h, __( 'Price', 'quotely-estimates-for-woocommerce' ), 0, 0, 'R', 1 );
+		$pdf->Cell( $col_sub, $head_h, __( 'Subtotal', 'quotely-estimates-for-woocommerce' ), 0, 1, 'R', 1 );
 
 		$pdf->SetTextColor( 20, 20, 20 );
 		$pdf->SetFont( $this->font, '', 10 );
@@ -368,10 +368,10 @@ class Estitofo_PDF {
 				$pdf->SetTextColor( 255, 255, 255 );
 				$pdf->SetFont( $this->font, 'B', 10 );
 				$pdf->Cell( $col_img, $head_h, '', 0, 0, 'C', 1 );
-				$pdf->Cell( $col_title, $head_h, __( 'Product', 'estimation-tool-for-woocommerce' ), 0, 0, 'L', 1 );
-				$pdf->Cell( $col_qty, $head_h, __( 'Qty', 'estimation-tool-for-woocommerce' ), 0, 0, 'C', 1 );
-				$pdf->Cell( $col_price, $head_h, __( 'Price', 'estimation-tool-for-woocommerce' ), 0, 0, 'R', 1 );
-				$pdf->Cell( $col_sub, $head_h, __( 'Subtotal', 'estimation-tool-for-woocommerce' ), 0, 1, 'R', 1 );
+				$pdf->Cell( $col_title, $head_h, __( 'Product', 'quotely-estimates-for-woocommerce' ), 0, 0, 'L', 1 );
+				$pdf->Cell( $col_qty, $head_h, __( 'Qty', 'quotely-estimates-for-woocommerce' ), 0, 0, 'C', 1 );
+				$pdf->Cell( $col_price, $head_h, __( 'Price', 'quotely-estimates-for-woocommerce' ), 0, 0, 'R', 1 );
+				$pdf->Cell( $col_sub, $head_h, __( 'Subtotal', 'quotely-estimates-for-woocommerce' ), 0, 1, 'R', 1 );
 				$pdf->SetTextColor( 20, 20, 20 );
 				$pdf->SetFont( $this->font, '', 10 );
 			}
@@ -560,7 +560,7 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, '', 10 );
 		$pdf->SetTextColor( 100, 110, 125 );
 		$pdf->SetXY( $box_x + 7, $box_y + 4 );
-		$pdf->Cell( $box_w / 2 - 7, $line_h, __( 'Items', 'estimation-tool-for-woocommerce' ), 0, 0, 'L' );
+		$pdf->Cell( $box_w / 2 - 7, $line_h, __( 'Items', 'quotely-estimates-for-woocommerce' ), 0, 0, 'L' );
 		$pdf->SetFont( $this->font, '', 10 );
 		$pdf->SetTextColor( 30, 41, 59 );
 		$pdf->SetXY( $box_x + $box_w / 2, $box_y + 4 );
@@ -569,7 +569,7 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, '', 10 );
 		$pdf->SetTextColor( 100, 110, 125 );
 		$pdf->SetXY( $box_x + 7, $box_y + 4 + $line_h );
-		$pdf->Cell( $box_w / 2 - 7, $line_h, __( 'Subtotal', 'estimation-tool-for-woocommerce' ), 0, 0, 'L' );
+		$pdf->Cell( $box_w / 2 - 7, $line_h, __( 'Subtotal', 'quotely-estimates-for-woocommerce' ), 0, 0, 'L' );
 		$pdf->SetFont( $this->font, '', 10 );
 		$pdf->SetTextColor( 30, 41, 59 );
 		$pdf->SetXY( $box_x + $box_w / 2, $box_y + 4 + $line_h );
@@ -584,7 +584,7 @@ class Estitofo_PDF {
 		$pdf->SetFont( $this->font, 'B', 14 );
 		$pdf->SetTextColor( 255, 255, 255 );
 		$pdf->SetXY( $box_x + 7, $stripe_y + ( $stripe_h - 8 ) / 2 );
-		$pdf->Cell( $box_w / 2 - 7, 8, __( 'TOTAL', 'estimation-tool-for-woocommerce' ), 0, 0, 'L' );
+		$pdf->Cell( $box_w / 2 - 7, 8, __( 'TOTAL', 'quotely-estimates-for-woocommerce' ), 0, 0, 'L' );
 		$pdf->SetXY( $box_x + $box_w / 2, $stripe_y + ( $stripe_h - 8 ) / 2 );
 		$pdf->Cell( $box_w / 2 - 7, 8, $this->money( $total ), 0, 1, 'R' );
 
@@ -647,7 +647,7 @@ class Estitofo_PDF {
 				4,
 				sprintf(
 				/* translators: 1: current page, 2: total pages */
-					__( 'Page %1$d of %2$d', 'estimation-tool-for-woocommerce' ),
+					__( 'Page %1$d of %2$d', 'quotely-estimates-for-woocommerce' ),
 					$i,
 					$count
 				),
@@ -881,7 +881,7 @@ class Estitofo_PDF {
 		if ( '' === $url && 0 === $id ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'No logo configured. Click "Choose Image" above.', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'No logo configured. Click "Choose Image" above.', 'quotely-estimates-for-woocommerce' ),
 				'detail'  => $detail,
 			);
 		}
@@ -892,7 +892,7 @@ class Estitofo_PDF {
 		if ( ! $path ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'Could not resolve the logo to a local file on the server.', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'Could not resolve the logo to a local file on the server.', 'quotely-estimates-for-woocommerce' ),
 				'detail'  => $detail,
 			);
 		}
@@ -902,7 +902,7 @@ class Estitofo_PDF {
 		if ( ! $detail['readable'] ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'Logo file is not readable by PHP (check file permissions or open_basedir).', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'Logo file is not readable by PHP (check file permissions or open_basedir).', 'quotely-estimates-for-woocommerce' ),
 				'detail'  => $detail,
 			);
 		}
@@ -911,7 +911,7 @@ class Estitofo_PDF {
 				'ok'      => false,
 				'message' => sprintf(
 									/* translators: %s: file extension */
-					__( 'Unsupported logo extension: %s. Use JPG or PNG.', 'estimation-tool-for-woocommerce' ),
+					__( 'Unsupported logo extension: %s. Use JPG or PNG.', 'quotely-estimates-for-woocommerce' ),
 					$detail['ext']
 				),
 				'detail'  => $detail,
@@ -928,14 +928,14 @@ class Estitofo_PDF {
 					'ok'      => false,
 					'message' => __(
 						'This logo is a PNG with a transparent background, and your server has neither the GD nor Imagick extension installed — TCPDF needs one of them to flatten transparency. Fix options (any one): (1) upload a JPG or a PNG without transparency, (2) enable the PHP "gd" extension (uncomment ;extension=gd in php.ini and restart Apache), or (3) install Imagick.',
-						'estimation-tool-for-woocommerce'
+						'quotely-estimates-for-woocommerce'
 					),
 					'detail'  => $detail,
 				);
 			}
 			return array(
 				'ok'      => false,
-				'message' => __( 'Logo file could not be prepared for embedding.', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'Logo file could not be prepared for embedding.', 'quotely-estimates-for-woocommerce' ),
 				'detail'  => $detail,
 			);
 		}
@@ -944,7 +944,7 @@ class Estitofo_PDF {
 		if ( ! is_string( $bytes ) || '' === $bytes ) {
 			return array(
 				'ok'      => false,
-				'message' => __( 'Could not read the logo bytes from disk.', 'estimation-tool-for-woocommerce' ),
+				'message' => __( 'Could not read the logo bytes from disk.', 'quotely-estimates-for-woocommerce' ),
 				'detail'  => $detail,
 			);
 		}
@@ -952,7 +952,7 @@ class Estitofo_PDF {
 			'ok'      => true,
 			'message' => sprintf(
 							/* translators: 1: filename 2: human size */
-				__( 'Logo ready — %1$s (%2$s). It will appear at the top of every PDF.', 'estimation-tool-for-woocommerce' ),
+				__( 'Logo ready — %1$s (%2$s). It will appear at the top of every PDF.', 'quotely-estimates-for-woocommerce' ),
 				basename( $safe ),
 				size_format( $detail['size_bytes'] )
 			),

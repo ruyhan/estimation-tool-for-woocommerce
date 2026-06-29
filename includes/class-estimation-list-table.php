@@ -22,13 +22,13 @@ class Estitofo_List_Table extends WP_List_Table {
 	public function get_columns() {
 		$columns = array(
 			'cb'      => '<input type="checkbox" />',
-			'id'      => __( 'ID', 'estimation-tool-for-woocommerce' ),
-			'name'    => __( 'Customer', 'estimation-tool-for-woocommerce' ),
-			'contact' => __( 'Contact', 'estimation-tool-for-woocommerce' ),
-			'total'   => __( 'Total', 'estimation-tool-for-woocommerce' ),
-			'flow'    => __( 'Status', 'estimation-tool-for-woocommerce' ),
-			'date'    => __( 'Date', 'estimation-tool-for-woocommerce' ),
-			'actions' => __( 'Actions', 'estimation-tool-for-woocommerce' ),
+			'id'      => __( 'ID', 'quotely-estimates-for-woocommerce' ),
+			'name'    => __( 'Customer', 'quotely-estimates-for-woocommerce' ),
+			'contact' => __( 'Contact', 'quotely-estimates-for-woocommerce' ),
+			'total'   => __( 'Total', 'quotely-estimates-for-woocommerce' ),
+			'flow'    => __( 'Status', 'quotely-estimates-for-woocommerce' ),
+			'date'    => __( 'Date', 'quotely-estimates-for-woocommerce' ),
+			'actions' => __( 'Actions', 'quotely-estimates-for-woocommerce' ),
 		);
 		return apply_filters( 'estitofo_list_columns', $columns );
 	}
@@ -100,7 +100,7 @@ class Estitofo_List_Table extends WP_List_Table {
 		$view  = sprintf(
 			'<button type="button" class="button view-products-btn" data-id="%d">%s</button> ',
 			absint( $item->id ),
-			esc_html__( 'View', 'estimation-tool-for-woocommerce' )
+			esc_html__( 'View', 'quotely-estimates-for-woocommerce' )
 		);
 		$reply = sprintf(
 			' <a class="button" href="mailto:%s?subject=%s">%s</a>',
@@ -108,16 +108,16 @@ class Estitofo_List_Table extends WP_List_Table {
 			rawurlencode(
 				sprintf(
 				/* translators: %d: estimation id */
-					__( 'Re: your estimation #%d', 'estimation-tool-for-woocommerce' ),
+					__( 'Re: your estimation #%d', 'quotely-estimates-for-woocommerce' ),
 					(int) $item->id
 				)
 			),
-			esc_html__( 'Reply', 'estimation-tool-for-woocommerce' )
+			esc_html__( 'Reply', 'quotely-estimates-for-woocommerce' )
 		);
 		$notes_btn = sprintf(
 			' <button type="button" class="button edit-notes-btn" data-id="%d">%s</button>',
 			absint( $item->id ),
-			esc_html__( 'Notes', 'estimation-tool-for-woocommerce' )
+			esc_html__( 'Notes', 'quotely-estimates-for-woocommerce' )
 		);
 		return $view . $reply . $notes_btn;
 	}
@@ -134,13 +134,13 @@ class Estitofo_List_Table extends WP_List_Table {
 		$status  = isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'publish';
 		$actions = ( 'trash' === $status )
 			? array(
-				'restore' => __( 'Restore', 'estimation-tool-for-woocommerce' ),
-				'delete'  => __( 'Delete Permanently', 'estimation-tool-for-woocommerce' ),
-				'export'  => __( 'Export to CSV', 'estimation-tool-for-woocommerce' ),
+				'restore' => __( 'Restore', 'quotely-estimates-for-woocommerce' ),
+				'delete'  => __( 'Delete Permanently', 'quotely-estimates-for-woocommerce' ),
+				'export'  => __( 'Export to CSV', 'quotely-estimates-for-woocommerce' ),
 			)
 			: array(
-				'trash'  => __( 'Move to Trash', 'estimation-tool-for-woocommerce' ),
-				'export' => __( 'Export to CSV', 'estimation-tool-for-woocommerce' ),
+				'trash'  => __( 'Move to Trash', 'quotely-estimates-for-woocommerce' ),
+				'export' => __( 'Export to CSV', 'quotely-estimates-for-woocommerce' ),
 			);
 		return apply_filters( 'estitofo_list_bulk_actions', $actions );
 	}
@@ -157,18 +157,18 @@ class Estitofo_List_Table extends WP_List_Table {
 		$flow = isset( $_REQUEST['flow'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['flow'] ) ) : '';
 		?>
 		<div class="alignleft actions">
-			<label class="screen-reader-text" for="wc-est-from"><?php esc_html_e( 'From', 'estimation-tool-for-woocommerce' ); ?></label>
+			<label class="screen-reader-text" for="wc-est-from"><?php esc_html_e( 'From', 'quotely-estimates-for-woocommerce' ); ?></label>
 			<input type="date" id="wc-est-from" name="from" value="<?php echo esc_attr( $from ); ?>">
-			<label class="screen-reader-text" for="wc-est-to"><?php esc_html_e( 'To', 'estimation-tool-for-woocommerce' ); ?></label>
+			<label class="screen-reader-text" for="wc-est-to"><?php esc_html_e( 'To', 'quotely-estimates-for-woocommerce' ); ?></label>
 			<input type="date" id="wc-est-to" name="to" value="<?php echo esc_attr( $to ); ?>">
-			<label class="screen-reader-text" for="wc-est-flow"><?php esc_html_e( 'Status', 'estimation-tool-for-woocommerce' ); ?></label>
+			<label class="screen-reader-text" for="wc-est-flow"><?php esc_html_e( 'Status', 'quotely-estimates-for-woocommerce' ); ?></label>
 			<select id="wc-est-flow" name="flow">
-				<option value=""><?php esc_html_e( 'All statuses', 'estimation-tool-for-woocommerce' ); ?></option>
+				<option value=""><?php esc_html_e( 'All statuses', 'quotely-estimates-for-woocommerce' ); ?></option>
 				<?php foreach ( Estitofo_Dashboard::statuses() as $slug => $label ) : ?>
 					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $flow, $slug ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<?php submit_button( __( 'Filter', 'estimation-tool-for-woocommerce' ), '', 'filter_action', false ); ?>
+			<?php submit_button( __( 'Filter', 'quotely-estimates-for-woocommerce' ), '', 'filter_action', false ); ?>
 		</div>
 		<?php
 	}
@@ -258,7 +258,7 @@ class Estitofo_List_Table extends WP_List_Table {
 			'<a href="%s"%s>%s <span class="count">(%s)</span></a>',
 			esc_url( $base_url ),
 			'publish' === $current ? ' class="current"' : '',
-			esc_html__( 'All', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'All', 'quotely-estimates-for-woocommerce' ),
 			number_format_i18n( $count_publish )
 		);
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
@@ -267,7 +267,7 @@ class Estitofo_List_Table extends WP_List_Table {
 			'<a href="%s"%s>%s <span class="count">(%s)</span></a>',
 			esc_url( add_query_arg( 'status', 'trash', $base_url ) ),
 			'trash' === $current ? ' class="current"' : '',
-			esc_html__( 'Trash', 'estimation-tool-for-woocommerce' ),
+			esc_html__( 'Trash', 'quotely-estimates-for-woocommerce' ),
 			number_format_i18n( $count_trash )
 		);
 

@@ -14,7 +14,7 @@ if ( ! class_exists( 'Estitofo_Elementor_Widget' ) && class_exists( 'Elementor\W
 		}
 
 		public function get_title() {
-			return esc_html__( 'Estimation Tool', 'estimation-tool-for-woocommerce' );
+			return esc_html__( 'Estimation Tool', 'quotely-estimates-for-woocommerce' );
 		}
 
 		public function get_icon() {
@@ -33,7 +33,7 @@ if ( ! class_exists( 'Estitofo_Elementor_Widget' ) && class_exists( 'Elementor\W
 			$this->start_controls_section(
 				'section_content',
 				array(
-					'label' => esc_html__( 'Content', 'estimation-tool-for-woocommerce' ),
+					'label' => esc_html__( 'Content', 'quotely-estimates-for-woocommerce' ),
 				)
 			);
 
@@ -47,20 +47,20 @@ if ( ! class_exists( 'Estitofo_Elementor_Widget' ) && class_exists( 'Elementor\W
 			$this->add_control(
 				'heading',
 				array(
-					'label'   => esc_html__( 'Heading', 'estimation-tool-for-woocommerce' ),
+					'label'   => esc_html__( 'Heading', 'quotely-estimates-for-woocommerce' ),
 					'type'    => Controls_Manager::TEXT,
-					'default' => '' !== $default_heading ? $default_heading : esc_html__( 'My plan and price estimation', 'estimation-tool-for-woocommerce' ),
+					'default' => '' !== $default_heading ? $default_heading : esc_html__( 'My plan and price estimation', 'quotely-estimates-for-woocommerce' ),
 				)
 			);
 
 			$this->add_control(
 				'subheading',
 				array(
-					'label'       => esc_html__( 'Subheading', 'estimation-tool-for-woocommerce' ),
+					'label'       => esc_html__( 'Subheading', 'quotely-estimates-for-woocommerce' ),
 					'type'        => Controls_Manager::TEXTAREA,
 					'rows'        => 2,
 					'default'     => $default_subheading,
-					'description' => esc_html__( 'Leave blank to hide the subheading.', 'estimation-tool-for-woocommerce' ),
+					'description' => esc_html__( 'Leave blank to hide the subheading.', 'quotely-estimates-for-woocommerce' ),
 				)
 			);
 

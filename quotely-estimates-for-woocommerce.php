@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: Estimation Tool for WooCommerce
- * Plugin URI: https://wordpress.org/plugins/estimation-tool-for-woocommerce/
+ * Plugin Name: Quotely Estimates for WooCommerce
+ * Plugin URI: https://wordpress.org/plugins/quotely-estimates-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.18.0
+ * Version: 3.19.0
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: estimation-tool-for-woocommerce
+ * Text Domain: quotely-estimates-for-woocommerce
  * Domain Path: /languages
  * Requires at least: 6.4
  * Tested up to: 7.0
@@ -17,7 +17,7 @@
  * WC requires at least: 6.0
  * WC tested up to: 9.3
  *
- * @package estimation-tool-for-woocommerce
+ * @package quotely-estimates-for-woocommerce
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -26,9 +26,9 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 	final class Estitofo_Plugin {
 
-		const VERSION               = '3.18.0';
+		const VERSION               = '3.19.0';
 		const DB_VERSION            = '1.2';
-		const TEXT_DOMAIN           = 'estimation-tool-for-woocommerce';
+		const TEXT_DOMAIN           = 'quotely-estimates-for-woocommerce';
 		const MIN_ELEMENTOR_VERSION = '3.5.0';
 		const STATUSES              = array( 'new', 'contacted', 'quoted', 'won', 'lost' );
 
@@ -318,11 +318,11 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 			if ( $id <= 0 || ! $token || ! hash_equals( self::pdf_token( $id ), $token ) ) {
 				status_header( 403 );
-				wp_die( esc_html__( 'Invalid PDF link.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 403 ) );
+				wp_die( esc_html__( 'Invalid PDF link.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 403 ) );
 			}
 			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
 				status_header( 500 );
-				wp_die( esc_html__( 'PDF library not loaded.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
+				wp_die( esc_html__( 'PDF library not loaded.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
 
 			global $wpdb;
@@ -331,12 +331,12 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			$row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", $id ) );
 			if ( ! $row ) {
 				status_header( 404 );
-				wp_die( esc_html__( 'Estimation not found.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 404 ) );
+				wp_die( esc_html__( 'Estimation not found.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 404 ) );
 			}
 			$products = json_decode( (string) $row->products, true );
 			if ( ! is_array( $products ) ) {
 				status_header( 400 );
-				wp_die( esc_html__( 'Bad estimation data.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 400 ) );
+				wp_die( esc_html__( 'Bad estimation data.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 400 ) );
 			}
 			// Don't let WP buffer output and corrupt the PDF binary.
 			while ( ob_get_level() > 0 ) {
@@ -364,7 +364,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				$pdf->Output( $filename, $disp );
 			} catch ( Exception $e ) {
 				status_header( 500 );
-				wp_die( esc_html__( 'PDF generation failed.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
+				wp_die( esc_html__( 'PDF generation failed.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
 			exit;
 		}
@@ -432,7 +432,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		}
 
 		public function plugin_action_links( $links ) {
-			$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=estimation-settings' ) ) . '">' . esc_html__( 'Settings', 'estimation-tool-for-woocommerce' ) . '</a>';
+			$settings_link = '<a href="' . esc_url( admin_url( 'admin.php?page=estimation-settings' ) ) . '">' . esc_html__( 'Settings', 'quotely-estimates-for-woocommerce' ) . '</a>';
 			array_unshift( $links, $settings_link );
 			return $links;
 		}
@@ -455,7 +455,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				return;
 			}
 			echo '<div class="notice notice-error"><p>' .
-				esc_html__( 'Estimation Tool for WooCommerce requires WooCommerce to be installed and active.', 'estimation-tool-for-woocommerce' ) .
+				esc_html__( 'Quotely Estimates for WooCommerce requires WooCommerce to be installed and active.', 'quotely-estimates-for-woocommerce' ) .
 				'</p></div>';
 		}
 
@@ -504,57 +504,57 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'default_country'  => $default_country,
 					'restrict_country' => $restrict_country,
 					'i18n'             => array(
-						'no_products'                => __( 'No products added yet', 'estimation-tool-for-woocommerce' ),
-						'fill_required'              => __( 'Please fill all required fields correctly.', 'estimation-tool-for-woocommerce' ),
-						'invalid_phone'              => __( 'Please enter a valid phone number.', 'estimation-tool-for-woocommerce' ),
-						'valid_number'               => __( 'Valid number', 'estimation-tool-for-woocommerce' ),
+						'no_products'                => __( 'No products added yet', 'quotely-estimates-for-woocommerce' ),
+						'fill_required'              => __( 'Please fill all required fields correctly.', 'quotely-estimates-for-woocommerce' ),
+						'invalid_phone'              => __( 'Please enter a valid phone number.', 'quotely-estimates-for-woocommerce' ),
+						'valid_number'               => __( 'Valid number', 'quotely-estimates-for-woocommerce' ),
 						/* translators: %s: country name */
-						'valid_number_country'       => __( 'Valid %s number', 'estimation-tool-for-woocommerce' ),
-						'phone_invalid_country_code' => __( 'Invalid country dial code. Please pick a country from the dropdown.', 'estimation-tool-for-woocommerce' ),
+						'valid_number_country'       => __( 'Valid %s number', 'quotely-estimates-for-woocommerce' ),
+						'phone_invalid_country_code' => __( 'Invalid country dial code. Please pick a country from the dropdown.', 'quotely-estimates-for-woocommerce' ),
 						/* translators: %s: country name */
-						'phone_too_short_country'    => __( 'Number is too short for %s.', 'estimation-tool-for-woocommerce' ),
-						'phone_too_short'            => __( 'Phone number is too short.', 'estimation-tool-for-woocommerce' ),
+						'phone_too_short_country'    => __( 'Number is too short for %s.', 'quotely-estimates-for-woocommerce' ),
+						'phone_too_short'            => __( 'Phone number is too short.', 'quotely-estimates-for-woocommerce' ),
 						/* translators: %s: country name */
-						'phone_too_long_country'     => __( 'Number is too long for %s.', 'estimation-tool-for-woocommerce' ),
-						'phone_too_long'             => __( 'Phone number is too long.', 'estimation-tool-for-woocommerce' ),
-						'phone_not_a_number'         => __( 'Please enter digits only.', 'estimation-tool-for-woocommerce' ),
+						'phone_too_long_country'     => __( 'Number is too long for %s.', 'quotely-estimates-for-woocommerce' ),
+						'phone_too_long'             => __( 'Phone number is too long.', 'quotely-estimates-for-woocommerce' ),
+						'phone_not_a_number'         => __( 'Please enter digits only.', 'quotely-estimates-for-woocommerce' ),
 						/* translators: %s: country name */
-						'phone_invalid_for_country'  => __( "Doesn't look like a valid %s number.", 'estimation-tool-for-woocommerce' ),
-						'phone_loading'              => __( 'Checking phone number…', 'estimation-tool-for-woocommerce' ),
-						'add_products_first'         => __( 'Please add products to generate the estimation.', 'estimation-tool-for-woocommerce' ),
-						'already_added'              => __( 'This product is already in your estimation', 'estimation-tool-for-woocommerce' ),
-						'generating'                 => __( 'Generating your estimation...', 'estimation-tool-for-woocommerce' ),
-						'thank_you'                  => __( 'Thank you! Your estimation is downloading...', 'estimation-tool-for-woocommerce' ),
-						'new_estimation'             => __( 'New Estimation', 'estimation-tool-for-woocommerce' ),
-						'submission_error'           => __( 'Submission error. Please try again.', 'estimation-tool-for-woocommerce' ),
-						'pdf_error'                  => __( 'Could not generate PDF. Please try again.', 'estimation-tool-for-woocommerce' ),
-						'add_more'                   => __( 'Add More Products', 'estimation-tool-for-woocommerce' ),
-						'loading_suggested'          => __( 'Loading suggestions...', 'estimation-tool-for-woocommerce' ),
-						'no_suggested'               => __( 'No suggestions available at this time', 'estimation-tool-for-woocommerce' ),
-						'no_results'                 => __( 'No products match your search.', 'estimation-tool-for-woocommerce' ),
-						'item'                       => __( 'item', 'estimation-tool-for-woocommerce' ),
-						'items'                      => __( 'items', 'estimation-tool-for-woocommerce' ),
-						'added_to_cart'              => __( 'Added', 'estimation-tool-for-woocommerce' ),
-						'empty_hint'                 => __( 'Search above to add products to your estimation.', 'estimation-tool-for-woocommerce' ),
-						'total'                      => __( 'Total', 'estimation-tool-for-woocommerce' ),
-						'product'                    => __( 'Product', 'estimation-tool-for-woocommerce' ),
-						'price'                      => __( 'Price', 'estimation-tool-for-woocommerce' ),
-						'quantity'                   => __( 'Quantity', 'estimation-tool-for-woocommerce' ),
-						'subtotal'                   => __( 'Subtotal', 'estimation-tool-for-woocommerce' ),
-						'action'                     => __( 'Action', 'estimation-tool-for-woocommerce' ),
-						'remove'                     => __( 'Remove', 'estimation-tool-for-woocommerce' ),
-						'add_note'                   => __( 'Add note…', 'estimation-tool-for-woocommerce' ),
-						'all'                        => __( 'All', 'estimation-tool-for-woocommerce' ),
-						'step_build'                 => __( 'Build', 'estimation-tool-for-woocommerce' ),
-						'step_contact'               => __( 'Contact', 'estimation-tool-for-woocommerce' ),
-						'step_done'                  => __( 'Done', 'estimation-tool-for-woocommerce' ),
-						'share_text'                 => __( 'My estimation total: ', 'estimation-tool-for-woocommerce' ),
-						'copy_link'                  => __( 'Copy PDF link', 'estimation-tool-for-woocommerce' ),
-						'copied'                     => __( 'Copied!', 'estimation-tool-for-woocommerce' ),
-						'download_pdf'               => __( 'Download PDF', 'estimation-tool-for-woocommerce' ),
-						'resume_email_required'      => __( 'Please enter your email first.', 'estimation-tool-for-woocommerce' ),
-						'resume_sent'                => __( 'Check your inbox for the resume link.', 'estimation-tool-for-woocommerce' ),
-						'resume_loaded'              => __( 'Your estimation has been restored.', 'estimation-tool-for-woocommerce' ),
+						'phone_invalid_for_country'  => __( "Doesn't look like a valid %s number.", 'quotely-estimates-for-woocommerce' ),
+						'phone_loading'              => __( 'Checking phone number…', 'quotely-estimates-for-woocommerce' ),
+						'add_products_first'         => __( 'Please add products to generate the estimation.', 'quotely-estimates-for-woocommerce' ),
+						'already_added'              => __( 'This product is already in your estimation', 'quotely-estimates-for-woocommerce' ),
+						'generating'                 => __( 'Generating your estimation...', 'quotely-estimates-for-woocommerce' ),
+						'thank_you'                  => __( 'Thank you! Your estimation is downloading...', 'quotely-estimates-for-woocommerce' ),
+						'new_estimation'             => __( 'New Estimation', 'quotely-estimates-for-woocommerce' ),
+						'submission_error'           => __( 'Submission error. Please try again.', 'quotely-estimates-for-woocommerce' ),
+						'pdf_error'                  => __( 'Could not generate PDF. Please try again.', 'quotely-estimates-for-woocommerce' ),
+						'add_more'                   => __( 'Add More Products', 'quotely-estimates-for-woocommerce' ),
+						'loading_suggested'          => __( 'Loading suggestions...', 'quotely-estimates-for-woocommerce' ),
+						'no_suggested'               => __( 'No suggestions available at this time', 'quotely-estimates-for-woocommerce' ),
+						'no_results'                 => __( 'No products match your search.', 'quotely-estimates-for-woocommerce' ),
+						'item'                       => __( 'item', 'quotely-estimates-for-woocommerce' ),
+						'items'                      => __( 'items', 'quotely-estimates-for-woocommerce' ),
+						'added_to_cart'              => __( 'Added', 'quotely-estimates-for-woocommerce' ),
+						'empty_hint'                 => __( 'Search above to add products to your estimation.', 'quotely-estimates-for-woocommerce' ),
+						'total'                      => __( 'Total', 'quotely-estimates-for-woocommerce' ),
+						'product'                    => __( 'Product', 'quotely-estimates-for-woocommerce' ),
+						'price'                      => __( 'Price', 'quotely-estimates-for-woocommerce' ),
+						'quantity'                   => __( 'Quantity', 'quotely-estimates-for-woocommerce' ),
+						'subtotal'                   => __( 'Subtotal', 'quotely-estimates-for-woocommerce' ),
+						'action'                     => __( 'Action', 'quotely-estimates-for-woocommerce' ),
+						'remove'                     => __( 'Remove', 'quotely-estimates-for-woocommerce' ),
+						'add_note'                   => __( 'Add note…', 'quotely-estimates-for-woocommerce' ),
+						'all'                        => __( 'All', 'quotely-estimates-for-woocommerce' ),
+						'step_build'                 => __( 'Build', 'quotely-estimates-for-woocommerce' ),
+						'step_contact'               => __( 'Contact', 'quotely-estimates-for-woocommerce' ),
+						'step_done'                  => __( 'Done', 'quotely-estimates-for-woocommerce' ),
+						'share_text'                 => __( 'My estimation total: ', 'quotely-estimates-for-woocommerce' ),
+						'copy_link'                  => __( 'Copy PDF link', 'quotely-estimates-for-woocommerce' ),
+						'copied'                     => __( 'Copied!', 'quotely-estimates-for-woocommerce' ),
+						'download_pdf'               => __( 'Download PDF', 'quotely-estimates-for-woocommerce' ),
+						'resume_email_required'      => __( 'Please enter your email first.', 'quotely-estimates-for-woocommerce' ),
+						'resume_sent'                => __( 'Check your inbox for the resume link.', 'quotely-estimates-for-woocommerce' ),
+						'resume_loaded'              => __( 'Your estimation has been restored.', 'quotely-estimates-for-woocommerce' ),
 					),
 				)
 			);
@@ -580,12 +580,12 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'nonce_download' => wp_create_nonce( 'estitofo_admin_pdf' ),
 					'nonce_admin'    => wp_create_nonce( 'estitofo_admin' ),
 					'i18n'           => array(
-						'loading'                 => __( 'Loading...', 'estimation-tool-for-woocommerce' ),
-						'edit_notes'              => __( 'Edit notes', 'estimation-tool-for-woocommerce' ),
-						'save'                    => __( 'Save', 'estimation-tool-for-woocommerce' ),
-						'cancel'                  => __( 'Cancel', 'estimation-tool-for-woocommerce' ),
-						'saved'                   => __( 'Saved', 'estimation-tool-for-woocommerce' ),
-						'admin_notes_placeholder' => __( 'Internal notes about this estimation…', 'estimation-tool-for-woocommerce' ),
+						'loading'                 => __( 'Loading...', 'quotely-estimates-for-woocommerce' ),
+						'edit_notes'              => __( 'Edit notes', 'quotely-estimates-for-woocommerce' ),
+						'save'                    => __( 'Save', 'quotely-estimates-for-woocommerce' ),
+						'cancel'                  => __( 'Cancel', 'quotely-estimates-for-woocommerce' ),
+						'saved'                   => __( 'Saved', 'quotely-estimates-for-woocommerce' ),
+						'admin_notes_placeholder' => __( 'Internal notes about this estimation…', 'quotely-estimates-for-woocommerce' ),
 					),
 				)
 			);
@@ -607,7 +607,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'estitofoAdmin',
 					array(
 						'i18n' => array(
-							'copied' => __( 'Copied!', 'estimation-tool-for-woocommerce' ),
+							'copied' => __( 'Copied!', 'quotely-estimates-for-woocommerce' ),
 						),
 					)
 				);
@@ -632,7 +632,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			$elements_manager->add_category(
 				'wc-estimation',
 				array(
-					'title' => esc_html__( 'Estimation Tool', 'estimation-tool-for-woocommerce' ),
+					'title' => esc_html__( 'Estimation Tool', 'quotely-estimates-for-woocommerce' ),
 					'icon'  => 'fa fa-calculator',
 				),
 				1
@@ -641,8 +641,8 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 		public function add_admin_menu() {
 			$hook = add_menu_page(
-				esc_html__( 'Estimation Data', 'estimation-tool-for-woocommerce' ),
-				esc_html__( 'Estimations', 'estimation-tool-for-woocommerce' ),
+				esc_html__( 'Estimation Data', 'quotely-estimates-for-woocommerce' ),
+				esc_html__( 'Estimations', 'quotely-estimates-for-woocommerce' ),
 				'manage_options',
 				'estimation-data',
 				array( $this, 'render_estimation_data_page' ),
@@ -651,16 +651,16 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			);
 			add_submenu_page(
 				'estimation-data',
-				esc_html__( 'Submissions', 'estimation-tool-for-woocommerce' ),
-				esc_html__( 'Submissions', 'estimation-tool-for-woocommerce' ),
+				esc_html__( 'Submissions', 'quotely-estimates-for-woocommerce' ),
+				esc_html__( 'Submissions', 'quotely-estimates-for-woocommerce' ),
 				'manage_options',
 				'estimation-data',
 				array( $this, 'render_estimation_data_page' )
 			);
 			add_submenu_page(
 				'estimation-data',
-				esc_html__( 'Settings', 'estimation-tool-for-woocommerce' ),
-				esc_html__( 'Settings', 'estimation-tool-for-woocommerce' ),
+				esc_html__( 'Settings', 'quotely-estimates-for-woocommerce' ),
+				esc_html__( 'Settings', 'quotely-estimates-for-woocommerce' ),
 				'manage_options',
 				'estimation-settings',
 				array( 'Estitofo_Settings', 'render_settings_page' )
@@ -671,7 +671,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		public function add_screen_options() {
 			$option = 'per_page';
 			$args   = array(
-				'label'   => esc_html__( 'Estimations per page', 'estimation-tool-for-woocommerce' ),
+				'label'   => esc_html__( 'Estimations per page', 'quotely-estimates-for-woocommerce' ),
 				'default' => 20,
 				'option'  => 'estimations_per_page',
 			);
@@ -680,7 +680,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 		public function render_estimation_data_page() {
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( esc_html__( 'Unauthorized access', 'estimation-tool-for-woocommerce' ) );
+				wp_die( esc_html__( 'Unauthorized access', 'quotely-estimates-for-woocommerce' ) );
 			}
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- handle_bulk_actions() verifies the nonce.
 			if ( isset( $_REQUEST['action'] ) || isset( $_REQUEST['action2'] ) ) {
@@ -690,27 +690,27 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			$table->prepare_items();
 			?>
 			<div class="wrap">
-				<h1 class="wp-heading-inline"><?php esc_html_e( 'Estimation Submissions', 'estimation-tool-for-woocommerce' ); ?></h1>
+				<h1 class="wp-heading-inline"><?php esc_html_e( 'Estimation Submissions', 'quotely-estimates-for-woocommerce' ); ?></h1>
 				<?php settings_errors( 'estimation_data_messages' ); ?>
 				<form method="post">
 					<?php wp_nonce_field( 'estimation_data_bulk_action', 'estimation_data_nonce' ); ?>
                     <?php // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only page slug from menu link. ?>
 					<input type="hidden" name="page" value="<?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['page'] ?? '' ) ) ); ?>" />
 					<?php $table->views(); ?>
-					<?php $table->search_box( esc_html__( 'Search', 'estimation-tool-for-woocommerce' ), 'search' ); ?>
+					<?php $table->search_box( esc_html__( 'Search', 'quotely-estimates-for-woocommerce' ), 'search' ); ?>
 					<?php $table->display(); ?>
 				</form>
 			</div>
 			<div id="estimation-products-modal" class="estimation-products-modal" style="display:none;">
 				<div class="estimation-modal-content">
 					<div class="estimation-modal-header">
-						<h2><?php esc_html_e( 'Estimated Products', 'estimation-tool-for-woocommerce' ); ?></h2>
+						<h2><?php esc_html_e( 'Estimated Products', 'quotely-estimates-for-woocommerce' ); ?></h2>
 						<button class="button button-secondary close-modal">&times;</button>
 					</div>
 					<div class="estimation-modal-body" id="products-list-container"></div>
 					<div class="estimation-modal-footer">
-						<button class="button download-pdf-btn"><?php esc_html_e( 'Download PDF', 'estimation-tool-for-woocommerce' ); ?></button>
-						<button class="button button-primary close-modal"><?php esc_html_e( 'Close', 'estimation-tool-for-woocommerce' ); ?></button>
+						<button class="button download-pdf-btn"><?php esc_html_e( 'Download PDF', 'quotely-estimates-for-woocommerce' ); ?></button>
+						<button class="button button-primary close-modal"><?php esc_html_e( 'Close', 'quotely-estimates-for-woocommerce' ); ?></button>
 					</div>
 				</div>
 			</div>
@@ -720,7 +720,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		public function ajax_suggested_products() {
 			check_ajax_referer( 'estitofo_nonce', 'nonce' );
 			if ( ! function_exists( 'wc_get_products' ) ) {
-				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'quotely-estimates-for-woocommerce' ) );
 			}
 			$products = wc_get_products(
 				array(
@@ -748,29 +748,29 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 		public function download_admin_pdf() {
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( esc_html__( 'Unauthorized access', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 403 ) );
+				wp_die( esc_html__( 'Unauthorized access', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 403 ) );
 			}
 			$nonce = isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '';
 			if ( ! wp_verify_nonce( $nonce, 'estitofo_admin_pdf' ) ) {
-				wp_die( esc_html__( 'Invalid request', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 403 ) );
+				wp_die( esc_html__( 'Invalid request', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 403 ) );
 			}
 			$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 			if ( $id <= 0 ) {
-				wp_die( esc_html__( 'Invalid estimation ID', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 400 ) );
+				wp_die( esc_html__( 'Invalid estimation ID', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 400 ) );
 			}
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'estimation_submissions';
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; query is prepared.
 			$estimation = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $id ) );
 			if ( ! $estimation ) {
-				wp_die( esc_html__( 'Estimation not found', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 404 ) );
+				wp_die( esc_html__( 'Estimation not found', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 404 ) );
 			}
 			$products = json_decode( $estimation->products, true );
 			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $products ) ) {
-				wp_die( esc_html__( 'Invalid product data', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 400 ) );
+				wp_die( esc_html__( 'Invalid product data', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 400 ) );
 			}
 			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
-				wp_die( esc_html__( 'PDF library not loaded', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
+				wp_die( esc_html__( 'PDF library not loaded', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
 			try {
 				$pdf_generator = new Estitofo_PDF();
@@ -788,29 +788,29 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				$pdf->Output( $filename, 'D' );
 				exit;
 			} catch ( Exception $e ) {
-				wp_die( esc_html__( 'PDF generation failed.', 'estimation-tool-for-woocommerce' ), '', array( 'response' => 500 ) );
+				wp_die( esc_html__( 'PDF generation failed.', 'quotely-estimates-for-woocommerce' ), '', array( 'response' => 500 ) );
 			}
 		}
 
 		public function get_estimation_products_ajax() {
 			check_ajax_referer( 'estitofo_products_nonce', '_ajax_nonce' );
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_send_json_error( esc_html__( 'Unauthorized access', 'estimation-tool-for-woocommerce' ), 403 );
+				wp_send_json_error( esc_html__( 'Unauthorized access', 'quotely-estimates-for-woocommerce' ), 403 );
 			}
 			$id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
 			if ( $id <= 0 ) {
-				wp_send_json_error( esc_html__( 'Invalid estimation ID', 'estimation-tool-for-woocommerce' ), 400 );
+				wp_send_json_error( esc_html__( 'Invalid estimation ID', 'quotely-estimates-for-woocommerce' ), 400 );
 			}
 			global $wpdb;
 			$table_name = $wpdb->prefix . 'estimation_submissions';
             // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom plugin table; query is prepared.
 			$estimation = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d", $id ) );
 			if ( ! $estimation ) {
-				wp_send_json_error( esc_html__( 'Estimation not found', 'estimation-tool-for-woocommerce' ), 404 );
+				wp_send_json_error( esc_html__( 'Estimation not found', 'quotely-estimates-for-woocommerce' ), 404 );
 			}
 			$products = json_decode( $estimation->products, true );
 			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $products ) ) {
-				wp_send_json_error( esc_html__( 'Invalid product data format', 'estimation-tool-for-woocommerce' ), 400 );
+				wp_send_json_error( esc_html__( 'Invalid product data format', 'quotely-estimates-for-woocommerce' ), 400 );
 			}
 			if ( ! empty( $_POST['include_notes'] ) ) {
 				wp_send_json_success(
@@ -827,33 +827,33 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				echo esc_html(
 					sprintf(
 					/* translators: %d: estimation submission ID */
-						__( 'Estimation #%d', 'estimation-tool-for-woocommerce' ),
+						__( 'Estimation #%d', 'quotely-estimates-for-woocommerce' ),
 						$estimation->id
 					)
 				);
 				?>
 					</h3>
 				<div class="customer-info">
-					<p><strong><?php esc_html_e( 'Name:', 'estimation-tool-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->name ); ?></p>
-					<p><strong><?php esc_html_e( 'Email:', 'estimation-tool-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->email ); ?></p>
-					<p><strong><?php esc_html_e( 'Phone:', 'estimation-tool-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->phone ); ?></p>
-					<p><strong><?php esc_html_e( 'Date:', 'estimation-tool-for-woocommerce' ); ?></strong> <?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $estimation->created_at ) ) ); ?></p>
+					<p><strong><?php esc_html_e( 'Name:', 'quotely-estimates-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->name ); ?></p>
+					<p><strong><?php esc_html_e( 'Email:', 'quotely-estimates-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->email ); ?></p>
+					<p><strong><?php esc_html_e( 'Phone:', 'quotely-estimates-for-woocommerce' ); ?></strong> <?php echo esc_html( $estimation->phone ); ?></p>
+					<p><strong><?php esc_html_e( 'Date:', 'quotely-estimates-for-woocommerce' ); ?></strong> <?php echo esc_html( date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $estimation->created_at ) ) ); ?></p>
 				</div>
 				<table class="product-table">
 					<thead>
 						<tr>
-							<th><?php esc_html_e( 'Product', 'estimation-tool-for-woocommerce' ); ?></th>
-							<th><?php esc_html_e( 'Image', 'estimation-tool-for-woocommerce' ); ?></th>
-							<th><?php esc_html_e( 'Price', 'estimation-tool-for-woocommerce' ); ?></th>
-							<th><?php esc_html_e( 'Qty', 'estimation-tool-for-woocommerce' ); ?></th>
-							<th><?php esc_html_e( 'Subtotal', 'estimation-tool-for-woocommerce' ); ?></th>
+							<th><?php esc_html_e( 'Product', 'quotely-estimates-for-woocommerce' ); ?></th>
+							<th><?php esc_html_e( 'Image', 'quotely-estimates-for-woocommerce' ); ?></th>
+							<th><?php esc_html_e( 'Price', 'quotely-estimates-for-woocommerce' ); ?></th>
+							<th><?php esc_html_e( 'Qty', 'quotely-estimates-for-woocommerce' ); ?></th>
+							<th><?php esc_html_e( 'Subtotal', 'quotely-estimates-for-woocommerce' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
 						foreach ( $products as $product ) :
 							$image_url = ! empty( $product['image'] ) ? esc_url( $product['image'] ) : wc_placeholder_img_src();
-							$title     = isset( $product['title'] ) ? (string) $product['title'] : __( 'N/A', 'estimation-tool-for-woocommerce' );
+							$title     = isset( $product['title'] ) ? (string) $product['title'] : __( 'N/A', 'quotely-estimates-for-woocommerce' );
 							$price     = wc_price( floatval( $product['price'] ?? 0 ) );
 							$qty       = absint( $product['quantity'] ?? 0 );
 							$subtotal  = wc_price( floatval( $product['price'] ?? 0 ) * $qty );
@@ -869,7 +869,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					</tbody>
 					<tfoot>
 						<tr>
-							<th colspan="4" style="text-align:right"><?php esc_html_e( 'Total:', 'estimation-tool-for-woocommerce' ); ?></th>
+							<th colspan="4" style="text-align:right"><?php esc_html_e( 'Total:', 'quotely-estimates-for-woocommerce' ); ?></th>
 							<th><?php echo wp_kses_post( wc_price( floatval( $estimation->total ) ) ); ?></th>
 						</tr>
 					</tfoot>
@@ -925,7 +925,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 						'estimation_data_message',
 						sprintf(
 						/* translators: %d: number of estimations moved to trash */
-							_n( '%d estimation moved to trash.', '%d estimations moved to trash.', $updated, 'estimation-tool-for-woocommerce' ),
+							_n( '%d estimation moved to trash.', '%d estimations moved to trash.', $updated, 'quotely-estimates-for-woocommerce' ),
 							$updated
 						),
 						'updated'
@@ -945,7 +945,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 						'estimation_data_message',
 						sprintf(
 						/* translators: %d: number of estimations permanently deleted */
-							_n( '%d estimation permanently deleted.', '%d estimations permanently deleted.', $updated, 'estimation-tool-for-woocommerce' ),
+							_n( '%d estimation permanently deleted.', '%d estimations permanently deleted.', $updated, 'quotely-estimates-for-woocommerce' ),
 							$updated
 						),
 						'updated'
@@ -974,7 +974,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 						'estimation_data_message',
 						sprintf(
 						/* translators: %d: number of estimations restored */
-							_n( '%d estimation restored.', '%d estimations restored.', $updated, 'estimation-tool-for-woocommerce' ),
+							_n( '%d estimation restored.', '%d estimations restored.', $updated, 'quotely-estimates-for-woocommerce' ),
 							$updated
 						),
 						'updated'
@@ -1072,7 +1072,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		public function render_estimation_page( $atts = array() ) {
 			$default_heading = (string) Estitofo_Options::get( 'heading', '' );
 			if ( '' === $default_heading ) {
-				$default_heading = __( 'My plan and price estimation', 'estimation-tool-for-woocommerce' );
+				$default_heading = __( 'My plan and price estimation', 'quotely-estimates-for-woocommerce' );
 			}
 			$default_subheading = (string) Estitofo_Options::get( 'subheading', '' );
 			// No hardcoded fallback string here — admins who clear the field
@@ -1088,13 +1088,13 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			);
 
 			if ( ! class_exists( 'WooCommerce' ) ) {
-				return '<div class="wc-estimation-notice">' . esc_html__( 'WooCommerce is required for the estimation tool.', 'estimation-tool-for-woocommerce' ) . '</div>';
+				return '<div class="wc-estimation-notice">' . esc_html__( 'WooCommerce is required for the estimation tool.', 'quotely-estimates-for-woocommerce' ) . '</div>';
 			}
 
 			$opts        = Estitofo_Options::all();
 			$submit_text = (string) $opts['submit_button_text'];
 			if ( '' === $submit_text ) {
-				$submit_text = __( 'Get My Estimation PDF', 'estimation-tool-for-woocommerce' );
+				$submit_text = __( 'Get My Estimation PDF', 'quotely-estimates-for-woocommerce' );
 			}
 			$collect_company = (int) $opts['collect_company'];
 			$collect_address = (int) $opts['collect_address'];
@@ -1121,17 +1121,17 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					<?php endif; ?>
 				</header>
 
-				<ol class="wc-est-stepper" aria-label="<?php esc_attr_e( 'Estimation progress', 'estimation-tool-for-woocommerce' ); ?>">
-					<li class="wc-est-stepper__item is-active" data-step="1"><span class="wc-est-stepper__num">1</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Browse', 'estimation-tool-for-woocommerce' ); ?></span></li>
-					<li class="wc-est-stepper__item" data-step="2"><span class="wc-est-stepper__num">2</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Your details', 'estimation-tool-for-woocommerce' ); ?></span></li>
-					<li class="wc-est-stepper__item" data-step="3"><span class="wc-est-stepper__num">3</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Done', 'estimation-tool-for-woocommerce' ); ?></span></li>
+				<ol class="wc-est-stepper" aria-label="<?php esc_attr_e( 'Estimation progress', 'quotely-estimates-for-woocommerce' ); ?>">
+					<li class="wc-est-stepper__item is-active" data-step="1"><span class="wc-est-stepper__num">1</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Browse', 'quotely-estimates-for-woocommerce' ); ?></span></li>
+					<li class="wc-est-stepper__item" data-step="2"><span class="wc-est-stepper__num">2</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Your details', 'quotely-estimates-for-woocommerce' ); ?></span></li>
+					<li class="wc-est-stepper__item" data-step="3"><span class="wc-est-stepper__num">3</span><span class="wc-est-stepper__label"><?php esc_html_e( 'Done', 'quotely-estimates-for-woocommerce' ); ?></span></li>
 				</ol>
 
 				<section class="wc-est-search-card">
-					<div class="wc-est-categories" role="group" aria-label="<?php esc_attr_e( 'Filter by category', 'estimation-tool-for-woocommerce' ); ?>"></div>
+					<div class="wc-est-categories" role="group" aria-label="<?php esc_attr_e( 'Filter by category', 'quotely-estimates-for-woocommerce' ); ?>"></div>
 					<div class="wc-search-container">
 						<svg class="wc-search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="2"/><path d="M14 14l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-						<input type="text" class="wc-search-input" placeholder="<?php echo esc_attr__( 'Search products by name or SKU…', 'estimation-tool-for-woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Search products', 'estimation-tool-for-woocommerce' ); ?>">
+						<input type="text" class="wc-search-input" placeholder="<?php echo esc_attr__( 'Search products by name or SKU…', 'quotely-estimates-for-woocommerce' ); ?>" aria-label="<?php esc_attr_e( 'Search products', 'quotely-estimates-for-woocommerce' ); ?>">
 						<div class="wc-search-results" role="listbox"></div>
 					</div>
 				</section>
@@ -1139,7 +1139,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				<!-- Featured / popular products grid (auto-populated when cart is empty) -->
 				<section class="wc-est-featured" style="display:none;">
 					<header class="wc-est-section-head">
-						<h3><?php esc_html_e( 'Popular products', 'estimation-tool-for-woocommerce' ); ?></h3>
+						<h3><?php esc_html_e( 'Popular products', 'quotely-estimates-for-woocommerce' ); ?></h3>
 					</header>
 					<div class="wc-est-featured-grid"></div>
 				</section>
@@ -1147,7 +1147,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				<div class="wc-estimation-container">
 					<section class="wc-estimation-products">
 						<header class="wc-est-section-head">
-							<h3><?php esc_html_e( 'Your selection', 'estimation-tool-for-woocommerce' ); ?></h3>
+							<h3><?php esc_html_e( 'Your selection', 'quotely-estimates-for-woocommerce' ); ?></h3>
 							<span class="wc-est-count" aria-live="polite">0</span>
 						</header>
 						<div class="wc-estimation-list" aria-live="polite">
@@ -1157,18 +1157,18 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 									<path d="M22 8h20a2 2 0 0 1 2 2v6H20v-6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2.5" fill="none"/>
 									<path d="M22 30h20M22 38h20M22 46h12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
 								</svg>
-								<p class="wc-est-empty__title"><?php esc_html_e( 'No products yet', 'estimation-tool-for-woocommerce' ); ?></p>
-								<p class="wc-est-empty__hint"><?php esc_html_e( 'Search above to add products to your estimation.', 'estimation-tool-for-woocommerce' ); ?></p>
+								<p class="wc-est-empty__title"><?php esc_html_e( 'No products yet', 'quotely-estimates-for-woocommerce' ); ?></p>
+								<p class="wc-est-empty__hint"><?php esc_html_e( 'Search above to add products to your estimation.', 'quotely-estimates-for-woocommerce' ); ?></p>
 							</div>
 						</div>
 					</section>
 
 					<aside class="wc-estimation-summary">
 						<div class="wc-est-summary-sticky">
-							<span class="wc-est-summary-label"><?php esc_html_e( 'Estimated total', 'estimation-tool-for-woocommerce' ); ?></span>
+							<span class="wc-est-summary-label"><?php esc_html_e( 'Estimated total', 'quotely-estimates-for-woocommerce' ); ?></span>
 							<div class="wc-estimation-total"><?php echo esc_html( $currency ); ?> 0.00</div>
 							<div class="wc-est-summary-meta">
-								<span class="wc-est-summary-meta__items">0 <?php esc_html_e( 'items', 'estimation-tool-for-woocommerce' ); ?></span>
+								<span class="wc-est-summary-meta__items">0 <?php esc_html_e( 'items', 'quotely-estimates-for-woocommerce' ); ?></span>
 							</div>
 							<button type="button" id="initiate-estimation-btn" class="wc-download-btn" style="display: none;">
 								<?php echo esc_html( $submit_text ); ?>
@@ -1177,37 +1177,37 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 							<div id="estimation-form-container" style="display: none;">
 								<form id="estimation-form" class="estimation-form" autocomplete="off" novalidate>
 									<div class="form-group">
-										<label for="estimation-name"><?php esc_html_e( 'Full name', 'estimation-tool-for-woocommerce' ); ?><span class="req">*</span></label>
-										<input type="text" id="estimation-name" name="name" required placeholder="<?php esc_attr_e( 'Jane Doe', 'estimation-tool-for-woocommerce' ); ?>">
+										<label for="estimation-name"><?php esc_html_e( 'Full name', 'quotely-estimates-for-woocommerce' ); ?><span class="req">*</span></label>
+										<input type="text" id="estimation-name" name="name" required placeholder="<?php esc_attr_e( 'Jane Doe', 'quotely-estimates-for-woocommerce' ); ?>">
 									</div>
 									<div class="form-group">
-										<label for="estimation-email"><?php esc_html_e( 'Email address', 'estimation-tool-for-woocommerce' ); ?><span class="req">*</span></label>
+										<label for="estimation-email"><?php esc_html_e( 'Email address', 'quotely-estimates-for-woocommerce' ); ?><span class="req">*</span></label>
 										<input type="email" id="estimation-email" name="email" required placeholder="you@example.com">
 									</div>
 									<div class="form-group">
-										<label for="estimation-phone"><?php esc_html_e( 'Phone number', 'estimation-tool-for-woocommerce' ); ?><span class="req">*</span></label>
+										<label for="estimation-phone"><?php esc_html_e( 'Phone number', 'quotely-estimates-for-woocommerce' ); ?><span class="req">*</span></label>
 										<input type="tel" id="estimation-phone" name="phone" required>
 									</div>
 									<?php if ( $collect_company ) : ?>
 									<div class="form-group">
-										<label for="estimation-company"><?php esc_html_e( 'Company', 'estimation-tool-for-woocommerce' ); ?></label>
+										<label for="estimation-company"><?php esc_html_e( 'Company', 'quotely-estimates-for-woocommerce' ); ?></label>
 										<input type="text" id="estimation-company" name="company">
 									</div>
 									<?php endif; ?>
 									<?php if ( $collect_address ) : ?>
 									<div class="form-group">
-										<label for="estimation-address"><?php esc_html_e( 'Delivery address', 'estimation-tool-for-woocommerce' ); ?></label>
+										<label for="estimation-address"><?php esc_html_e( 'Delivery address', 'quotely-estimates-for-woocommerce' ); ?></label>
 										<input type="text" id="estimation-address" name="address">
 									</div>
 									<?php endif; ?>
 									<?php if ( $collect_notes ) : ?>
 									<div class="form-group">
-										<label for="estimation-notes"><?php esc_html_e( 'Anything we should know?', 'estimation-tool-for-woocommerce' ); ?></label>
-										<textarea id="estimation-notes" name="customer_notes" rows="3" placeholder="<?php esc_attr_e( 'Special requests, delivery date, color preferences…', 'estimation-tool-for-woocommerce' ); ?>"></textarea>
+										<label for="estimation-notes"><?php esc_html_e( 'Anything we should know?', 'quotely-estimates-for-woocommerce' ); ?></label>
+										<textarea id="estimation-notes" name="customer_notes" rows="3" placeholder="<?php esc_attr_e( 'Special requests, delivery date, color preferences…', 'quotely-estimates-for-woocommerce' ); ?>"></textarea>
 									</div>
 									<?php endif; ?>
 									<div class="form-group wc-estimation-honeypot" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden;">
-										<label for="estimation-website"><?php esc_html_e( 'Website', 'estimation-tool-for-woocommerce' ); ?></label>
+										<label for="estimation-website"><?php esc_html_e( 'Website', 'quotely-estimates-for-woocommerce' ); ?></label>
 										<input type="text" id="estimation-website" name="website" tabindex="-1" autocomplete="off">
 									</div>
 									<?php do_action( 'estitofo_form_extra_fields', $opts ); ?>
@@ -1216,7 +1216,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 									</button>
 									<?php if ( $enable_resume ) : ?>
 										<div class="wc-estimation-resume">
-											<button type="button" class="wc-est-link-btn" id="wc-est-save-resume"><?php esc_html_e( 'Email me a link to resume later', 'estimation-tool-for-woocommerce' ); ?></button>
+											<button type="button" class="wc-est-link-btn" id="wc-est-save-resume"><?php esc_html_e( 'Email me a link to resume later', 'quotely-estimates-for-woocommerce' ); ?></button>
 										</div>
 									<?php endif; ?>
 								</form>
@@ -1247,11 +1247,11 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			check_ajax_referer( 'estitofo_nonce', 'nonce' );
 
 			if ( ! empty( $_POST['website'] ) ) {
-				wp_send_json_error( esc_html__( 'Spam detected.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'Spam detected.', 'quotely-estimates-for-woocommerce' ) );
 			}
 
 			if ( ! is_user_logged_in() && ! $this->rate_limit( 'submit', 5, 60 ) ) {
-				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a moment.', 'estimation-tool-for-woocommerce' ), 429 );
+				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a moment.', 'quotely-estimates-for-woocommerce' ), 429 );
 			}
 
 			$name    = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
@@ -1265,7 +1265,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			$total    = floatval( $_POST['total'] ?? 0 );
 
 			if ( empty( $name ) || ! is_email( $email ) || empty( $phone ) || ! is_array( $products ) || empty( $products ) ) {
-				wp_send_json_error( esc_html__( 'Please fill all required fields correctly.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'Please fill all required fields correctly.', 'quotely-estimates-for-woocommerce' ) );
 			}
 
 			// Cross-check the phone format on the server: when a restrict_country
@@ -1273,13 +1273,13 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			// country prefix has to map to a known dial code.
 			$phone_digits = preg_replace( '/\D/', '', $phone );
 			if ( strlen( $phone_digits ) < 7 || strlen( $phone_digits ) > 15 ) {
-				wp_send_json_error( esc_html__( 'That phone number looks too short or too long. Please check it.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'That phone number looks too short or too long. Please check it.', 'quotely-estimates-for-woocommerce' ) );
 			}
 			$restrict = strtolower( (string) Estitofo_Options::get( 'restrict_country', '' ) );
 			if ( $restrict && strpos( $phone, '+' ) === 0 ) {
 				$expected_dial = self::dial_code_for( $restrict );
 				if ( $expected_dial && strpos( $phone_digits, $expected_dial ) !== 0 ) {
-					wp_send_json_error( esc_html__( 'Phone number does not match the required country.', 'estimation-tool-for-woocommerce' ) );
+					wp_send_json_error( esc_html__( 'Phone number does not match the required country.', 'quotely-estimates-for-woocommerce' ) );
 				}
 			}
 
@@ -1317,7 +1317,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			);
 
 			if ( false === $result ) {
-				wp_send_json_error( esc_html__( 'Failed to save estimation.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'Failed to save estimation.', 'quotely-estimates-for-woocommerce' ) );
 			}
 
 			$new_id = (int) $wpdb->insert_id;
@@ -1335,7 +1335,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'success' => true,
 					'id'      => $new_id,
 					'pdf_url' => self::public_pdf_url( $new_id ),
-					'message' => esc_html__( 'Estimation saved successfully.', 'estimation-tool-for-woocommerce' ),
+					'message' => esc_html__( 'Estimation saved successfully.', 'quotely-estimates-for-woocommerce' ),
 				)
 			);
 		}
@@ -1344,23 +1344,23 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			check_ajax_referer( 'estitofo_nonce', 'nonce' );
 
 			if ( ! (int) Estitofo_Options::get( 'enable_save_resume', 1 ) ) {
-				wp_send_json_error( esc_html__( 'Save & resume is disabled.', 'estimation-tool-for-woocommerce' ), 404 );
+				wp_send_json_error( esc_html__( 'Save & resume is disabled.', 'quotely-estimates-for-woocommerce' ), 404 );
 			}
 			if ( ! empty( $_POST['website'] ) ) {
-				wp_send_json_error( esc_html__( 'Spam detected.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'Spam detected.', 'quotely-estimates-for-woocommerce' ) );
 			}
 			if ( ! is_user_logged_in() && ! $this->rate_limit( 'resume', 3, 300 ) ) {
-				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a few minutes.', 'estimation-tool-for-woocommerce' ), 429 );
+				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a few minutes.', 'quotely-estimates-for-woocommerce' ), 429 );
 			}
 
 			$email = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
 			if ( ! is_email( $email ) ) {
-				wp_send_json_error( esc_html__( 'A valid email is required.', 'estimation-tool-for-woocommerce' ), 400 );
+				wp_send_json_error( esc_html__( 'A valid email is required.', 'quotely-estimates-for-woocommerce' ), 400 );
 			}
             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON; sanitized in loop.
 			$products = json_decode( wp_unslash( $_POST['products'] ?? '[]' ), true );
 			if ( ! is_array( $products ) || empty( $products ) ) {
-				wp_send_json_error( esc_html__( 'Nothing to save yet.', 'estimation-tool-for-woocommerce' ), 400 );
+				wp_send_json_error( esc_html__( 'Nothing to save yet.', 'quotely-estimates-for-woocommerce' ), 400 );
 			}
 
 			$clean = array();
@@ -1409,17 +1409,17 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 			$subject = sprintf(
 				/* translators: %s: site name */
-				__( 'Resume your estimation at %s', 'estimation-tool-for-woocommerce' ),
+				__( 'Resume your estimation at %s', 'quotely-estimates-for-woocommerce' ),
 				get_bloginfo( 'name' )
 			);
 			$body = '<p>' . sprintf(
 				/* translators: %s: resume link */
-				esc_html__( 'Click the link below to resume your estimation: %s', 'estimation-tool-for-woocommerce' ),
+				esc_html__( 'Click the link below to resume your estimation: %s', 'quotely-estimates-for-woocommerce' ),
 				'<a href="' . esc_url( $link ) . '">' . esc_html( $link ) . '</a>'
 			) . '</p>';
 			$body .= '<p>' . sprintf(
 				/* translators: %d: number of days */
-				esc_html__( 'This link expires in %d days.', 'estimation-tool-for-woocommerce' ),
+				esc_html__( 'This link expires in %d days.', 'quotely-estimates-for-woocommerce' ),
 				$ttl
 			) . '</p>';
 
@@ -1428,7 +1428,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 			wp_send_json_success(
 				array(
-					'message' => esc_html__( 'Check your inbox for the resume link.', 'estimation-tool-for-woocommerce' ),
+					'message' => esc_html__( 'Check your inbox for the resume link.', 'quotely-estimates-for-woocommerce' ),
 				)
 			);
 		}
@@ -1436,7 +1436,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		public function ajax_search_products() {
 			check_ajax_referer( 'estitofo_nonce', 'nonce' );
 			if ( ! function_exists( 'wc_get_products' ) ) {
-				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'quotely-estimates-for-woocommerce' ) );
 			}
 			$search_term = sanitize_text_field( wp_unslash( $_REQUEST['term'] ?? '' ) );
 			if ( mb_strlen( $search_term ) < 2 ) {
@@ -1463,15 +1463,15 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			check_ajax_referer( 'estitofo_nonce', 'nonce' );
 
 			if ( ! is_user_logged_in() && ! $this->rate_limit( 'pdf', 5, 60 ) ) {
-				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a moment.', 'estimation-tool-for-woocommerce' ), 429 );
+				wp_send_json_error( esc_html__( 'Too many requests. Please try again in a moment.', 'quotely-estimates-for-woocommerce' ), 429 );
 			}
 
 			if ( ! class_exists( 'Estitofo_TCPDF' ) ) {
-				wp_send_json_error( esc_html__( 'PDF library not loaded', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'PDF library not loaded', 'quotely-estimates-for-woocommerce' ) );
 				return;
 			}
 			if ( ! class_exists( 'WooCommerce' ) ) {
-				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'WooCommerce is not active.', 'quotely-estimates-for-woocommerce' ) );
 				return;
 			}
             // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- JSON payload sanitized inside Estitofo_PDF::generate().
@@ -1487,7 +1487,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				$pdf           = $pdf_generator->generate( $products, $total, $user_info );
 				$pdf->Output( 'product-estimation-' . gmdate( 'Y-m-d' ) . '.pdf', 'D' );
 			} catch ( Exception $e ) {
-				wp_send_json_error( esc_html__( 'PDF generation failed.', 'estimation-tool-for-woocommerce' ) );
+				wp_send_json_error( esc_html__( 'PDF generation failed.', 'quotely-estimates-for-woocommerce' ) );
 			}
 			wp_die();
 		}
