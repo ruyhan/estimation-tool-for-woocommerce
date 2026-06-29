@@ -83,14 +83,6 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 * **TCPDF** — LGPL-3.0 — https://tcpdf.org
 * **intl-tel-input** — MIT — https://github.com/jackocnr/intl-tel-input
 
-== Screenshots ==
-
-1. Frontend estimation builder with product search and live total
-2. Submission form with international phone validation
-3. Admin submission list with bulk actions
-4. PDF quotation output
-5. Settings screen for company branding
-
 == Changelog ==
 
 = 3.19.0 =
