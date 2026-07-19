@@ -2,12 +2,12 @@
 jQuery(function ($) {
     'use strict';
 
-    var ajaxUrl = estitofoAdmin.ajax_url;
-    var adminPostUrl = estitofoAdmin.admin_post_url;
-    var nonceProducts = estitofoAdmin.nonce_products;
-    var nonceDownload = estitofoAdmin.nonce_download;
-    var nonceAdmin = estitofoAdmin.nonce_admin;
-    var i18n = estitofoAdmin.i18n || {};
+    var ajaxUrl = estitofo_admin.ajax_url;
+    var adminPostUrl = estitofo_admin.admin_post_url;
+    var nonceProducts = estitofo_admin.nonce_products;
+    var nonceDownload = estitofo_admin.nonce_download;
+    var nonceAdmin = estitofo_admin.nonce_admin;
+    var i18n = estitofo_admin.i18n || {};
 
     function closeModal() {
         $('#estimation-products-modal').hide();

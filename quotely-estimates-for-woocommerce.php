@@ -3,7 +3,7 @@
  * Plugin Name: Quotely Estimates for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/quotely-estimates-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.19.1
+ * Version: 3.19.2
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 	final class Estitofo_Plugin {
 
-		const VERSION               = '3.19.1';
+		const VERSION               = '3.19.2';
 		const DB_VERSION            = '1.2';
 		const TEXT_DOMAIN           = 'quotely-estimates-for-woocommerce';
 		const MIN_ELEMENTOR_VERSION = '3.5.0';

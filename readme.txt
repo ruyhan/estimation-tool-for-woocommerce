@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.19.1
+Stable tag: 3.19.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,9 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 * **intl-tel-input** — MIT — https://github.com/jackocnr/intl-tel-input
 
 == Changelog ==
+
+= 3.19.2 =
+* Fix: the View, Notes, status dropdown and Download PDF controls on the admin Submissions page did nothing, caused by a JavaScript settings-object name mismatch (estitofoAdmin vs estitofo_admin) that stopped the admin script from initialising.
 
 = 3.19.1 =
 * Fix: PDF download showed a critical error because two required TCPDF library files (`tcpdf_autoconfig.php` and the core font metric files) were missing from the bundled `lib/` directory. PDF generation now works again on all sites.
