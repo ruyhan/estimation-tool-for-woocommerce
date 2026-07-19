@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.19.0
+Stable tag: 3.19.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -84,6 +84,9 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 * **intl-tel-input** — MIT — https://github.com/jackocnr/intl-tel-input
 
 == Changelog ==
+
+= 3.19.1 =
+* Fix: PDF download showed a critical error because two required TCPDF library files (`tcpdf_autoconfig.php` and the core font metric files) were missing from the bundled `lib/` directory. PDF generation now works again on all sites.
 
 = 3.19.0 =
 * WordPress.org review: renamed the plugin from the generic "Estimation Tool for WooCommerce" to the distinctive **Quotely Estimates for WooCommerce**, with a matching slug/text domain of `quotely-estimates-for-woocommerce`. The internal `estitofo_` code prefix, the `[estitofo_form]` shortcode and stored option keys are unchanged, so existing installs upgrade without data loss.
