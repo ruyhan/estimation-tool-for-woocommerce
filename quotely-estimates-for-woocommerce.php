@@ -3,7 +3,7 @@
  * Plugin Name: Quotely Estimates for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/quotely-estimates-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.19.2
+ * Version: 3.20.0
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 	final class Estitofo_Plugin {
 
-		const VERSION               = '3.19.2';
+		const VERSION               = '3.20.0';
 		const DB_VERSION            = '1.2';
 		const TEXT_DOMAIN           = 'quotely-estimates-for-woocommerce';
 		const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -474,8 +474,12 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			if ( is_admin() && ! $force ) {
 				return;
 			}
-			wp_enqueue_style( 'estitofo-css', ESTITOFO_ASSETS_URL . 'css/estimation.css', array(), ESTITOFO_VERSION );
 			wp_enqueue_style( 'intl-tel-input', ESTITOFO_ASSETS_URL . 'libs/intl-tel-input/css/intlTelInput.min.css', array(), '17.0.9' );
+			// estitofo-css depends on intl-tel-input so WordPress always prints
+			// it AFTER the library's base CSS — our phone-field overrides must
+			// win regardless of enqueue order, theme stylesheets, or caching/
+			// minification plugins that can otherwise reorder handles.
+			wp_enqueue_style( 'estitofo-css', ESTITOFO_ASSETS_URL . 'css/estimation.css', array( 'intl-tel-input' ), ESTITOFO_VERSION );
 			wp_enqueue_script( 'intl-tel-input', ESTITOFO_ASSETS_URL . 'libs/intl-tel-input/js/intlTelInput.min.js', array(), '17.0.9', true );
 			// Load utils.js (the country-rules library) explicitly so it's
 			// guaranteed available before our init runs. intl-tel-input's
@@ -738,7 +742,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				$results[] = array(
 					'id'         => $product->get_id(),
 					'title'      => wp_strip_all_tags( $product->get_name() ),
-					'price'      => floatval( $product->get_price() ),
+					'price'      => (float) apply_filters( 'estitofo_display_price', floatval( $product->get_price() ), $product ),
 					'price_html' => wp_kses_post( $product->get_price_html() ),
 					'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 				);
@@ -1451,7 +1455,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 				$results[] = array(
 					'id'         => $product->get_id(),
 					'title'      => wp_strip_all_tags( $product->get_name() ),
-					'price'      => floatval( $product->get_price() ),
+					'price'      => (float) apply_filters( 'estitofo_display_price', floatval( $product->get_price() ), $product ),
 					'price_html' => wp_kses_post( $product->get_price_html() ),
 					'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 				);

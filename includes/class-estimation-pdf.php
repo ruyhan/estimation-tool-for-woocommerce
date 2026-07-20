@@ -55,6 +55,22 @@ class Estitofo_PDF {
 		}
 		$pdf_author     = (string) apply_filters( 'estitofo_pdf_author', $pdf_author );
 		$this->template = (string) apply_filters( 'estitofo_pdf_template', 'classic' );
+
+		/**
+		 * Allow an add-on to take over PDF generation entirely (e.g. Pro's
+		 * multi-template engine). Return a fully built Estitofo_TCPDF
+		 * instance to short-circuit; return null to use the built-in layout.
+		 *
+		 * @param null   $pdf       Null — return a PDF object to override.
+		 * @param array  $products  Sanitized product list.
+		 * @param float  $total     Estimation total.
+		 * @param array  $user_info Customer info (name, email, phone, date, ref).
+		 * @param string $template  Resolved template slug.
+		 */
+		$override = apply_filters( 'estitofo_pdf_engine', null, $products, $total, $user_info, $this->template );
+		if ( $override instanceof Estitofo_TCPDF ) {
+			return $override;
+		}
 		$logo_url       = (string) Estitofo_Options::get( 'logo_url', '' );
 		$footer_text    = (string) Estitofo_Options::get( 'footer_text', '' );
 		$locations      = Estitofo_Settings::get_locations_array();
@@ -634,11 +650,12 @@ class Estitofo_PDF {
 		if ( $count < 2 ) {
 			return;
 		}
-		// Disable auto-page-break before writing footer items; otherwise the
-		// SetY(-12) + Cell write at the bottom margin spawns a blank page.
-		$pdf->SetAutoPageBreak( false, 0 );
 		for ( $i = 1; $i <= $count; $i++ ) {
 			$pdf->setPage( $i );
+			// setPage() restores the page's stored auto-page-break flag, so it
+			// must be re-disabled per page — otherwise the SetY(-12) write
+			// triggers a break, shifting numbers and adding a blank last page.
+			$pdf->SetAutoPageBreak( false, 0 );
 			$pdf->SetY( -12 );
 			$pdf->SetFont( $this->font, '', 8 );
 			$pdf->SetTextColor( 150, 150, 150 );

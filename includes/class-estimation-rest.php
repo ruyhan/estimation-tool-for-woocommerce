@@ -227,7 +227,7 @@ class Estitofo_REST {
 		return array(
 			'id'         => $product->get_id(),
 			'title'      => wp_strip_all_tags( $product->get_name() ),
-			'price'      => (float) $product->get_price(),
+			'price'      => (float) apply_filters( 'estitofo_display_price', (float) $product->get_price(), $product ),
 			'price_html' => wp_kses_post( $product->get_price_html() ),
 			'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 		);

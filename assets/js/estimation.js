@@ -1003,8 +1003,19 @@ jQuery(function ($) {
                         .append($('<div class="loading-spinner"></div>'));
                 }
             }).done(function (resp) {
+                // wp_send_json_error() replies with HTTP 200, so server-side
+                // rejections (missing phone, rate limit, spam) land here too —
+                // treat them as failures, never as a successful submission.
+                if (!resp || !resp.success) {
+                    $('#estimation-success').hide();
+                    self.$form.show();
+                    $btn.prop('disabled', false);
+                    var msg = (resp && typeof resp.data === 'string' && resp.data) ? resp.data : i18n.submission_error;
+                    self.showInlineMessage(msg);
+                    return;
+                }
                 self.clearStorage();
-                var data = (resp && resp.data) ? resp.data : {};
+                var data = resp.data || {};
                 var pdfUrl = data.pdf_url || '';
                 if (pdfUrl) {
                     // Auto-download via hidden iframe so the success screen still shows.

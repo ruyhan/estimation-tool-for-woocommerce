@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.19.2
+Stable tag: 3.20.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,12 +40,24 @@ The free plugin is a complete estimation / quotation tool — every feature list
 
 If your business needs more, **Quotely Estimates for WooCommerce — Pro** is a separately-sold add-on that extends the free plugin with:
 
-* **Convert estimations to WooCommerce orders** — manually from the admin list, or automatically on submission, with your chosen initial order status.
+* **Quote acceptance links** — customers accept or decline a quote with one click from their email; accepted quotes are marked *won* and can automatically become WooCommerce orders.
+* **Admin quote editing & counter-offers** — adjust line prices/quantities, add custom lines, and email the customer an updated quote with a fresh PDF and accept button.
+* **Automated follow-ups & expiry reminders** — email leads that went quiet and warn customers before their quote expires, on autopilot.
+* **10 designed PDF templates** — Classic, Modern, Minimal, Elegant, Bold, Emerald, Corporate, Sunset, Mono and Airy, with live previews and an optional Terms & Conditions page.
+* **5 designed customer email templates** — with live previews and one-click apply.
+* **"My Quotes" in My Account** — logged-in customers see their quote history, PDFs and accept buttons.
+* **Role-based pricing** — show different prices per user role (wholesale, VIP, guest…).
+* **Discount codes** — percent or fixed codes with expiry dates, validated live on the form.
+* **Convert estimations to WooCommerce orders** — manually from the admin list, on acceptance, or automatically on submission.
 * **File uploads on the customer form** — let customers attach drawings, spec sheets or photos. Configurable max size and allowed extensions.
+* **Stripe deposit collection** — let customers lock in a quote by paying a configurable deposit via Stripe Checkout.
+* **Quote expiration** — auto-stamped expiry dates with admin status pills.
+* **Multi-step form wizard** — break the form into steps with a progress bar.
+* **Conditional custom fields** — extra form fields that show/hide based on other answers.
+* **Webhooks / Zapier** — JSON webhooks on quote submitted / accepted / declined / deposit paid.
 * **Google reCAPTCHA v3** — score-based spam filtering on form submissions.
-* **Discount / tax / shipping fields** — add custom pricing logic directly on the customer form.
-* **Multiple PDF templates** — Classic / Modern / Minimal styles.
-* **30-day analytics dashboard** — submission funnel, won/lost values, top products, time-series chart.
+* **Discount / tax / shipping fields** — extra pricing fields directly on the customer form.
+* **30-day analytics dashboard** — submission funnel, won/lost values, time-series chart.
 * **White-label mode** — strip the plugin author credit from PDFs.
 
 The Pro add-on is sold separately on CodeCanyon. The free plugin works fully on its own and never expires or limits functionality.
@@ -84,6 +96,13 @@ The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is con
 * **intl-tel-input** — MIT — https://github.com/jackocnr/intl-tel-input
 
 == Changelog ==
+
+= 3.20.0 =
+* New: `estitofo_display_price` filter — add-ons can adjust the prices shown in search results, suggestions and the REST API (used by Pro's role-based pricing).
+* Fix: the phone-number field layout broke under themes that restyle form inputs (e.g. Hello Elementor) — the input collapsed and the dial code rendered outside the field. The intl-tel-input structure is now enforced by scoped plugin CSS.
+* Fix: on multi-page PDFs the page numbers were shifted by one page and a blank trailing page was appended (TCPDF's setPage() restores the auto-page-break flag per page).
+* New: `estitofo_pdf_engine` filter — add-ons can supply a fully built PDF object to replace the built-in layout (used by the Pro add-on's multi-template engine). No behaviour change when the filter is unused.
+* Fix: when the server rejected a submission (missing phone, rate limit, spam check), the frontend still showed the success screen and generated a client-side PDF. Server errors are now shown to the customer and the form is restored.
 
 = 3.19.2 =
 * Fix: the View, Notes, status dropdown and Download PDF controls on the admin Submissions page did nothing, caused by a JavaScript settings-object name mismatch (estitofoAdmin vs estitofo_admin) that stopped the admin script from initialising.

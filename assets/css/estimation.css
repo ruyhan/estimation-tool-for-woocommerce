@@ -871,9 +871,91 @@
     margin: 4px 0 0;
 }
 
-/* ---- Phone input (intl-tel-input) ---- */
-.iti { width: 100%; }
-.iti__selected-dial-code { color: var(--wc-est-text); }
+/* ---- Phone input (intl-tel-input v18+) ----
+   Defensive structural rules for themes (Hello Elementor / Elementor kit)
+   whose input resets carry !important and wipe the library's JS-applied
+   inline padding-left, collapsing the flag/dial-code onto the field. These
+   re-assert the widget's geometry using the correct v18 class names and the
+   #estimation-phone ID so they beat element-level theme resets. */
+.estimation-form .iti {
+    position: relative !important;
+    display: block !important;
+    width: 100%;
+}
+.estimation-form .iti * { box-sizing: border-box; }
+
+/* The tel input. #estimation-phone (ID) beats theme `input {…}` rules; the
+   left padding reserves room for the flag + dial code (max ~4-digit code)
+   because the library's inline padding-left can be overridden by a themed
+   `padding … !important`. Vertical/right padding stays theme-controlled. */
+.estimation-form input#estimation-phone.iti__tel-input,
+.estimation-form .iti .iti__tel-input {
+    width: 100% !important;
+    max-width: 100%;
+    padding-left: 90px !important;
+}
+
+/* Flag + dropdown button, overlaid on the left of the input. */
+.estimation-form .iti__country-container {
+    position: absolute !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    padding: 1px;
+    margin: 0;
+    z-index: 2;
+}
+.estimation-form .iti__selected-country {
+    display: flex !important;
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    background: transparent;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.estimation-form .iti__selected-country-primary {
+    display: flex !important;
+    align-items: center;
+    height: 100%;
+    padding: 0 6px 0 12px;
+}
+.estimation-form .iti__selected-dial-code {
+    margin-left: 6px;
+    font-size: 14px;
+    color: var(--wc-est-text);
+}
+.estimation-form .iti__selected-country:focus-visible {
+    box-shadow: 0 0 0 3px var(--wc-est-primary-100);
+    border-radius: var(--wc-est-radius-sm);
+}
+
+/* Country dropdown list. */
+.estimation-form .iti__dropdown-content {
+    z-index: 20;
+    border: 1px solid var(--wc-est-border);
+    border-radius: var(--wc-est-radius-sm);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .12);
+    background: #fff;
+}
+.estimation-form .iti__country-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 210px;
+    overflow-y: auto;
+}
+.estimation-form .iti__country {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    margin: 0;
+    font-size: 13px;
+}
 #estimation-phone::placeholder { color: var(--wc-est-muted); }
 #estimation-phone.valid {
     border-color: var(--wc-est-success);
