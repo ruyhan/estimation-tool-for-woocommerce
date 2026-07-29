@@ -9,9 +9,42 @@ jQuery(function ($) {
     var nonceAdmin = estitofo_admin.nonce_admin;
     var i18n = estitofo_admin.i18n || {};
 
-    function closeModal() {
-        $('#estimation-products-modal').hide();
+    // The dialog uses the shared .qly-modal shell, whose overlay is a flex
+    // container toggled by the [hidden] attribute — jQuery .show() would force
+    // display:block and break the centering, so drive `hidden` directly.
+    var MODAL_TITLE_DEFAULT = null;
+
+    function openModal(title) {
+        var $overlay = $('#estimation-products-modal');
+        var $title = $('#estimation-modal-title');
+        if (MODAL_TITLE_DEFAULT === null) {
+            MODAL_TITLE_DEFAULT = $title.text();
+        }
+        $title.text(title || MODAL_TITLE_DEFAULT);
+        // The PDF button only makes sense for the products view.
+        $overlay.find('.download-pdf-btn').toggle(!title);
+        // Drop any action button a previous dialog added to the footer.
+        $overlay.find('.qly-modal-injected').remove();
+        $overlay.prop('hidden', false);
+        $('body').addClass('qly-modal-open');
     }
+
+    function closeModal() {
+        $('#estimation-products-modal').prop('hidden', true);
+        $('body').removeClass('qly-modal-open');
+    }
+
+    // Backdrop click and Escape, matching the Pro quote editor.
+    $(document).on('click', '#estimation-products-modal', function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    $(document).on('keydown', function (e) {
+        if (e.key === 'Escape' && !$('#estimation-products-modal').prop('hidden')) {
+            closeModal();
+        }
+    });
 
     function showFlash($row, text) {
         var $flash = $('<span class="wc-est-flash" style="margin-left:6px;color:#16a34a;font-size:12px;"></span>').text(text);
@@ -29,7 +62,7 @@ jQuery(function ($) {
         $('#products-list-container').empty().append(
             $('<div class="loading-message"></div>').text(i18n.loading || 'Loading...')
         );
-        $('#estimation-products-modal').show();
+        openModal();
         $.post(ajaxUrl, {
             action: 'estitofo_get_products',
             id: estimationId,
@@ -100,7 +133,7 @@ jQuery(function ($) {
         $('#products-list-container').empty().append(
             $('<div class="loading-message"></div>').text(i18n.loading || 'Loading...')
         );
-        $('#estimation-products-modal').show();
+        openModal(i18n.edit_notes || 'Edit notes');
 
         $.post(ajaxUrl, {
             action: 'estitofo_get_products',
@@ -110,14 +143,17 @@ jQuery(function ($) {
         }, function (response) {
             if (response && response.success) {
                 var $box = $('<div class="wc-est-notes-editor"></div>');
-                $box.append($('<h3></h3>').text(i18n.edit_notes || 'Edit notes'));
-                var $textarea = $('<textarea rows="8" style="width:100%;"></textarea>')
+                var $textarea = $('<textarea rows="8"></textarea>')
                     .attr('placeholder', i18n.admin_notes_placeholder || '')
                     .val(response.data.admin_notes || '');
                 $box.append($textarea);
-                var $save = $('<button type="button" class="button button-primary"></button>').text(i18n.save || 'Save');
-                $box.append($save);
                 $('#products-list-container').empty().append($box);
+
+                // Save lives in the footer next to Close, so both dialog
+                // actions sit in the same place.
+                var $save = $('<button type="button" class="qly-btn qly-btn--primary qly-modal-injected"></button>')
+                    .text(i18n.save || 'Save');
+                $('#estimation-products-modal').find('.qly-modal__foot').append($save);
 
                 $save.on('click', function () {
                     $.post(ajaxUrl, {

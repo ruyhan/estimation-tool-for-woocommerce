@@ -49,6 +49,7 @@ jQuery(function ($) {
                             id: parseInt(p.id, 10) || 0,
                             title: String(p.title || ''),
                             price: parseFloat(p.price) || 0,
+                            sku: String(p.sku || ''),
                             image: String(p.image || ''),
                             quantity: Math.max(1, parseInt(p.quantity, 10) || 1),
                             note: String(p.note || '')
@@ -462,7 +463,7 @@ jQuery(function ($) {
                         self.showToast(i18n.already_added || 'Already in your estimation', 'warning');
                         return;
                     }
-                    self.products.push({ id: p.id, title: p.title, price: p.price, image: p.image, quantity: 1, note: '' });
+                    self.products.push({ id: p.id, title: p.title, price: p.price, sku: p.sku || '', image: p.image, quantity: 1, note: '' });
                     self.saveToStorage();
                     self.renderEstimation();
                     self.showToast((i18n.added_to_cart || 'Added') + ': ' + p.title, 'success');
@@ -583,6 +584,7 @@ jQuery(function ($) {
             products.forEach(function (p) {
                 var $row = $('<div class="wc-search-result-item"></div>')
                     .attr('data-id', p.id)
+                    .attr('data-sku', p.sku || '')
                     .attr('data-price', p.price);
                 if (p.image) $row.append($('<img/>', { 'class': 'wc-search-result-img', src: p.image, alt: '' }));
                 var $info = $('<div class="wc-search-result-info"></div>');
@@ -636,7 +638,7 @@ jQuery(function ($) {
                             self.showInlineMessage(i18n.already_added);
                             return;
                         }
-                        self.products.push({ id: p.id, title: p.title, price: p.price, image: p.image, quantity: 1, note: '' });
+                        self.products.push({ id: p.id, title: p.title, price: p.price, sku: p.sku || '', image: p.image, quantity: 1, note: '' });
                         self.saveToStorage();
                         self.renderEstimation();
                         self.$suggestedProducts.empty().hide();
@@ -662,6 +664,7 @@ jQuery(function ($) {
                 id: productId,
                 title: title,
                 price: priceValue,
+                sku: String($item.attr('data-sku') || ''),
                 image: $item.find('.wc-search-result-img').attr('src'),
                 quantity: 1,
                 note: ''
@@ -1189,6 +1192,7 @@ jQuery(function ($) {
                         id: parseInt(p.id, 10) || 0,
                         title: p.title || '',
                         price: parseFloat(p.price) || 0,
+                        sku: p.sku || '',
                         image: p.image || '',
                         quantity: parseInt(p.quantity, 10) || 1,
                         note: p.note || ''

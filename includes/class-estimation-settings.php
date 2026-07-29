@@ -71,7 +71,17 @@ class Estitofo_Settings {
 				if ( is_array( $v ) ) {
 					return array_map( 'sanitize_text_field', $v );
 				}
-				return sanitize_text_field( (string) $v );
+				$v = (string) $v;
+				// sanitize_text_field() collapses newlines into spaces. Add-on
+				// settings that hold one entry per line (shipping options, role
+				// pricing, discount codes, conditional fields, webhooks) were
+				// therefore flattened into a single unusable line the first time
+				// the user pressed Save. Multi-line values get the textarea
+				// sanitizer instead: same tag and invalid-UTF-8 stripping, but
+				// line breaks survive.
+				return ( false !== strpos( $v, "\n" ) || false !== strpos( $v, "\r" ) )
+					? sanitize_textarea_field( $v )
+					: sanitize_text_field( $v );
 			},
 			$input
 		);
@@ -237,6 +247,102 @@ class Estitofo_Settings {
 		return $list ? $list : array( get_option( 'admin_email' ) );
 	}
 
+	/**
+	 * Everything below the tab strip for one tab.
+	 *
+	 * Split out of render_settings_page() so the same markup can be produced
+	 * for a full page load and for an in-place tab switch — one code path, so
+	 * the two can never drift apart.
+	 *
+	 * Each tab keeps its own <form>: they submit only their own fields, and
+	 * Tools renders forms of its own that must not end up nested inside another.
+	 *
+	 * @param string $tab Tab slug.
+	 */
+	private static function render_tab_panel( $tab ) {
+		/**
+		 * Tabs that render their own UI (no outer settings form wrapper).
+		 * 'tools' renders its own forms; Pro adds 'license' here.
+		 */
+		$no_form_tabs = apply_filters( 'estitofo_settings_no_form_tabs', array( 'tools' ) );
+
+		if ( 'tools' === $tab ) {
+			self::render_tools_tab();
+			return;
+		}
+		if ( in_array( $tab, $no_form_tabs, true ) ) {
+			do_action( 'estitofo_settings_tab_' . $tab );
+			return;
+		}
+		?>
+		<form method="post" action="">
+			<?php wp_nonce_field( self::NONCE_ACTION, 'estitofo_settings_nonce' ); ?>
+			<input type="hidden" name="active_tab" value="<?php echo esc_attr( $tab ); ?>">
+
+			<?php
+			// Free renders the full customization for every core tab.
+			// Add-ons may *append* extra fields via the `..._extra`
+			// action; they cannot hide or lock the core ones.
+			switch ( $tab ) {
+				case 'pdf':
+					self::render_pdf_tab();
+					break;
+				case 'notifications':
+					self::render_notifications_tab();
+					break;
+				case 'forms':
+					self::render_forms_tab();
+					break;
+				case 'general':
+					self::render_general_tab();
+					break;
+				default:
+					// Unknown tab — let add-ons own it
+					// (e.g. Pro's "pro" or "license" tabs).
+					do_action( 'estitofo_settings_tab_' . $tab );
+					break;
+			}
+			// Hook for add-ons to append extra fields after any tab — fires
+			// for ALL tabs (core ones + add-on ones like "pro" / "license").
+			do_action( 'estitofo_settings_tab_' . $tab . '_extra' );
+			?>
+
+			<?php submit_button(); ?>
+		</form>
+		<?php
+	}
+
+	/**
+	 * AJAX: return one tab's panel so it can be swapped in without a reload.
+	 *
+	 * Renders through render_tab_panel(), the same method the full page load
+	 * uses, so an AJAX switch and a direct link always produce identical markup.
+	 */
+	public static function ajax_tab_panel() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'Unauthorized', 'quotely-estimates-for-woocommerce' ), 403 );
+		}
+		check_ajax_referer( 'estitofo_admin_nonce', 'nonce' );
+
+		$tab  = isset( $_POST['tab'] ) ? sanitize_key( wp_unslash( $_POST['tab'] ) ) : '';
+		$tabs = self::tabs();
+		if ( ! array_key_exists( $tab, $tabs ) ) {
+			wp_send_json_error( __( 'Unknown tab.', 'quotely-estimates-for-woocommerce' ), 400 );
+		}
+
+		ob_start();
+		self::render_tab_panel( $tab );
+		$html = ob_get_clean();
+
+		wp_send_json_success(
+			array(
+				'tab'   => $tab,
+				'html'  => $html,
+				'title' => isset( $tabs[ $tab ] ) ? wp_strip_all_tags( $tabs[ $tab ] ) : '',
+			)
+		);
+	}
+
 	public static function render_settings_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'Unauthorized access', 'quotely-estimates-for-woocommerce' ) );
@@ -246,8 +352,33 @@ class Estitofo_Settings {
 		$current_tab = self::current_tab();
 		$base_url    = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
 		?>
-		<div class="wrap wc-estimation-settings">
-			<h1><?php esc_html_e( 'Estimation Tool Settings', 'quotely-estimates-for-woocommerce' ); ?></h1>
+		<?php
+		// NOTE: the legacy `wc-estimation-settings` hook class is deliberately
+		// NOT applied any more. assets/css/admin-estimation.css still carries a
+		// complete pre-4.0 design system scoped to it (page header, nav tabs,
+		// form-table, inputs, labels) at a higher specificity than the Quotely
+		// UI system, and it loads later — so the two fought and the old one won
+		// (e.g. `td > label { display:inline-block }` collapsed stacked toggles
+		// onto one line). Dropping the class lets the new design system own the
+		// screen; the non-scoped legacy helpers (.wc-est-guide-card, .wc-est-code,
+		// .wc-est-pill…) still apply and are restyled in quotely-ui.css.
+		?>
+		<div class="wrap qly-app qly-settings">
+			<div class="qly-pagehead">
+				<span class="qly-pagehead__logo"><?php echo Quotely_UI::icon( 'file-text', 24 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static internal SVG. ?></span>
+				<div>
+					<div class="qly-pagehead__title">Quotely</div>
+					<div class="qly-pagehead__sub"><?php esc_html_e( 'Estimates & Quotes for WooCommerce — Settings', 'quotely-estimates-for-woocommerce' ); ?></div>
+				</div>
+			</div>
+
+			<?php
+			// WordPress hoists admin notices to just after the first <h1> or
+			// .wp-header-end marker. Without this anchor they land inside our
+			// first card. Screen-reader h1 keeps the page accessible too.
+			?>
+			<h1 class="screen-reader-text"><?php esc_html_e( 'Quotely settings', 'quotely-estimates-for-woocommerce' ); ?></h1>
+			<hr class="wp-header-end">
 
 			<?php settings_errors( 'estitofo_messages' ); ?>
 
@@ -257,61 +388,14 @@ class Estitofo_Settings {
 					$url   = esc_url( add_query_arg( 'tab', $slug, $base_url ) );
 					$class = 'nav-tab' . ( $slug === $current_tab ? ' nav-tab-active' : '' );
 					?>
-					<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $class ); ?>"><?php echo wp_kses( $label, array( 'span' => array( 'class' => true ) ) ); ?></a>
+					<?php // data-tab lets the panel be swapped in place; the href stays a real link so no-JS, middle-click and "open in new tab" keep working. ?>
+					<a href="<?php echo esc_url( $url ); ?>" data-tab="<?php echo esc_attr( $slug ); ?>" class="<?php echo esc_attr( $class ); ?>"><?php $qly_ti = array( 'general' => 'sliders', 'pdf' => 'file-text', 'forms' => 'dashboard', 'notifications' => 'mail', 'tools' => 'tools', 'pro' => 'award', 'license' => 'key' ); echo Quotely_UI::icon( isset( $qly_ti[ $slug ] ) ? $qly_ti[ $slug ] : 'chevron-right', 16 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static internal SVG. ?> <?php echo wp_kses( $label, array( 'span' => array( 'class' => true ) ) ); ?></a>
 				<?php endforeach; ?>
 			</nav>
 
-			<?php
-			/**
-			 * Tabs that render their own UI (no outer settings form wrapper).
-			 * 'tools' renders its own forms; Pro adds 'license' here.
-			 */
-			$no_form_tabs = apply_filters( 'estitofo_settings_no_form_tabs', array( 'tools' ) );
-			?>
-
-			<?php
-			if ( 'tools' === $current_tab ) :
-				self::render_tools_tab();
-			elseif ( in_array( $current_tab, $no_form_tabs, true ) ) :
-				do_action( 'estitofo_settings_tab_' . $current_tab );
-			else :
-				?>
-				<form method="post" action="">
-					<?php wp_nonce_field( self::NONCE_ACTION, 'estitofo_settings_nonce' ); ?>
-					<input type="hidden" name="active_tab" value="<?php echo esc_attr( $current_tab ); ?>">
-
-					<?php
-					// Free renders the full customization for every core tab.
-					// Add-ons may *append* extra fields via the `..._extra`
-					// action; they cannot hide or lock the core ones.
-					$core_tabs = array( 'general', 'pdf', 'forms', 'notifications' );
-					switch ( $current_tab ) {
-						case 'pdf':
-							self::render_pdf_tab();
-							break;
-						case 'notifications':
-							self::render_notifications_tab();
-							break;
-						case 'forms':
-							self::render_forms_tab();
-							break;
-						case 'general':
-							self::render_general_tab();
-							break;
-						default:
-							// Unknown tab — let add-ons own it
-							// (e.g. Pro's "pro" or "license" tabs).
-							do_action( 'estitofo_settings_tab_' . $current_tab );
-							break;
-					}
-					// Hook for add-ons to append extra fields after any tab — fires
-					// for ALL tabs (core ones + add-on ones like "pro" / "license").
-					do_action( 'estitofo_settings_tab_' . $current_tab . '_extra' );
-					?>
-
-					<?php submit_button(); ?>
-				</form>
-			<?php endif; ?>
+			<div id="qly-tab-panel" data-current-tab="<?php echo esc_attr( $current_tab ); ?>">
+				<?php self::render_tab_panel( $current_tab ); ?>
+			</div>
 
 			<?php
 			// ----------------------------------------------------------------
@@ -322,8 +406,15 @@ class Estitofo_Settings {
 			// non-intrusive, and never disguise it as a locked feature.
 			// The hint hides itself when Pro is already installed, so existing
 			// customers don't see an upsell for something they already own.
-			// ----------------------------------------------------------------
-			if ( ! class_exists( 'Estitofo_Pro_Plugin' ) ) :
+			//
+			// HIDDEN FOR NOW: the Pro add-on is not on sale yet, so the link
+			// would send people to a CodeCanyon search that finds nothing. Turn
+			// it back on once the item is approved by flipping this default to
+			// true (or from a site, via the `estitofo_show_pro_hint` filter),
+			// and set the real item URL on `estitofo_pro_purchase_url`.
+			$show_pro_hint = (bool) apply_filters( 'estitofo_show_pro_hint', false );
+
+			if ( $show_pro_hint && ! class_exists( 'Estitofo_Pro_Plugin' ) ) :
 				/**
 				 * URL where buyers can purchase the Pro add-on. Falls back to a
 				 * CodeCanyon search URL while the author updates the constant
@@ -837,6 +928,7 @@ class Estitofo_Settings {
 	 */
 	private static function render_general_tab() {
 		?>
+		<h2><?php esc_html_e( 'Frontend text', 'quotely-estimates-for-woocommerce' ); ?></h2>
 		<table class="form-table" role="presentation">
 			<tr><th><label for="estitofo_heading"><?php esc_html_e( 'Frontend Heading', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_text( 'heading' ); ?>
@@ -844,13 +936,21 @@ class Estitofo_Settings {
 			<tr><th><label for="estitofo_subheading"><?php esc_html_e( 'Frontend Subheading', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_text( 'subheading', 'text', 'large-text' ); ?>
 					<p class="description"><?php esc_html_e( 'Smaller line of text shown under the heading. Leave blank to hide.', 'quotely-estimates-for-woocommerce' ); ?></p></td></tr>
-			<tr><th><label for="estitofo_default_country"><?php esc_html_e( 'Default Phone Country', 'quotely-estimates-for-woocommerce' ); ?></label></th>
+			</table>
+
+			<h2><?php esc_html_e( 'Phone field', 'quotely-estimates-for-woocommerce' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr><th><label for="estitofo_default_country"><?php esc_html_e( 'Default Phone Country', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_country_select( 'default_country', __( '— Auto-detect by visitor IP —', 'quotely-estimates-for-woocommerce' ) ); ?>
 					<p class="description"><?php esc_html_e( 'Pre-selects this country\'s flag in the phone field on the frontend. Leave blank to auto-detect.', 'quotely-estimates-for-woocommerce' ); ?></p></td></tr>
 			<tr><th><label for="estitofo_restrict_country"><?php esc_html_e( 'Restrict to Country', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_country_select( 'restrict_country', __( '— Allow any country —', 'quotely-estimates-for-woocommerce' ) ); ?>
 					<p class="description"><?php esc_html_e( 'If set, the phone field is locked to this country — the flag dropdown is hidden and only numbers from this country are accepted.', 'quotely-estimates-for-woocommerce' ); ?></p></td></tr>
-			<tr><th><label><?php esc_html_e( 'Primary Color', 'quotely-estimates-for-woocommerce' ); ?></label></th>
+			</table>
+
+			<h2><?php esc_html_e( 'Brand &amp; appearance', 'quotely-estimates-for-woocommerce' ); ?></h2>
+			<table class="form-table" role="presentation">
+				<tr><th><label><?php esc_html_e( 'Primary Color', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_color( 'primary_color' ); ?></td></tr>
 			<tr><th><label><?php esc_html_e( 'Accent Color', 'quotely-estimates-for-woocommerce' ); ?></label></th>
 				<td><?php self::input_color( 'accent_color' ); ?></td></tr>
@@ -932,13 +1032,36 @@ class Estitofo_Settings {
 					?>
 					</p></td></tr>
 			<tr><th><label for="estitofo_email_body"><?php esc_html_e( 'Customer Email Body', 'quotely-estimates-for-woocommerce' ); ?></label></th>
-				<td><?php self::input_textarea( 'email_body', 8 ); ?>
+				<td>
+					<?php
+					// Edit / Preview live in the same box rather than a dialog, so
+					// the rendered result sits exactly where the markup is written
+					// and you can flip between them without losing your place.
+					?>
+					<div class="qly-editor" id="estitofo-email-editor">
+						<div class="qly-editor__tabs" role="tablist">
+							<button type="button" class="qly-editor__tab is-active" data-ee-tab="edit" role="tab" aria-selected="true">
+								<?php esc_html_e( 'Edit', 'quotely-estimates-for-woocommerce' ); ?>
+							</button>
+							<button type="button" class="qly-editor__tab" data-ee-tab="preview" role="tab" aria-selected="false">
+								<?php echo class_exists( 'Quotely_UI' ) ? Quotely_UI::icon( 'eye', 14 ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted inline SVG. ?>
+								<?php esc_html_e( 'Preview', 'quotely-estimates-for-woocommerce' ); ?>
+							</button>
+						</div>
+						<div class="qly-editor__pane" data-ee-pane="edit">
+							<?php self::input_textarea( 'email_body', 10 ); ?>
+						</div>
+						<div class="qly-editor__pane" data-ee-pane="preview" hidden>
+							<iframe id="estitofo-email-frame" sandbox="" title="<?php esc_attr_e( 'Email preview', 'quotely-estimates-for-woocommerce' ); ?>"></iframe>
+						</div>
+					</div>
 					<p class="description">
 					<?php
 						/* translators: 1: token list */
 						printf( esc_html__( 'HTML allowed. Tokens: %s', 'quotely-estimates-for-woocommerce' ), '<code>{{name}}</code> <code>{{email}}</code> <code>{{phone}}</code> <code>{{total}}</code> <code>{{products_table}}</code> <code>{{site}}</code>' );
 					?>
-					</p></td></tr>
+					</p>
+				</td></tr>
 		</table>
 		<?php
 	}

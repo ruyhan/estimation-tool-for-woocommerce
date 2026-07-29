@@ -226,9 +226,11 @@ class Estitofo_REST {
 	private static function shape( $product ) {
 		return array(
 			'id'         => $product->get_id(),
-			'title'      => wp_strip_all_tags( $product->get_name() ),
+			'title'      => html_entity_decode( wp_strip_all_tags( $product->get_name() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 			'price'      => (float) apply_filters( 'estitofo_display_price', (float) $product->get_price(), $product ),
 			'price_html' => wp_kses_post( $product->get_price_html() ),
+			// Carried through submission so the quote can show each line's SKU.
+			'sku'        => $product->get_sku(),
 			'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 		);
 	}
@@ -266,6 +268,7 @@ class Estitofo_REST {
 				'title'    => isset( $p['title'] ) ? sanitize_text_field( $p['title'] ) : '',
 				'price'    => isset( $p['price'] ) ? (float) $p['price'] : 0,
 				'quantity' => isset( $p['quantity'] ) ? max( 1, absint( $p['quantity'] ) ) : 1,
+				'sku'      => isset( $p['sku'] ) ? sanitize_text_field( $p['sku'] ) : '',
 				'image'    => isset( $p['image'] ) ? esc_url_raw( $p['image'] ) : '',
 				'note'     => isset( $p['note'] ) ? sanitize_text_field( $p['note'] ) : '',
 			);

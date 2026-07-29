@@ -3,7 +3,7 @@
  * Plugin Name: Quotely Estimates for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/quotely-estimates-for-woocommerce/
  * Description: Adds a WooCommerce product estimation interface with PDF downloads and admin submission management.
- * Version: 3.20.0
+ * Version: 4.0.0
  * Author: ruyhan
  * Author URI: https://ruyhan.com/
  * License: GPLv2 or later
@@ -15,7 +15,8 @@
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  * WC requires at least: 6.0
- * WC tested up to: 9.3
+ * WC tested up to: 10.9
+ * Elementor tested up to: 4.2
  *
  * @package quotely-estimates-for-woocommerce
  */
@@ -26,7 +27,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 
 	final class Estitofo_Plugin {
 
-		const VERSION               = '3.20.0';
+		const VERSION               = '4.0.0';
 		const DB_VERSION            = '1.2';
 		const TEXT_DOMAIN           = 'quotely-estimates-for-woocommerce';
 		const MIN_ELEMENTOR_VERSION = '3.5.0';
@@ -103,6 +104,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 		}
 
 		private function includes() {
+			require_once ESTITOFO_PATH . 'includes/class-quotely-ui.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-options.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-pdf.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-list-table.php';
@@ -110,8 +112,59 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			require_once ESTITOFO_PATH . 'includes/class-estimation-mailer.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-dashboard.php';
 			require_once ESTITOFO_PATH . 'includes/class-estimation-rest.php';
+			self::polyfill_curl_constants();
 			if ( file_exists( ESTITOFO_PATH . 'lib/autoload.php' ) ) {
 				require_once ESTITOFO_PATH . 'lib/autoload.php';
+			}
+		}
+
+		/**
+		 * Define the cURL option constants TCPDF references when the PHP cURL
+		 * extension is unavailable.
+		 *
+		 * TCPDF 6.11 declares `protected const CURLOPT_DEFAULT = [ CURLOPT_CONNECTTIMEOUT => 5, ... ]`
+		 * in tcpdf_static.php. Its *runtime* cURL branch is guarded by
+		 * function_exists('curl_init'), but evaluating that class constant needs
+		 * the CURLOPT_* / CURLPROTO_* constants to exist — so on any host without
+		 * the cURL extension, generating a PDF fatals with
+		 * "Undefined constant CURLOPT_CONNECTTIMEOUT".
+		 *
+		 * Defining them here (values match PHP's cURL extension) lets the constant
+		 * resolve; the runtime guard still prevents cURL from ever being used.
+		 * Done in the plugin rather than the vendored library so it survives
+		 * Strauss regenerating lib/.
+		 */
+		private static function polyfill_curl_constants() {
+			if ( extension_loaded( 'curl' ) || defined( 'CURLOPT_CONNECTTIMEOUT' ) ) {
+				return;
+			}
+			$map = array(
+				'CURLOPT_CONNECTTIMEOUT'  => 78,
+				'CURLOPT_MAXREDIRS'       => 68,
+				'CURLOPT_PROTOCOLS'       => 181,
+				'CURLOPT_SSL_VERIFYHOST'  => 81,
+				'CURLOPT_SSL_VERIFYPEER'  => 64,
+				'CURLOPT_TIMEOUT'         => 13,
+				'CURLOPT_USERAGENT'       => 10018,
+				'CURLOPT_FAILONERROR'     => 45,
+				'CURLOPT_RETURNTRANSFER'  => 19913,
+				'CURLOPT_FOLLOWLOCATION'  => 52,
+				'CURLOPT_URL'             => 10002,
+				'CURLPROTO_HTTP'          => 1,
+				'CURLPROTO_HTTPS'         => 2,
+				'CURLPROTO_FTP'           => 4,
+				'CURLPROTO_FTPS'          => 8,
+			);
+			foreach ( $map as $name => $value ) {
+				if ( ! defined( $name ) ) {
+					// These intentionally keep PHP's own cURL constant names: the
+					// bundled TCPDF references CURLOPT_*/CURLPROTO_* literally, so a
+					// plugin prefix would defeat the polyfill. They are only defined
+					// when the cURL extension is absent, so they can never collide
+					// with the real ones.
+					// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.VariableConstantNameFound -- must match PHP's cURL constant names.
+					define( $name, $value );
+				}
 			}
 		}
 
@@ -143,6 +196,8 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			add_action( 'admin_post_estitofo_admin_pdf', array( $this, 'download_admin_pdf' ) );
 			add_action( 'wp_ajax_estitofo_update_workflow', array( $this, 'ajax_update_workflow' ) );
 			add_action( 'wp_ajax_estitofo_save_admin_notes', array( $this, 'ajax_save_admin_notes' ) );
+			add_action( 'wp_ajax_estitofo_preview_email', array( 'Estitofo_Mailer', 'ajax_preview' ) );
+			add_action( 'wp_ajax_estitofo_settings_panel', array( 'Estitofo_Settings', 'ajax_tab_panel' ) );
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'plugin_action_links' ) );
 		}
 
@@ -348,10 +403,20 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					$products,
 					(float) $row->total,
 					array(
-						'name'  => sanitize_text_field( $row->name ),
-						'email' => sanitize_email( $row->email ),
-						'phone' => sanitize_text_field( $row->phone ),
-						'date'  => $row->created_at,
+						// 'id' lets add-ons look up per-submission extension meta —
+						// Pro reads the stored expiry date from it for "Valid until".
+						// The bundled layout ignores keys it does not use.
+						'id'      => (int) $row->id,
+						'name'    => sanitize_text_field( $row->name ),
+						'email'   => sanitize_email( $row->email ),
+						'phone'   => sanitize_text_field( $row->phone ),
+						'date'    => $row->created_at,
+						// Captured on the form and stored, but previously never
+						// reached the PDF — the quote omitted the customer's own
+						// company, address and request notes.
+						'company' => sanitize_text_field( $row->company ?? '' ),
+						'address' => sanitize_text_field( $row->address ?? '' ),
+						'notes'   => sanitize_textarea_field( $row->customer_notes ?? '' ),
 					)
 				);
 				$filename  = sanitize_file_name(
@@ -572,7 +637,14 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			if ( 'toplevel_page_estimation-data' !== $hook && 'estimations_page_estimation-settings' !== $hook && 'estimation_page_estimation-settings' !== $hook ) {
 				return;
 			}
-			wp_enqueue_style( 'estitofo-admin-css', ESTITOFO_ASSETS_URL . 'css/admin-estimation.css', array(), ESTITOFO_VERSION );
+			// Quotely UI design system (shared by free + Pro). Alpine powers the
+			// reactive tabs / toggles / modals; the stylesheet carries the tokens
+			// and component styles. Both are namespaced/scoped so they never leak
+			// into the rest of wp-admin.
+			wp_enqueue_style( 'quotely-ui', ESTITOFO_ASSETS_URL . 'css/quotely-ui.css', array(), ESTITOFO_VERSION );
+			wp_enqueue_script( 'quotely-alpine', ESTITOFO_ASSETS_URL . 'js/alpine.min.js', array(), '3.14.1', true );
+			wp_script_add_data( 'quotely-alpine', 'defer', true );
+			wp_enqueue_style( 'estitofo-admin-css', ESTITOFO_ASSETS_URL . 'css/admin-estimation.css', array( 'quotely-ui' ), ESTITOFO_VERSION );
 			wp_enqueue_script( 'estitofo-admin-js', ESTITOFO_ASSETS_URL . 'js/admin-estimation.js', array( 'jquery' ), ESTITOFO_VERSION, true );
 			wp_localize_script(
 				'estitofo-admin-js',
@@ -610,8 +682,13 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'estitofo-admin-settings',
 					'estitofoAdmin',
 					array(
-						'i18n' => array(
-							'copied' => __( 'Copied!', 'quotely-estimates-for-woocommerce' ),
+						'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+						'nonce'   => wp_create_nonce( 'estitofo_admin_nonce' ),
+						'i18n'    => array(
+							'copied'      => __( 'Copied!', 'quotely-estimates-for-woocommerce' ),
+							'previewing'  => __( 'Rendering…', 'quotely-estimates-for-woocommerce' ),
+							'previewFail' => __( 'Could not render the preview. Please try again.', 'quotely-estimates-for-woocommerce' ),
+							'unsaved'     => __( 'You have unsaved changes on this tab. Leave without saving?', 'quotely-estimates-for-woocommerce' ),
 						),
 					)
 				);
@@ -693,8 +770,16 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			$table = new Estitofo_List_Table();
 			$table->prepare_items();
 			?>
-			<div class="wrap">
-				<h1 class="wp-heading-inline"><?php esc_html_e( 'Estimation Submissions', 'quotely-estimates-for-woocommerce' ); ?></h1>
+			<div class="wrap qly-app qly-submissions">
+				<div class="qly-pagehead">
+					<span class="qly-pagehead__logo"><?php echo Quotely_UI::icon( 'dashboard', 24 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static internal SVG. ?></span>
+					<div>
+						<div class="qly-pagehead__title">Quotely</div>
+						<div class="qly-pagehead__sub"><?php esc_html_e( 'Estimate submissions', 'quotely-estimates-for-woocommerce' ); ?></div>
+					</div>
+				</div>
+				<h1 class="screen-reader-text"><?php esc_html_e( 'Estimate submissions', 'quotely-estimates-for-woocommerce' ); ?></h1>
+				<hr class="wp-header-end">
 				<?php settings_errors( 'estimation_data_messages' ); ?>
 				<form method="post">
 					<?php wp_nonce_field( 'estimation_data_bulk_action', 'estimation_data_nonce' ); ?>
@@ -705,16 +790,23 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					<?php $table->display(); ?>
 				</form>
 			</div>
-			<div id="estimation-products-modal" class="estimation-products-modal" style="display:none;">
-				<div class="estimation-modal-content">
-					<div class="estimation-modal-header">
-						<h2><?php esc_html_e( 'Estimated Products', 'quotely-estimates-for-woocommerce' ); ?></h2>
-						<button class="button button-secondary close-modal">&times;</button>
+			<?php
+			// Uses the shared .qly-modal shell (quotely-ui.css) so the View and
+			// Notes dialogs match Pro's quote editor exactly. The legacy IDs and
+			// button classes are kept because admin-estimation.js binds to them.
+			?>
+			<div id="estimation-products-modal" class="qly-modal-overlay" hidden>
+				<div class="qly-modal" role="dialog" aria-modal="true" aria-labelledby="estimation-modal-title">
+					<div class="qly-modal__head">
+						<h2 id="estimation-modal-title"><?php esc_html_e( 'Estimated Products', 'quotely-estimates-for-woocommerce' ); ?></h2>
+						<button type="button" class="qly-modal__close close-modal" aria-label="<?php esc_attr_e( 'Close', 'quotely-estimates-for-woocommerce' ); ?>">
+							<?php echo class_exists( 'Quotely_UI' ) ? Quotely_UI::icon( 'x', 18 ) : '&times;'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- trusted inline SVG. ?>
+						</button>
 					</div>
-					<div class="estimation-modal-body" id="products-list-container"></div>
-					<div class="estimation-modal-footer">
-						<button class="button download-pdf-btn"><?php esc_html_e( 'Download PDF', 'quotely-estimates-for-woocommerce' ); ?></button>
-						<button class="button button-primary close-modal"><?php esc_html_e( 'Close', 'quotely-estimates-for-woocommerce' ); ?></button>
+					<div class="qly-modal__body" id="products-list-container"></div>
+					<div class="qly-modal__foot">
+						<button type="button" class="qly-btn qly-btn--secondary close-modal"><?php esc_html_e( 'Close', 'quotely-estimates-for-woocommerce' ); ?></button>
+						<button type="button" class="qly-btn qly-btn--primary download-pdf-btn"><?php esc_html_e( 'Download PDF', 'quotely-estimates-for-woocommerce' ); ?></button>
 					</div>
 				</div>
 			</div>
@@ -741,9 +833,12 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			foreach ( $products as $product ) {
 				$results[] = array(
 					'id'         => $product->get_id(),
-					'title'      => wp_strip_all_tags( $product->get_name() ),
+					'title'      => html_entity_decode( wp_strip_all_tags( $product->get_name() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 					'price'      => (float) apply_filters( 'estitofo_display_price', floatval( $product->get_price() ), $product ),
 					'price_html' => wp_kses_post( $product->get_price_html() ),
+					// Carried through submission so the quote can show each
+					// line's SKU, the way an order confirmation does.
+					'sku'        => $product->get_sku(),
 					'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 				);
 			}
@@ -782,10 +877,16 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					$products,
 					floatval( $estimation->total ),
 					array(
-						'name'  => sanitize_text_field( $estimation->name ),
-						'email' => sanitize_email( $estimation->email ),
-						'phone' => sanitize_text_field( $estimation->phone ),
-						'date'  => $estimation->created_at,
+						// See the tokenized download above — 'id' is what lets Pro
+						// resolve this submission's stored expiry date.
+						'id'      => (int) $estimation->id,
+						'name'    => sanitize_text_field( $estimation->name ),
+						'email'   => sanitize_email( $estimation->email ),
+						'phone'   => sanitize_text_field( $estimation->phone ),
+						'date'    => $estimation->created_at,
+						'company' => sanitize_text_field( $estimation->company ?? '' ),
+						'address' => sanitize_text_field( $estimation->address ?? '' ),
+						'notes'   => sanitize_textarea_field( $estimation->customer_notes ?? '' ),
 					)
 				);
 				$filename      = sanitize_file_name( sprintf( 'product-estimation-%d-%s.pdf', $estimation->id, gmdate( 'Y-m-d', strtotime( $estimation->created_at ) ) ) );
@@ -1297,6 +1398,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'title'    => isset( $p['title'] ) ? sanitize_text_field( $p['title'] ) : '',
 					'price'    => isset( $p['price'] ) ? floatval( $p['price'] ) : 0,
 					'quantity' => isset( $p['quantity'] ) ? max( 1, absint( $p['quantity'] ) ) : 1,
+					'sku'      => isset( $p['sku'] ) ? sanitize_text_field( $p['sku'] ) : '',
 					'image'    => isset( $p['image'] ) ? esc_url_raw( $p['image'] ) : '',
 					'note'     => isset( $p['note'] ) ? sanitize_text_field( $p['note'] ) : '',
 				);
@@ -1377,6 +1479,7 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 					'title'    => isset( $p['title'] ) ? sanitize_text_field( $p['title'] ) : '',
 					'price'    => isset( $p['price'] ) ? floatval( $p['price'] ) : 0,
 					'quantity' => isset( $p['quantity'] ) ? max( 1, absint( $p['quantity'] ) ) : 1,
+					'sku'      => isset( $p['sku'] ) ? sanitize_text_field( $p['sku'] ) : '',
 					'image'    => isset( $p['image'] ) ? esc_url_raw( $p['image'] ) : '',
 					'note'     => isset( $p['note'] ) ? sanitize_text_field( $p['note'] ) : '',
 				);
@@ -1454,9 +1557,12 @@ if ( ! class_exists( 'Estitofo_Plugin' ) ) {
 			foreach ( $products as $product ) {
 				$results[] = array(
 					'id'         => $product->get_id(),
-					'title'      => wp_strip_all_tags( $product->get_name() ),
+					'title'      => html_entity_decode( wp_strip_all_tags( $product->get_name() ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
 					'price'      => (float) apply_filters( 'estitofo_display_price', floatval( $product->get_price() ), $product ),
 					'price_html' => wp_kses_post( $product->get_price_html() ),
+					// Carried through submission so the quote can show each
+					// line's SKU, the way an order confirmation does.
+					'sku'        => $product->get_sku(),
 					'image'      => get_the_post_thumbnail_url( $product->get_id(), 'thumbnail' ),
 				);
 			}

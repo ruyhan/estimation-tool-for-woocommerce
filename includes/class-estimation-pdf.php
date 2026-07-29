@@ -113,8 +113,8 @@ class Estitofo_PDF {
 		// ---- Title and meta ----
 		$this->draw_title_block( $pdf, $user_info );
 
-		// ---- Bill To ----
-		$this->draw_billto_block( $pdf, $user_info );
+		// ---- Prepared for / Issued / Prepared by ----
+		$this->draw_billto_block( $pdf, $user_info, $company_name );
 
 		// ---- Products table ----
 		$this->draw_products_table( $pdf, $products );
@@ -175,8 +175,9 @@ class Estitofo_PDF {
 		$pdf->Rect( 0, 38, $page_w, 1.2, 'F' );
 
 		$logo_drawn = false;
+		$logo_w     = 0.0;
 		if ( ! $hide_logo ) {
-			$embed = self::load_logo_data( $logo_url );
+			$embed = self::logo_fit( $logo_url, 62, 25 );
 			// Attempt 1: raw-bytes embed via '@' prefix.
 			if ( is_array( $embed ) && ! empty( $embed['data'] ) && ! empty( $embed['type'] ) ) {
 				try {
@@ -184,8 +185,8 @@ class Estitofo_PDF {
 						'@' . $embed['data'],
 						15,
 						6,
-						0,
-						25,
+						$embed['w'],
+						$embed['h'],
 						$embed['type'],
 						'',
 						'T',
@@ -200,6 +201,7 @@ class Estitofo_PDF {
 						false
 					);
 					$logo_drawn = true;
+					$logo_w     = (float) $embed['w'];
 				} catch ( Exception $e ) {
 					if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                         // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging is gated on WP_DEBUG.
@@ -234,6 +236,10 @@ class Estitofo_PDF {
 								false
 							);
 							$logo_drawn = true;
+								$dims   = @getimagesize( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+								$logo_w = ( is_array( $dims ) && ! empty( $dims[1] ) )
+									? min( 62.0, 25 * ( $dims[0] / $dims[1] ) )
+									: 25.0;
 						} catch ( Exception $e ) {
 							if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
                                 // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Logging is gated on WP_DEBUG.
@@ -251,8 +257,10 @@ class Estitofo_PDF {
 			}
 		}
 
-		// Company name (white text on band) — to the right of the logo, or left-aligned if no logo.
-		$x = $logo_drawn ? 50 : 15;
+		// Company name (white text on band) — placed after the logo's ACTUAL
+		// rendered width (see logo_fit()). A fixed offset used to overlap any
+		// horizontal logo, which is the most common kind.
+		$x = $logo_drawn ? ( 15 + $logo_w + 9 ) : 15;
 		$pdf->SetTextColor( 255, 255, 255 );
 		$pdf->SetFont( $this->font, 'B', 18 );
 		$pdf->SetXY( $x, 9 );
@@ -277,21 +285,18 @@ class Estitofo_PDF {
 		$pdf->Cell( 110, 12, strtoupper( __( 'Estimation', 'quotely-estimates-for-woocommerce' ) ), 0, 0, 'L' );
 
 		// ---- Meta on the right, vertically centred against the title.
-		$date = ! empty( $user_info['date'] )
-			? date_i18n( get_option( 'date_format' ), strtotime( $user_info['date'] ) )
-			: date_i18n( get_option( 'date_format' ) );
-		$ref  = ! empty( $user_info['ref'] ) ? (string) $user_info['ref'] : '';
+		// The issue date lives in the "Issued" column of the detail band below,
+		// so only the reference is repeated up here.
+		$ref = ! empty( $user_info['ref'] ) ? (string) $user_info['ref'] : '';
+		if ( '' === $ref && ! empty( $user_info['reference'] ) ) {
+			$ref = (string) $user_info['reference'];
+		}
 
-		$pdf->SetFont( $this->font, '', 10 );
-		$pdf->SetTextColor( 80, 80, 80 );
-		$meta_x = 125;
-		$meta_w = 70;
-		$meta_y = $title_y + 1;
-		$pdf->SetXY( $meta_x, $meta_y );
-		$pdf->Cell( $meta_w, 5, __( 'Date', 'quotely-estimates-for-woocommerce' ) . ': ' . $date, 0, 1, 'R' );
 		if ( '' !== $ref ) {
-			$pdf->SetXY( $meta_x, $meta_y + 5 );
-			$pdf->Cell( $meta_w, 5, __( 'Reference', 'quotely-estimates-for-woocommerce' ) . ': ' . $ref, 0, 1, 'R' );
+			$pdf->SetFont( $this->font, '', 10 );
+			$pdf->SetTextColor( 80, 80, 80 );
+			$pdf->SetXY( 125, $title_y + 1 );
+			$pdf->Cell( 70, 5, __( 'Reference', 'quotely-estimates-for-woocommerce' ) . ': ' . $ref, 0, 1, 'R' );
 		}
 
 		// Move the cursor *below* the title block so the next section doesn't overlap.
@@ -299,39 +304,115 @@ class Estitofo_PDF {
 		$pdf->SetTextColor( 0, 0, 0 );
 	}
 
-	private function draw_billto_block( $pdf, $user_info ) {
+	/**
+	 * The detail band: Prepared for / Issued / Prepared by.
+	 *
+	 * Replaces the old single "Bill To" panel so the bundled layout uses the
+	 * same vocabulary as the Pro designs — a quote reads the same whichever
+	 * template produced it. "Valid until" only appears when something supplied
+	 * an expiry (Pro stamps one per submission); the free plugin has no expiry
+	 * of its own, and an empty labelled column would just look broken.
+	 *
+	 * @param string $company_name Shown under "Prepared by".
+	 */
+	private function draw_billto_block( $pdf, $user_info, $company_name = '' ) {
 		$x = 15;
 		$y = $pdf->GetY();
 		$w = 180;
-		$h = 26;
+
+		$val = static function ( $k ) use ( $user_info ) {
+			return ! empty( $user_info[ $k ] ) ? (string) $user_info[ $k ] : '';
+		};
+
+		$date = '' !== $val( 'date' )
+			? date_i18n( get_option( 'date_format' ), strtotime( $val( 'date' ) ) )
+			: date_i18n( get_option( 'date_format' ) );
+
+		$columns = array(
+			array(
+				array(
+					__( 'Prepared for', 'quotely-estimates-for-woocommerce' ),
+					array_values(
+						array_filter(
+							array(
+								sanitize_text_field( $val( 'name' ) ),
+								sanitize_text_field( $val( 'company' ) ),
+								sanitize_text_field( $val( 'address' ) ),
+								sanitize_email( $val( 'email' ) ),
+								sanitize_text_field( $val( 'phone' ) ),
+							)
+						)
+					),
+				),
+			),
+			array(
+				array( __( 'Issued', 'quotely-estimates-for-woocommerce' ), array( $date ) ),
+			),
+			array(
+				array( __( 'Prepared by', 'quotely-estimates-for-woocommerce' ), array( $company_name ) ),
+			),
+		);
+		if ( '' !== $val( 'expires' ) ) {
+			$columns[1][] = array(
+				__( 'Valid until', 'quotely-estimates-for-woocommerce' ),
+				array( sanitize_text_field( $val( 'expires' ) ) ),
+			);
+		}
+
+		// The panel has to be drawn before its contents, so measure first —
+		// a long name, company or street address wraps onto extra lines.
+		$colw = $w / 3;
+		$h    = 0.0;
+		foreach ( $columns as $groups ) {
+			$col_h = 4.0;
+			foreach ( $groups as $group ) {
+				$col_h += 5.0;
+				foreach ( $group[1] as $line ) {
+					if ( '' === trim( (string) $line ) ) {
+						continue;
+					}
+					$pdf->SetFont( $this->font, '', 10 );
+					$col_h += max( 1, $pdf->getNumLines( $line, $colw - 10 ) ) * 4.6;
+				}
+				$col_h += 1.6;
+			}
+			$h = max( $h, $col_h + 4.0 );
+		}
+		$h = max( 26.0, $h );
 
 		$pdf->SetDrawColor( 230, 230, 230 );
 		$pdf->SetFillColor( 248, 250, 252 );
 		$pdf->RoundedRect( $x, $y, $w, $h, 2.5, '1111', 'DF' );
 
 		list($r, $g, $b) = $this->brand;
-		$pdf->SetFont( $this->font, 'B', 9 );
-		$pdf->SetTextColor( $r, $g, $b );
-		$pdf->SetXY( $x + 5, $y + 4 );
-		$pdf->Cell( 50, 4, strtoupper( __( 'Bill To', 'quotely-estimates-for-woocommerce' ) ), 0, 1 );
+		foreach ( $columns as $i => $groups ) {
+			$cx = $x + 5 + ( $i * $colw );
+			$cy = $y + 4;
+			foreach ( $groups as $group ) {
+				$pdf->SetFont( $this->font, 'B', 9 );
+				$pdf->SetTextColor( $r, $g, $b );
+				$pdf->SetXY( $cx, $cy );
+				$pdf->Cell( $colw - 10, 4, strtoupper( $group[0] ), 0, 1 );
+				$cy += 5.0;
 
-		$pdf->SetFont( $this->font, 'B', 11 );
-		$pdf->SetTextColor( 20, 20, 20 );
-		$pdf->SetXY( $x + 5, $y + 9 );
-		$pdf->Cell( 110, 5, ! empty( $user_info['name'] ) ? sanitize_text_field( $user_info['name'] ) : '—', 0, 1 );
+				$first = true;
+				foreach ( $group[1] as $line ) {
+					if ( '' === trim( (string) $line ) ) {
+						continue;
+					}
+					$pdf->SetFont( $this->font, $first ? 'B' : '', $first ? 11 : 10 );
+					$pdf->SetTextColor( $first ? 20 : 80, $first ? 20 : 80, $first ? 20 : 80 );
+					$pdf->SetXY( $cx, $cy );
+					// MultiCell, not Cell: Cell would run straight over the
+					// neighbouring column instead of wrapping inside its own.
+					$pdf->MultiCell( $colw - 10, 4.6, $line, 0, 'L', false, 1 );
+					$cy    = $pdf->GetY();
+					$first = false;
+				}
+				$cy += 1.6;
+			}
+		}
 
-		$pdf->SetFont( $this->font, '', 10 );
-		$pdf->SetTextColor( 80, 80, 80 );
-		$email = ! empty( $user_info['email'] ) ? sanitize_email( $user_info['email'] ) : '';
-		$phone = ! empty( $user_info['phone'] ) ? sanitize_text_field( $user_info['phone'] ) : '';
-		$pdf->SetXY( $x + 5, $y + 15 );
-		if ( $email ) {
-			$pdf->Cell( 110, 4.5, $email, 0, 1 );
-		}
-		if ( $phone ) {
-			$pdf->SetX( $x + 5 );
-			$pdf->Cell( 110, 4.5, $phone, 0, 1 );
-		}
 		$pdf->SetTextColor( 0, 0, 0 );
 		$pdf->SetY( $y + $h + 6 );
 	}
@@ -369,11 +450,12 @@ class Estitofo_PDF {
 			$quantity = isset( $product['quantity'] ) ? max( 1, absint( $product['quantity'] ) ) : 1;
 			$image    = isset( $product['image'] ) ? esc_url_raw( $product['image'] ) : '';
 			$note     = isset( $product['note'] ) ? sanitize_text_field( $product['note'] ) : '';
+			$sku      = isset( $product['sku'] ) ? trim( sanitize_text_field( (string) $product['sku'] ) ) : '';
 			$subtotal = $price * $quantity;
 
-			// Row height — based on title length (+ optional note line).
+			// Row height — title, plus the SKU and note lines when present.
 			$title_h = $pdf->getStringHeight( $col_title - 4, $title, false, true, '', 1 );
-			$row_h   = max( 18, $title_h + 6 + ( '' !== $note ? 5 : 0 ) );
+			$row_h   = max( 18, $title_h + 6 + ( '' !== $sku ? 4 : 0 ) + ( '' !== $note ? 5 : 0 ) );
 
 			// Page break check.
 			if ( $pdf->GetY() + $row_h > ( $pdf->getPageHeight() - $pdf->getBreakMargin() ) ) {
@@ -411,6 +493,13 @@ class Estitofo_PDF {
 			$pdf->SetFont( $this->font, 'B', 10 );
 			$pdf->SetTextColor( 20, 20, 20 );
 			$pdf->MultiCell( $col_title - 4, 5, $title, 0, 'L' );
+			if ( '' !== $sku ) {
+				$pdf->SetX( $start_x + $col_img + 2 );
+				$pdf->SetFont( $this->font, '', 8 );
+				$pdf->SetTextColor( 130, 130, 130 );
+				/* translators: %s: product SKU */
+				$pdf->Cell( $col_title - 4, 4, sprintf( __( 'SKU %s', 'quotely-estimates-for-woocommerce' ), $sku ), 0, 1, 'L' );
+			}
 			if ( '' !== $note ) {
 				$pdf->SetX( $start_x + $col_img + 2 );
 				$pdf->SetFont( $this->font, 'I', 8 );
@@ -825,6 +914,53 @@ class Estitofo_PDF {
 	 *
 	 * Returns ['data' => string, 'type' => 'JPG'|'PNG'] on success, or false.
 	 */
+	/**
+	 * Fit the configured logo into a max box and report the exact size it will
+	 * occupy, so callers can lay text out *after* it.
+	 *
+	 * Header layouts used to assume a narrow, square-ish logo and hard-coded the
+	 * text offset (e.g. x = 50mm). A horizontal logo — by far the most common
+	 * kind — scales far wider than that at a given height, so the company name
+	 * printed straight on top of it. Always position text using the returned
+	 * width instead of a fixed guess.
+	 *
+	 * @param string $logo_url Configured logo URL.
+	 * @param float  $max_w    Max width in mm.
+	 * @param float  $max_h    Max height in mm.
+	 * @return array{data:string,type:string,w:float,h:float}|false
+	 */
+	public static function logo_fit( $logo_url, $max_w = 62, $max_h = 25 ) {
+		$embed = self::load_logo_data( $logo_url );
+		if ( ! is_array( $embed ) || empty( $embed['data'] ) || empty( $embed['type'] ) ) {
+			return false;
+		}
+		$iw = 0;
+		$ih = 0;
+		if ( ! empty( $embed['path'] ) ) {
+			$dims = @getimagesize( $embed['path'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( is_array( $dims ) && ! empty( $dims[0] ) && ! empty( $dims[1] ) ) {
+				$iw = (int) $dims[0];
+				$ih = (int) $dims[1];
+			}
+		}
+		if ( $iw < 1 || $ih < 1 ) {
+			// Intrinsic size unknown — assume square at the max height.
+			return array(
+				'data' => $embed['data'],
+				'type' => $embed['type'],
+				'w'    => (float) $max_h,
+				'h'    => (float) $max_h,
+			);
+		}
+		$scale = min( $max_w / $iw, $max_h / $ih );
+		return array(
+			'data' => $embed['data'],
+			'type' => $embed['type'],
+			'w'    => round( $iw * $scale, 2 ),
+			'h'    => round( $ih * $scale, 2 ),
+		);
+	}
+
 	public static function load_logo_data( $logo_url ) {
 		$instance = new self();
 		$path     = $instance->resolve_logo_path( $logo_url );

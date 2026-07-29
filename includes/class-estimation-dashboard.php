@@ -47,7 +47,7 @@ class Estitofo_Dashboard {
 
 		$top_products = self::top_products( 30, 5 );
 		?>
-		<div class="wc-est-dash">
+		<div class="wc-est-dash qly-app qly-dash">
 			<div class="wc-est-dash-stats" style="display:flex;gap:20px;margin-bottom:12px;">
 				<div><strong style="font-size:22px;display:block;"><?php echo esc_html( number_format_i18n( $total ) ); ?></strong>
 					<span style="color:#646970;"><?php esc_html_e( 'All-time submissions', 'quotely-estimates-for-woocommerce' ); ?></span></div>

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Quotely Estimates for WooCommerce 3.19.0\n"
-"Report-Msgid-Bugs-To: https://ruyhan.com/\n"
-"Last-Translator: ruyhan <devtools@marketorr.com.bd>\n"
-"Language-Team: ruyhan <devtools@marketorr.com.bd>\n"
+"Project-Id-Version: Quotely Estimates for WooCommerce 3.20.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/quotely-estimates-for-woocommerce\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-23T18:56:52+02:00\n"
+"POT-Creation-Date: 2026-07-25T18:22:45+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: quotely-estimates-for-woocommerce\n"
@@ -20,9 +20,8 @@ msgid "Quotely Estimates for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin
-#. Author URI of the plugin
 #: quotely-estimates-for-woocommerce.php
-msgid "https://ruyhan.com/"
+msgid "https://wordpress.org/plugins/quotely-estimates-for-woocommerce/"
 msgstr ""
 
 #. Description of the plugin
@@ -35,8 +34,16 @@ msgstr ""
 msgid "ruyhan"
 msgstr ""
 
+#. Author URI of the plugin
+#: quotely-estimates-for-woocommerce.php
+msgid "https://ruyhan.com/"
+msgstr ""
+
 #: includes/class-elementor-estimation-widget.php:17
-#: quotely-estimates-for-woocommerce.php:253
+#: includes/class-estimation-dashboard.php:27
+#: includes/class-estimation-settings.php:1065
+#: includes/class-estimation-settings.php:1076
+#: quotely-estimates-for-woocommerce.php:698
 msgid "Estimation Tool"
 msgstr ""
 
@@ -44,383 +51,1101 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: includes/class-elementor-estimation-widget.php:43
+#: includes/class-elementor-estimation-widget.php:50
 msgid "Heading"
 msgstr ""
 
-#: includes/class-elementor-estimation-widget.php:45
-#: includes/class-estimation-settings.php:43
-#: includes/class-estimation-settings.php:147
-#: quotely-estimates-for-woocommerce.php:548
+#: includes/class-elementor-estimation-widget.php:52
+#: includes/class-estimation-settings.php:1040
+#: quotely-estimates-for-woocommerce.php:1146
 msgid "My plan and price estimation"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:23
-msgid "ID"
+#: includes/class-elementor-estimation-widget.php:59
+msgid "Subheading"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:24
-msgid "Name"
+#: includes/class-elementor-estimation-widget.php:63
+msgid "Leave blank to hide the subheading."
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:53
+msgid "All-time submissions"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:55
+msgid "Last 30 days"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:57
+msgid "Value (30 days)"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:61
+msgid "Latest"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:80
+msgid "Top products (30d)"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:100
+msgid "New"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:101
+msgid "Contacted"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:102
+msgid "Quoted"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:103
+msgid "Won"
+msgstr ""
+
+#: includes/class-estimation-dashboard.php:104
+msgid "Lost"
 msgstr ""
 
 #: includes/class-estimation-list-table.php:25
-msgid "Email"
+msgid "ID"
 msgstr ""
 
 #: includes/class-estimation-list-table.php:26
-msgid "Phone"
+msgid "Customer"
 msgstr ""
 
 #: includes/class-estimation-list-table.php:27
-#: includes/class-estimation-pdf.php:137
-#: quotely-estimates-for-woocommerce.php:199
-msgid "Total"
+#: quotely-estimates-for-woocommerce.php:605
+msgid "Contact"
 msgstr ""
 
 #: includes/class-estimation-list-table.php:28
-msgid "Date"
+#: includes/class-estimation-mailer.php:114
+#: quotely-estimates-for-woocommerce.php:595
+msgid "Total"
 msgstr ""
 
 #: includes/class-estimation-list-table.php:29
+#: includes/class-estimation-list-table.php:164
+msgid "Status"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:30
+#: includes/class-estimation-pdf.php:299
+msgid "Date"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:31
 msgid "Actions"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:60
-msgid "View Products"
+#: includes/class-estimation-list-table.php:103
+msgid "View"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:78
+#. translators: %d: estimation id
+#: includes/class-estimation-list-table.php:111
+#, php-format
+msgid "Re: your estimation #%d"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:115
+msgid "Reply"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:120
+msgid "Notes"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:137
 msgid "Restore"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:79
+#: includes/class-estimation-list-table.php:138
 msgid "Delete Permanently"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:83
+#: includes/class-estimation-list-table.php:139
+#: includes/class-estimation-list-table.php:143
+msgid "Export to CSV"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:142
 msgid "Move to Trash"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:146
+#: includes/class-estimation-list-table.php:160
+msgid "From"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:162
+msgid "To"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:166
+msgid "All statuses"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:171
+msgid "Filter"
+msgstr ""
+
+#: includes/class-estimation-list-table.php:261
+#: quotely-estimates-for-woocommerce.php:603
 msgid "All"
 msgstr ""
 
-#: includes/class-estimation-list-table.php:155
+#: includes/class-estimation-list-table.php:270
 msgid "Trash"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:11
-#: quotely-estimates-for-woocommerce.php:443
-msgid "Image"
-msgstr ""
-
-#: includes/class-estimation-pdf.php:12
-#: quotely-estimates-for-woocommerce.php:200
-#: quotely-estimates-for-woocommerce.php:442
-#: quotely-estimates-for-woocommerce.php:570
+#: includes/class-estimation-mailer.php:109
+#: includes/class-estimation-pdf.php:361
+#: includes/class-estimation-pdf.php:395
+#: quotely-estimates-for-woocommerce.php:596
+#: quotely-estimates-for-woocommerce.php:916
 msgid "Product"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:13
-#: quotely-estimates-for-woocommerce.php:201
-#: quotely-estimates-for-woocommerce.php:444
-#: quotely-estimates-for-woocommerce.php:571
-msgid "Price"
-msgstr ""
-
-#: includes/class-estimation-pdf.php:14
-#: quotely-estimates-for-woocommerce.php:445
+#: includes/class-estimation-mailer.php:110
+#: includes/class-estimation-pdf.php:362
+#: includes/class-estimation-pdf.php:396
+#: quotely-estimates-for-woocommerce.php:919
 msgid "Qty"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:15
-#: quotely-estimates-for-woocommerce.php:203
-#: quotely-estimates-for-woocommerce.php:446
-#: quotely-estimates-for-woocommerce.php:573
+#: includes/class-estimation-mailer.php:111
+#: includes/class-estimation-pdf.php:363
+#: includes/class-estimation-pdf.php:397
+#: quotely-estimates-for-woocommerce.php:597
+#: quotely-estimates-for-woocommerce.php:918
+msgid "Price"
+msgstr ""
+
+#: includes/class-estimation-mailer.php:112
+#: includes/class-estimation-pdf.php:364
+#: includes/class-estimation-pdf.php:398
+#: includes/class-estimation-pdf.php:596
+#: quotely-estimates-for-woocommerce.php:599
+#: quotely-estimates-for-woocommerce.php:920
 msgid "Subtotal"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:20
+#. translators: %s: site name
+#: includes/class-estimation-mailer.php:140
+#, php-format
+msgid "Your estimation from %s"
+msgstr ""
+
+#: includes/class-estimation-mailer.php:146
+msgid "Hi {{name}},"
+msgstr ""
+
+#: includes/class-estimation-mailer.php:147
+msgid "Thanks for your interest. Your estimation total is {{total}}. Details below:"
+msgstr ""
+
+#: includes/class-estimation-mailer.php:149
+msgid "We will be in touch shortly."
+msgstr ""
+
+#. translators: %s: customer name
+#: includes/class-estimation-mailer.php:185
+#, php-format
+msgid "New estimation from %s"
+msgstr ""
+
+#. translators: 1: customer name, 2: customer email, 3: customer phone
+#: includes/class-estimation-mailer.php:191
+#, php-format
+msgid "A new estimation was submitted by %1$s (%2$s, %3$s)."
+msgstr ""
+
+#: includes/class-estimation-mailer.php:197
+msgid "View in admin"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/class-estimation-mailer.php:242
+#, php-format
+msgid "Estimation Tool test email from %s"
+msgstr ""
+
+#: includes/class-estimation-mailer.php:245
+msgid "If you can read this, the Estimation Tool plugin can send email from this site."
+msgstr ""
+
+#. translators: %s: timestamp
+#: includes/class-estimation-mailer.php:248
+#, php-format
+msgid "Sent at %s."
+msgstr ""
+
+#: includes/class-estimation-pdf.php:35
 msgid "WooCommerce is required for PDF generation"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:23
+#: includes/class-estimation-pdf.php:38
 msgid "TCPDF library is not loaded"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:39
-#: includes/class-estimation-pdf.php:40
-#: includes/class-estimation-pdf.php:79
+#: includes/class-estimation-pdf.php:96
+#: includes/class-estimation-pdf.php:97
 msgid "Product Estimation"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:82
-msgid "Prepared for:"
+#: includes/class-estimation-pdf.php:285
+msgid "Estimation"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:83
-#: quotely-estimates-for-woocommerce.php:435
-msgid "Email:"
+#: includes/class-estimation-pdf.php:302
+msgid "Reference"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:84
-#: quotely-estimates-for-woocommerce.php:436
-msgid "Phone:"
+#: includes/class-estimation-pdf.php:324
+msgid "Bill To"
 msgstr ""
 
-#: includes/class-estimation-pdf.php:85
-#: quotely-estimates-for-woocommerce.php:437
-msgid "Date:"
+#: includes/class-estimation-pdf.php:587
+msgid "Items"
 msgstr ""
 
-#: includes/class-estimation-settings.php:110
-#: quotely-estimates-for-woocommerce.php:301
-#: quotely-estimates-for-woocommerce.php:363
-#: quotely-estimates-for-woocommerce.php:409
-msgid "Unauthorized access"
+#: includes/class-estimation-pdf.php:611
+msgid "TOTAL"
 msgstr ""
 
-#: includes/class-estimation-settings.php:114
-msgid "Estimation Tool Settings"
+#. translators: 1: current page, 2: total pages
+#: includes/class-estimation-pdf.php:675
+#, php-format
+msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/class-estimation-settings.php:119
-msgid "Company Name"
+#: includes/class-estimation-pdf.php:956
+msgid "No logo configured. Click \"Choose Image\" above."
 msgstr ""
 
-#: includes/class-estimation-settings.php:123
-msgid "PDF Subheading / Tagline"
+#: includes/class-estimation-pdf.php:967
+msgid "Could not resolve the logo to a local file on the server."
 msgstr ""
 
-#: includes/class-estimation-settings.php:127
-msgid "PDF Logo URL"
+#: includes/class-estimation-pdf.php:977
+msgid "Logo file is not readable by PHP (check file permissions or open_basedir)."
 msgstr ""
 
-#: includes/class-estimation-settings.php:130
-msgid "Choose Image"
+#. translators: %s: file extension
+#: includes/class-estimation-pdf.php:986
+#, php-format
+msgid "Unsupported logo extension: %s. Use JPG or PNG."
 msgstr ""
 
-#: includes/class-estimation-settings.php:131
-msgid "JPG or PNG. Displayed at the top of the generated PDF."
+#: includes/class-estimation-pdf.php:1001
+msgid "This logo is a PNG with a transparent background, and your server has neither the GD nor Imagick extension installed — TCPDF needs one of them to flatten transparency. Fix options (any one): (1) upload a JPG or a PNG without transparency, (2) enable the PHP \"gd\" extension (uncomment ;extension=gd in php.ini and restart Apache), or (3) install Imagick."
 msgstr ""
 
-#: includes/class-estimation-settings.php:135
-msgid "PDF Footer Note"
+#: includes/class-estimation-pdf.php:1010
+msgid "Logo file could not be prepared for embedding."
 msgstr ""
 
-#: includes/class-estimation-settings.php:139
-msgid "Store / Location List"
+#: includes/class-estimation-pdf.php:1019
+msgid "Could not read the logo bytes from disk."
 msgstr ""
 
-#: includes/class-estimation-settings.php:142
-msgid "One per line, format: \"Name | Phone\". Shown at the bottom of the PDF. Leave blank to hide."
+#. translators: 1: filename 2: human size
+#: includes/class-estimation-pdf.php:1027
+#, php-format
+msgid "Logo ready — %1$s (%2$s). It will appear at the top of every PDF."
 msgstr ""
 
-#: includes/class-estimation-settings.php:146
-msgid "Frontend Heading"
-msgstr ""
-
-#: includes/class-estimation-settings.php:150
-msgid "Default Phone Country Code"
-msgstr ""
-
-#: includes/class-estimation-settings.php:153
-msgid "Two-letter ISO code (e.g. \"us\", \"bd\", \"gb\"). Leave blank to auto-detect."
-msgstr ""
-
-#: includes/class-estimation-settings.php:157
-msgid "Restrict to Country"
-msgstr ""
-
-#: includes/class-estimation-settings.php:160
-msgid "Optional. Set a two-letter ISO code to lock the phone input to a single country."
-msgstr ""
-
-#: includes/class-estimation-settings.php:171
-msgid "Select Logo"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:123
-#: quotely-estimates-for-woocommerce.php:280
-#: quotely-estimates-for-woocommerce.php:281
-msgid "Settings"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:146
-msgid "Quotely Estimates for WooCommerce requires WooCommerce to be installed and active."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:185
-#: quotely-estimates-for-woocommerce.php:579
-msgid "No products added yet"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:186
-#: quotely-estimates-for-woocommerce.php:647
-msgid "Please fill all required fields correctly."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:187
-msgid "Please enter a valid phone number."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:188
-msgid "Valid number"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:189
-msgid "Please add products to generate the estimation."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:190
-msgid "This product is already in your estimation"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:191
-msgid "Generating your estimation..."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:192
-msgid "Thank you! Your estimation is downloading..."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:193
-msgid "New Estimation"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:194
-msgid "Submission error. Please try again."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:195
-msgid "Could not generate PDF. Please try again."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:196
-msgid "Add More Products"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:197
-msgid "Loading suggestions..."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:198
-msgid "No suggestions available at this time"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:202
-#: quotely-estimates-for-woocommerce.php:572
-msgid "Quantity"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:204
-#: quotely-estimates-for-woocommerce.php:574
-msgid "Action"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:205
-msgid "Remove"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:226
-msgid "Loading..."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:262
-msgid "Estimation Data"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:263
-msgid "Estimations"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:272
-#: quotely-estimates-for-woocommerce.php:273
-msgid "Submissions"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:292
-msgid "Estimations per page"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:310
-msgid "Estimation Submissions"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:316
-msgid "Search"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:323
-msgid "Estimated Products"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:328
-msgid "Download PDF"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:329
-msgid "Close"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:339
-#: quotely-estimates-for-woocommerce.php:695
-#: quotely-estimates-for-woocommerce.php:733
+#: includes/class-estimation-rest.php:83
+#: quotely-estimates-for-woocommerce.php:794
+#: quotely-estimates-for-woocommerce.php:1510
+#: quotely-estimates-for-woocommerce.php:1545
 msgid "WooCommerce is not active."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:367
+#: includes/class-estimation-rest.php:239
+msgid "Invalid nonce"
+msgstr ""
+
+#: includes/class-estimation-rest.php:256
+#: quotely-estimates-for-woocommerce.php:564
+#: quotely-estimates-for-woocommerce.php:1339
+msgid "Please fill all required fields correctly."
+msgstr ""
+
+#: includes/class-estimation-rest.php:291
+#: quotely-estimates-for-woocommerce.php:1391
+msgid "Failed to save estimation."
+msgstr ""
+
+#: includes/class-estimation-rest.php:301
+msgid "Estimation saved."
+msgstr ""
+
+#: includes/class-estimation-rest.php:308
+#: quotely-estimates-for-woocommerce.php:1418
+msgid "Save & resume is disabled."
+msgstr ""
+
+#: includes/class-estimation-rest.php:312
+msgid "Invalid token."
+msgstr ""
+
+#: includes/class-estimation-rest.php:319
+msgid "Estimation not found or already expired."
+msgstr ""
+
+#: includes/class-estimation-rest.php:322
+msgid "This resume link has expired."
+msgstr ""
+
+#: includes/class-estimation-settings.php:30
+msgid "General"
+msgstr ""
+
+#: includes/class-estimation-settings.php:31
+msgid "PDF"
+msgstr ""
+
+#: includes/class-estimation-settings.php:32
+msgid "Forms"
+msgstr ""
+
+#: includes/class-estimation-settings.php:33
+msgid "Notifications"
+msgstr ""
+
+#: includes/class-estimation-settings.php:34
+msgid "Tools"
+msgstr ""
+
+#: includes/class-estimation-settings.php:91
+msgid "Settings saved."
+msgstr ""
+
+#: includes/class-estimation-settings.php:242
+#: quotely-estimates-for-woocommerce.php:746
+#: quotely-estimates-for-woocommerce.php:822
+#: quotely-estimates-for-woocommerce.php:869
+msgid "Unauthorized access"
+msgstr ""
+
+#: includes/class-estimation-settings.php:265
+msgid "Estimates & Quotes for WooCommerce — Settings"
+msgstr ""
+
+#: includes/class-estimation-settings.php:274
+msgid "Quotely settings"
+msgstr ""
+
+#. translators: %s: link to CodeCanyon item
+#: includes/class-estimation-settings.php:369
+#, php-format
+msgid "Looking for WooCommerce order conversion, file uploads, reCAPTCHA, analytics or more PDF templates? An optional Pro add-on is available on %s."
+msgstr ""
+
+#: includes/class-estimation-settings.php:865
+msgid "Frontend text"
+msgstr ""
+
+#: includes/class-estimation-settings.php:867
+msgid "Frontend Heading"
+msgstr ""
+
+#: includes/class-estimation-settings.php:869
+msgid "Big title shown above the estimation form. Leave blank to use the default (\"My plan and price estimation\")."
+msgstr ""
+
+#: includes/class-estimation-settings.php:870
+msgid "Frontend Subheading"
+msgstr ""
+
+#: includes/class-estimation-settings.php:872
+msgid "Smaller line of text shown under the heading. Leave blank to hide."
+msgstr ""
+
+#: includes/class-estimation-settings.php:875
+msgid "Phone field"
+msgstr ""
+
+#: includes/class-estimation-settings.php:877
+msgid "Default Phone Country"
+msgstr ""
+
+#: includes/class-estimation-settings.php:878
+msgid "— Auto-detect by visitor IP —"
+msgstr ""
+
+#: includes/class-estimation-settings.php:879
+msgid "Pre-selects this country's flag in the phone field on the frontend. Leave blank to auto-detect."
+msgstr ""
+
+#: includes/class-estimation-settings.php:880
+msgid "Restrict to Country"
+msgstr ""
+
+#: includes/class-estimation-settings.php:881
+msgid "— Allow any country —"
+msgstr ""
+
+#: includes/class-estimation-settings.php:882
+msgid "If set, the phone field is locked to this country — the flag dropdown is hidden and only numbers from this country are accepted."
+msgstr ""
+
+#: includes/class-estimation-settings.php:885
+msgid "Brand &amp; appearance"
+msgstr ""
+
+#: includes/class-estimation-settings.php:887
+msgid "Primary Color"
+msgstr ""
+
+#: includes/class-estimation-settings.php:889
+msgid "Accent Color"
+msgstr ""
+
+#: includes/class-estimation-settings.php:891
+msgid "Dashboard Widget"
+msgstr ""
+
+#: includes/class-estimation-settings.php:892
+msgid "Show recent estimations on the WP dashboard"
+msgstr ""
+
+#: includes/class-estimation-settings.php:900
+msgid "Company Name"
+msgstr ""
+
+#: includes/class-estimation-settings.php:902
+msgid "Tagline / Subheading"
+msgstr ""
+
+#: includes/class-estimation-settings.php:904
+msgid "Logo URL"
+msgstr ""
+
+#: includes/class-estimation-settings.php:907
+msgid "Select Logo"
+msgstr ""
+
+#: includes/class-estimation-settings.php:907
+msgid "Choose Image"
+msgstr ""
+
+#: includes/class-estimation-settings.php:909
+msgid "Footer Note"
+msgstr ""
+
+#: includes/class-estimation-settings.php:911
+msgid "PDF Author (metadata)"
+msgstr ""
+
+#: includes/class-estimation-settings.php:913
+msgid "Store / Location List"
+msgstr ""
+
+#: includes/class-estimation-settings.php:915
+msgid "One per line: \"Name | Phone\". Shown at the bottom of the PDF."
+msgstr ""
+
+#: includes/class-estimation-settings.php:923
+msgid "Optional Fields"
+msgstr ""
+
+#: includes/class-estimation-settings.php:925
+msgid "Collect company name"
+msgstr ""
+
+#: includes/class-estimation-settings.php:926
+msgid "Collect address"
+msgstr ""
+
+#: includes/class-estimation-settings.php:927
+msgid "Allow customer notes"
+msgstr ""
+
+#: includes/class-estimation-settings.php:929
+msgid "Submit Button Text"
+msgstr ""
+
+#: includes/class-estimation-settings.php:931
+msgid "Leave blank to use the default (\"Get My Estimation PDF\")."
+msgstr ""
+
+#: includes/class-estimation-settings.php:932
+msgid "Success Message"
+msgstr ""
+
+#: includes/class-estimation-settings.php:934
+msgid "Save & Resume"
+msgstr ""
+
+#: includes/class-estimation-settings.php:935
+msgid "Let customers email themselves a link to resume their estimation"
+msgstr ""
+
+#: includes/class-estimation-settings.php:936
+msgid "Resume Link Lifetime (days)"
+msgstr ""
+
+#: includes/class-estimation-settings.php:946
+msgid "Admin Notification"
+msgstr ""
+
+#: includes/class-estimation-settings.php:947
+msgid "Email admin when a new estimation is submitted"
+msgstr ""
+
+#: includes/class-estimation-settings.php:948
+msgid "Admin Recipients"
+msgstr ""
+
+#: includes/class-estimation-settings.php:950
+msgid "Comma-separated. Leaves the site admin email if blank."
+msgstr ""
+
+#: includes/class-estimation-settings.php:951
+msgid "Customer Confirmation"
+msgstr ""
+
+#: includes/class-estimation-settings.php:953
+msgid "Send a confirmation email to the customer"
+msgstr ""
+
+#: includes/class-estimation-settings.php:954
+msgid "Attach the PDF to the customer email"
+msgstr ""
+
+#: includes/class-estimation-settings.php:956
+msgid "From Name"
+msgstr ""
+
+#: includes/class-estimation-settings.php:958
+msgid "From Email"
+msgstr ""
+
+#: includes/class-estimation-settings.php:960
+msgid "Customer Email Subject"
+msgstr ""
+
+#. translators: 1: token list
+#: includes/class-estimation-settings.php:965
+#, php-format
+msgid "Tokens: %s"
+msgstr ""
+
+#: includes/class-estimation-settings.php:968
+msgid "Customer Email Body"
+msgstr ""
+
+#. translators: 1: token list
+#: includes/class-estimation-settings.php:973
+#, php-format
+msgid "HTML allowed. Tokens: %s"
+msgstr ""
+
+#: includes/class-estimation-settings.php:991
+msgid "How to add the estimation form to a page"
+msgstr ""
+
+#: includes/class-estimation-settings.php:992
+msgid "Pick whichever method matches the editor you use. Both render the same modern frontend."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1000
+msgid "Shortcode (Block / Classic editor)"
+msgstr ""
+
+#. translators: 1: menu path
+#: includes/class-estimation-settings.php:1007
+#, php-format
+msgid "Edit the page where you want the form (or create a new one under %s)."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1008
+msgid "Pages → Add New"
+msgstr ""
+
+#. translators: 1: shortcode block name
+#: includes/class-estimation-settings.php:1016
+#, php-format
+msgid "Add a %s block (in Classic editor, just paste the shortcode anywhere in the content)."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1021
+msgid "Paste this shortcode and publish:"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1025
+#: includes/class-estimation-settings.php:1032
+#: includes/class-estimation-settings.php:1092
+msgid "Copy"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1028
+msgid "Optional: custom heading"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1029
+msgid "Override the default frontend heading per page:"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1036
+msgid "All available attributes"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1038
+msgid "Attribute"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1038
+msgid "Description"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1038
+msgid "Default"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1040
+msgid "Title shown above the estimation form."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1041
+msgid "Smaller text shown under the heading. Leave blank to hide."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1051
+msgid "Elementor widget"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1053
+msgid "Elementor not detected"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1055
+msgid "Elementor ready"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1059
+msgid "Edit any page with Elementor."
+msgstr ""
+
+#. translators: 1: widget search term
+#: includes/class-estimation-settings.php:1064
+#, php-format
+msgid "In the left panel, search for %s."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1069
+msgid "Drag the widget into your layout and tweak the heading from the widget settings on the left."
+msgstr ""
+
+#. translators: 1: category name, 2: minimum Elementor version
+#: includes/class-estimation-settings.php:1075
+#, php-format
+msgid "The widget lives in the %1$s category and requires Elementor %2$s or higher."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1087
+msgid "PHP / theme template"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1089
+msgid "Drop this anywhere in a page template if you need pure PHP integration:"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1098
+msgid "Tip:"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1099
+msgid "Set your brand colours and default phone country under the General tab first — they're used everywhere the form appears."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1112
+#: includes/class-estimation-settings.php:1117
+msgid "Send Test Email"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1116
+msgid "Recipient address"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1120
+msgid "Export Settings"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1121
+msgid "Download all plugin settings as JSON so you can import them on another site."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1125
+msgid "Download JSON"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1128
+msgid "Import Settings"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1133
+msgid "Upload JSON"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1142
+#: includes/class-estimation-settings.php:1178
+#: includes/class-estimation-settings.php:1198
+msgid "Unauthorized"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1145
+#: includes/class-estimation-settings.php:1181
+#: includes/class-estimation-settings.php:1201
+#: quotely-estimates-for-woocommerce.php:826
 msgid "Invalid request"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:371
-#: quotely-estimates-for-woocommerce.php:413
-msgid "Invalid estimation ID"
+#: includes/class-estimation-settings.php:1204
+msgid "No file uploaded"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1211
+msgid "Invalid upload"
+msgstr ""
+
+#: includes/class-estimation-settings.php:1219
+msgid "Could not access the filesystem to read the uploaded file."
+msgstr ""
+
+#: includes/class-estimation-settings.php:1224
+msgid "Invalid settings file"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:373
+msgid "Invalid PDF link."
 msgstr ""
 
 #: quotely-estimates-for-woocommerce.php:377
+msgid "PDF library not loaded."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:386
+msgid "Estimation not found."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:391
+msgid "Bad estimation data."
+msgstr ""
+
 #: quotely-estimates-for-woocommerce.php:419
-msgid "Estimation not found"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:381
-msgid "Invalid product data"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:384
-#: quotely-estimates-for-woocommerce.php:729
-msgid "PDF library not loaded"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:402
-#: quotely-estimates-for-woocommerce.php:748
+#: quotely-estimates-for-woocommerce.php:862
+#: quotely-estimates-for-woocommerce.php:1561
 msgid "PDF generation failed."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:423
+#: quotely-estimates-for-woocommerce.php:487
+#: quotely-estimates-for-woocommerce.php:725
+#: quotely-estimates-for-woocommerce.php:726
+msgid "Settings"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:510
+msgid "Quotely Estimates for WooCommerce requires WooCommerce to be installed and active."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:563
+msgid "No products added yet"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:565
+msgid "Please enter a valid phone number."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:566
+msgid "Valid number"
+msgstr ""
+
+#. translators: %s: country name
+#: quotely-estimates-for-woocommerce.php:568
+#, php-format
+msgid "Valid %s number"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:569
+msgid "Invalid country dial code. Please pick a country from the dropdown."
+msgstr ""
+
+#. translators: %s: country name
+#: quotely-estimates-for-woocommerce.php:571
+#, php-format
+msgid "Number is too short for %s."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:572
+msgid "Phone number is too short."
+msgstr ""
+
+#. translators: %s: country name
+#: quotely-estimates-for-woocommerce.php:574
+#, php-format
+msgid "Number is too long for %s."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:575
+msgid "Phone number is too long."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:576
+msgid "Please enter digits only."
+msgstr ""
+
+#. translators: %s: country name
+#: quotely-estimates-for-woocommerce.php:578
+#, php-format
+msgid "Doesn't look like a valid %s number."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:579
+msgid "Checking phone number…"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:580
+msgid "Please add products to generate the estimation."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:581
+msgid "This product is already in your estimation"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:582
+msgid "Generating your estimation..."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:583
+msgid "Thank you! Your estimation is downloading..."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:584
+msgid "New Estimation"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:585
+msgid "Submission error. Please try again."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:586
+msgid "Could not generate PDF. Please try again."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:587
+msgid "Add More Products"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:588
+msgid "Loading suggestions..."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:589
+msgid "No suggestions available at this time"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:590
+msgid "No products match your search."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:591
+msgid "item"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:592
+#: quotely-estimates-for-woocommerce.php:1242
+msgid "items"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:593
+msgid "Added"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:594
+#: quotely-estimates-for-woocommerce.php:1232
+msgid "Search above to add products to your estimation."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:598
+msgid "Quantity"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:600
+msgid "Action"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:601
+msgid "Remove"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:602
+msgid "Add note…"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:604
+msgid "Build"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:606
+#: quotely-estimates-for-woocommerce.php:1198
+msgid "Done"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:607
+msgid "My estimation total: "
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:608
+msgid "Copy PDF link"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:609
+#: quotely-estimates-for-woocommerce.php:673
+msgid "Copied!"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:610
+#: quotely-estimates-for-woocommerce.php:783
+msgid "Download PDF"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:611
+msgid "Please enter your email first."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:612
+#: quotely-estimates-for-woocommerce.php:1502
+msgid "Check your inbox for the resume link."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:613
+msgid "Your estimation has been restored."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:646
+msgid "Loading..."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:647
+msgid "Edit notes"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:648
+msgid "Save"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:649
+msgid "Cancel"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:650
+msgid "Saved"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:651
+msgid "Internal notes about this estimation…"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:707
+msgid "Estimation Data"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:708
+msgid "Estimations"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:717
+#: quotely-estimates-for-woocommerce.php:718
+msgid "Submissions"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:737
+msgid "Estimations per page"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:760
+#: quotely-estimates-for-woocommerce.php:763
+msgid "Estimate submissions"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:771
+msgid "Search"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:778
+msgid "Estimated Products"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:784
+msgid "Close"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:830
+#: quotely-estimates-for-woocommerce.php:873
+msgid "Invalid estimation ID"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:837
+#: quotely-estimates-for-woocommerce.php:880
+msgid "Estimation not found"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:841
+msgid "Invalid product data"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:844
+#: quotely-estimates-for-woocommerce.php:1541
+msgid "PDF library not loaded"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:884
 msgid "Invalid product data format"
 msgstr ""
 
 #. translators: %d: estimation submission ID
-#: quotely-estimates-for-woocommerce.php:430
+#: quotely-estimates-for-woocommerce.php:901
 #, php-format
 msgid "Estimation #%d"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:434
+#: quotely-estimates-for-woocommerce.php:908
 msgid "Name:"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:452
+#: quotely-estimates-for-woocommerce.php:909
+msgid "Email:"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:910
+msgid "Phone:"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:911
+msgid "Date:"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:917
+msgid "Image"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:927
 msgid "N/A"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:468
+#: quotely-estimates-for-woocommerce.php:943
 msgid "Total:"
 msgstr ""
 
 #. translators: %d: number of estimations moved to trash
-#: quotely-estimates-for-woocommerce.php:511
+#: quotely-estimates-for-woocommerce.php:999
 #, php-format
 msgid "%d estimation moved to trash."
 msgid_plural "%d estimations moved to trash."
@@ -428,7 +1153,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of estimations permanently deleted
-#: quotely-estimates-for-woocommerce.php:525
+#: quotely-estimates-for-woocommerce.php:1019
 #, php-format
 msgid "%d estimation permanently deleted."
 msgid_plural "%d estimations permanently deleted."
@@ -436,63 +1161,149 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of estimations restored
-#: quotely-estimates-for-woocommerce.php:539
+#: quotely-estimates-for-woocommerce.php:1048
 #, php-format
 msgid "%d estimation restored."
 msgid_plural "%d estimations restored."
 msgstr[0] ""
 msgstr[1] ""
 
-#: quotely-estimates-for-woocommerce.php:552
+#: quotely-estimates-for-woocommerce.php:1162
 msgid "WooCommerce is required for the estimation tool."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:560
-msgid "Search & add more products..."
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:565
-msgid "Selected Products"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:586
-msgid "My Estimation Summary"
-msgstr ""
-
-#: quotely-estimates-for-woocommerce.php:588
-#: quotely-estimates-for-woocommerce.php:607
+#: quotely-estimates-for-woocommerce.php:1168
 msgid "Get My Estimation PDF"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:592
-msgid "Name*"
+#: quotely-estimates-for-woocommerce.php:1195
+msgid "Estimation progress"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:596
-msgid "Email*"
+#: quotely-estimates-for-woocommerce.php:1196
+msgid "Browse"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:600
-msgid "Phone*"
+#: quotely-estimates-for-woocommerce.php:1197
+msgid "Your details"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:604
+#: quotely-estimates-for-woocommerce.php:1202
+msgid "Filter by category"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1205
+msgid "Search products by name or SKU…"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1205
+msgid "Search products"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1213
+msgid "Popular products"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1221
+msgid "Your selection"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1231
+msgid "No products yet"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1239
+msgid "Estimated total"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1251
+msgid "Full name"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1252
+msgid "Jane Doe"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1255
+msgid "Email address"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1259
+msgid "Phone number"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1264
+msgid "Company"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1270
+msgid "Delivery address"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1276
+msgid "Anything we should know?"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1277
+msgid "Special requests, delivery date, color preferences…"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1281
 msgid "Website"
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:633
+#: quotely-estimates-for-woocommerce.php:1290
+msgid "Email me a link to resume later"
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1321
+#: quotely-estimates-for-woocommerce.php:1421
 msgid "Spam detected."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:637
-#: quotely-estimates-for-woocommerce.php:725
+#: quotely-estimates-for-woocommerce.php:1325
+#: quotely-estimates-for-woocommerce.php:1537
 msgid "Too many requests. Please try again in a moment."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:675
-msgid "Failed to save estimation."
+#: quotely-estimates-for-woocommerce.php:1347
+msgid "That phone number looks too short or too long. Please check it."
 msgstr ""
 
-#: quotely-estimates-for-woocommerce.php:688
+#: quotely-estimates-for-woocommerce.php:1353
+msgid "Phone number does not match the required country."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1409
 msgid "Estimation saved successfully."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1424
+msgid "Too many requests. Please try again in a few minutes."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1429
+msgid "A valid email is required."
+msgstr ""
+
+#: quotely-estimates-for-woocommerce.php:1434
+msgid "Nothing to save yet."
+msgstr ""
+
+#. translators: %s: site name
+#: quotely-estimates-for-woocommerce.php:1483
+#, php-format
+msgid "Resume your estimation at %s"
+msgstr ""
+
+#. translators: %s: resume link
+#: quotely-estimates-for-woocommerce.php:1488
+#, php-format
+msgid "Click the link below to resume your estimation: %s"
+msgstr ""
+
+#. translators: %d: number of days
+#: quotely-estimates-for-woocommerce.php:1493
+#, php-format
+msgid "This link expires in %d days."
 msgstr ""

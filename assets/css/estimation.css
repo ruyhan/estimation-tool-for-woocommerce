@@ -310,10 +310,20 @@
 .wc-est-featured {
     margin-bottom: 22px;
 }
+/* Popular products.
+   auto-fill at 140px produced 7+ cramped columns on a desktop width (and a
+   lonely orphan on the next row). Cap the track count so cards stay a
+   comfortable size and the grid reads as a tidy block. */
 .wc-est-featured-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+}
+@media (min-width: 900px) {
+    .wc-est-featured-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (min-width: 1500px) {
+    .wc-est-featured-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 .wc-est-featured-card {
     background: var(--wc-est-bg-card);
@@ -608,22 +618,41 @@
     .wc-estimation-item .product-subtotal { font-size: 14px; }
 }
 
-/* ---- Product note (textarea) ---- */
+/* ---- Product note (textarea) ----
+   rows="1" alone still renders tall (the UA adds its own min-height and
+   line-box padding), which left the note field visually heavier than the
+   product row it belongs to. Pin a compact single-line height and let the
+   customer drag it taller only if they actually need more room. */
 .product-note {
     display: block;
     width: 100%;
-    margin-top: 4px;
+    margin-top: 5px;
     font-size: 12px;
-    padding: 6px 8px;
+    line-height: 1.35;
+    /* Collapsed to a single compact line so the note never dominates the row;
+       it grows on focus. box-sizing is pinned because themes that leave inputs
+       as content-box would otherwise render this ~12px taller than intended. */
+    box-sizing: border-box;
+    height: 30px;
+    min-height: 30px;
+    padding: 5px 9px;
     border: 1px dashed var(--wc-est-border);
     border-radius: var(--wc-est-radius-sm);
     color: var(--wc-est-text-soft);
     background: transparent;
     resize: vertical;
     font-family: inherit;
-    transition: border-color .15s;
+    /* nowrap keeps an existing note on ONE line while collapsed. Without it a
+       longer note wraps and the 30px box slices the second line through the
+       middle of the glyphs, which reads as a rendering bug. */
+    white-space: nowrap;
+    overflow: hidden;
+    transition: border-color .15s, height .15s;
 }
 .product-note:focus {
+    height: 64px;
+    white-space: pre-wrap; /* wrap normally once the customer is editing */
+    overflow: auto;
     outline: none;
     border-color: var(--wc-est-primary);
     border-style: solid;

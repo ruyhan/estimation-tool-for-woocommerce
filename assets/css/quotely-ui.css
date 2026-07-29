@@ -1,0 +1,1368 @@
+/**
+ * Quotely UI — premium light admin design system (free + Pro).
+ *
+ * "Soft Studio": an airy, light SaaS surface — off-white ground biased toward
+ * indigo, white cards with hairline borders and soft shadows, one indigo
+ * primary with a sparing amber accent.
+ *
+ * DESIGN DECISIONS (deliberate, please keep):
+ *  1. LIGHT ONLY. No prefers-color-scheme dark block. WordPress admin ships
+ *     hardcoded light styles; mixing a dark theme into it produced dark inputs
+ *     with dark text and invisible headings. One committed theme = correctness.
+ *  2. EXPLICIT COLOURS. Every text element sets its own colour so wp-admin's
+ *     global h1/h2/h3/label/input rules can never leak in.
+ *  3. SYSTEM FONT STACK. No @font-face — no missing files, no silent fallback.
+ *  4. Everything is scoped under .qly-* so nothing escapes into wp-admin.
+ *
+ * @package quotely-estimates-for-woocommerce
+ */
+
+/* ============================================================
+   1. TOKENS
+   ============================================================ */
+/* Tokens live on :root as well as the page wrappers. Some Quotely UI is
+   printed outside those wrappers (the quote-editor modal renders in
+   admin_footer), and wrapper-scoped variables simply don't resolve there —
+   which silently made the modal transparent. :root covers every case; all
+   selectors are qly- prefixed so nothing leaks. */
+:root,
+.qly-app,
+.qly-settings,
+.qly-submissions,
+.qly-analytics,
+.qly-dash {
+  /* Brand — indigo */
+  --qly-p-50:  #eef2ff;
+  --qly-p-100: #e0e7ff;
+  --qly-p-200: #c7d2fe;
+  --qly-p-300: #a5b4fc;
+  --qly-p-400: #818cf8;
+  --qly-p-500: #6366f1;
+  --qly-p-600: #4f46e5;
+  --qly-p-700: #4338ca;
+  --qly-p-800: #3730a3;
+
+  /* Accent — amber (sparing) */
+  --qly-a-100: #fef3c7;
+  --qly-a-400: #fbbf24;
+  --qly-a-500: #f59e0b;
+  --qly-a-700: #b45309;
+
+  /* Semantic */
+  --qly-ok:   #059669; --qly-ok-bg:   #ecfdf5; --qly-ok-fg:   #065f46;
+  --qly-warn: #d97706; --qly-warn-bg: #fffbeb; --qly-warn-fg: #92400e;
+  --qly-bad:  #dc2626; --qly-bad-bg:  #fef2f2; --qly-bad-fg:  #991b1b;
+  --qly-info: #0284c7; --qly-info-bg: #f0f9ff; --qly-info-fg: #075985;
+
+  /* Data palette */
+  --qly-d1: #4f46e5; --qly-d2: #0d9488; --qly-d3: #f59e0b; --qly-d4: #e11d48;
+  --qly-d5: #7c3aed; --qly-d6: #059669; --qly-d7: #0284c7; --qly-d8: #ea580c;
+
+  /* Ground & ink — off-white biased toward the accent, not neutral grey.
+     Ground is deliberately a touch deeper than the card surface so white
+     cards read as raised rather than blending into the page. */
+  /* NB: wp-admin's page ground is #f0f0f1. Card borders must be DARKER than
+     that or the card edges vanish and every section reads as one white slab. */
+  --qly-ground:  #eef0f7;
+  --qly-surface: #ffffff;
+  --qly-raised:  #f8f9fd;
+  --qly-line:    #dce0ec;
+  --qly-line-2:  #cdd3e3;
+  --qly-ink:     #111827;
+  --qly-ink-2:   #374151;
+  --qly-body:    #4b5563;
+  --qly-muted:   #9ca3af;
+
+  /* Type */
+  --qly-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --qly-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Radii / shadow / motion */
+  --qly-r:    10px;
+  --qly-r-lg: 14px;
+  --qly-r-xl: 18px;
+  --qly-pill: 999px;
+  --qly-sh-1: 0 1px 2px rgba(17,24,39,.05), 0 4px 12px rgba(17,24,39,.055);
+  --qly-sh-2: 0 2px 4px rgba(17,24,39,.05), 0 10px 24px rgba(17,24,39,.08);
+  --qly-sh-3: 0 12px 40px rgba(17,24,39,.12);
+  --qly-ring: 0 0 0 3px rgba(99,102,241,.18);
+  --qly-t: 160ms cubic-bezier(.4,0,.2,1);
+}
+
+/* Shared page reset */
+.qly-app, .qly-settings, .qly-submissions, .qly-analytics {
+  font-family: var(--qly-font);
+  color: var(--qly-body);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.qly-app *, .qly-settings *, .qly-submissions *, .qly-analytics * { box-sizing: border-box; }
+
+/* Icons inherit text colour */
+.qly-icon { display: inline-block; vertical-align: -.18em; flex: none; }
+
+/* ============================================================
+   2. PAGE SHELL
+   ============================================================ */
+.qly-settings.wrap,
+.qly-submissions.wrap,
+.qly-analytics.wrap {
+  max-width: 1240px;
+  margin: 18px 20px 40px 0;
+  padding: 0;
+  background: transparent;
+}
+
+/* Light gradient page header — premium SaaS, dark ink on a soft wash */
+.qly-pagehead {
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(245,158,11,.10) 0%, rgba(245,158,11,0) 45%),
+    linear-gradient(112deg, #ffffff 0%, #f4f4ff 45%, #eef2ff 100%);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-xl);
+  box-shadow: var(--qly-sh-1);
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+/* thin brand rail on the left edge */
+.qly-pagehead::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--qly-p-500), var(--qly-p-700));
+}
+.qly-pagehead__logo {
+  width: 46px; height: 46px; border-radius: 13px; flex: none;
+  display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700));
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(79,70,229,.28);
+}
+/* The mark sits on a saturated indigo tile, so it must be explicitly white
+   and a touch heavier — inheriting currentColor left it low-contrast and
+   hard to read against the gradient. */
+.qly-pagehead__logo .qly-icon {
+  width: 26px; height: 26px;
+  color: #fff;
+  stroke: #fff;
+  stroke-width: 2.1;
+  opacity: 1;
+}
+.qly-pagehead__title {
+  font-size: 21px; font-weight: 700; letter-spacing: -.021em;
+  color: var(--qly-ink); line-height: 1.25;
+}
+.qly-pagehead__sub { font-size: 13px; color: var(--qly-body); margin-top: 1px; }
+.qly-pagehead__actions { margin-left: auto; display: flex; gap: 8px; }
+
+/* ============================================================
+   3. TAB NAVIGATION (from .nav-tab-wrapper)
+   ============================================================ */
+.qly-settings .nav-tab-wrapper {
+  border: 1px solid var(--qly-line);
+  background: var(--qly-surface);
+  border-radius: var(--qly-pill);
+  box-shadow: var(--qly-sh-1);
+  margin: 0 0 18px;
+  padding: 6px;
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.qly-settings .nav-tab {
+  border: 0 !important;
+  background: transparent !important;
+  margin: 0;
+  padding: 9px 16px;
+  border-radius: var(--qly-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--qly-body) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1.2;
+  box-shadow: none;
+  transition: background var(--qly-t), color var(--qly-t);
+  text-decoration: none;
+}
+.qly-settings .nav-tab:hover { background: var(--qly-p-50) !important; color: var(--qly-p-700) !important; }
+.qly-settings .nav-tab:focus { box-shadow: var(--qly-ring); outline: none; }
+.qly-settings .nav-tab-active,
+.qly-settings .nav-tab-active:hover,
+.qly-settings .nav-tab-active:focus {
+  background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700)) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(79,70,229,.26);
+}
+.qly-settings .nav-tab .qly-icon { opacity: .95; }
+
+/* ============================================================
+   4. SECTION HEADINGS  (h2 → eyebrow label above its card)
+   Explicit colours so wp-admin can't leak in.
+   ============================================================ */
+.qly-settings h2,
+.qly-analytics h2 {
+  font-size: 11.5px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: var(--qly-muted) !important;
+  margin: 26px 0 10px !important;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.qly-settings h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--qly-line), transparent);
+}
+.qly-settings h2:first-of-type { margin-top: 4px !important; }
+.qly-settings h3 { font-size: 14px !important; font-weight: 700; color: var(--qly-ink) !important; margin: 0 0 4px; }
+.qly-settings p, .qly-settings li, .qly-settings td, .qly-settings th, .qly-settings label,
+.qly-settings span, .qly-settings div { color: inherit; }
+
+/* ============================================================
+   5. FORM TABLE → CARD
+   ============================================================ */
+.qly-settings .form-table {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  margin: 0 0 14px;
+  padding: 0;
+  width: 100%;
+  /* Clip rows to the card's rounded corners. Row borders/backgrounds run the
+     full card width, so without this they cut square across the radius and the
+     border no longer follows the corner. */
+  overflow: hidden;
+}
+/* The inset lives on the row, not the table: rows are grid items, so their
+   padding is reliable, whereas padding on a <table> is easily lost. */
+.qly-settings .form-table tr {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 22px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--qly-line);
+  align-items: start;
+}
+.qly-settings .form-table tr:last-child { border-bottom: 0; }
+.qly-settings .form-table th {
+  padding: 0;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--qly-ink) !important;
+  line-height: 1.45;
+  padding-top: 9px; /* optically aligns with the first input/toggle in the cell */
+}
+.qly-settings .form-table th label { font-weight: 600; color: var(--qly-ink) !important; }
+.qly-settings .form-table td { padding: 0; color: var(--qly-body); min-width: 0; }
+
+/* Stacked option groups.
+   Several cells hold two or three toggles separated only by <br>, which gave
+   them no vertical rhythm at all (they touched). Drop those direct-child <br>s
+   and lay the labels out as flex rows with a consistent gap, so every stacked
+   toggle group is spaced identically. Scoped to direct children so <br> inside
+   descriptions is untouched. */
+.qly-settings .form-table td > br { display: none; }
+.qly-settings .form-table td > label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0;
+  padding: 7px 0;
+  line-height: 1.45;
+  color: var(--qly-body) !important;
+}
+.qly-settings .form-table td > label:first-of-type { padding-top: 1px; }
+.qly-settings .form-table td > label:last-of-type { padding-bottom: 1px; }
+/* A label that wraps its own input (e.g. "Rate (%): [ 0 ]") keeps them inline */
+.qly-settings .form-table td > label > input[type=number],
+.qly-settings .form-table td > label > input[type=text] { margin-left: 2px; }
+@media (max-width: 960px) {
+  .qly-settings .form-table tr { grid-template-columns: 1fr; gap: 8px; }
+  .qly-settings .form-table th { padding-top: 0; }
+}
+
+/* Descriptions */
+.qly-settings .description,
+.qly-settings p.description {
+  color: var(--qly-muted) !important;
+  font-size: 12.5px;
+  font-style: normal;
+  margin: 8px 0 0;
+  line-height: 1.55;
+}
+.qly-settings .description code,
+.qly-settings code {
+  background: var(--qly-p-50);
+  color: var(--qly-p-700);
+  border-radius: 5px;
+  padding: 1.5px 6px;
+  font-family: var(--qly-mono);
+  font-size: 11.5px;
+}
+
+/* ============================================================
+   6. INPUTS  (force light — beats wp-admin + browser dark UA styles)
+   ============================================================ */
+.qly-settings input[type=text],
+.qly-settings input[type=email],
+.qly-settings input[type=url],
+.qly-settings input[type=number],
+.qly-settings input[type=password],
+.qly-settings input[type=search],
+.qly-settings input[type=tel],
+.qly-settings select,
+.qly-settings textarea {
+  background-color: var(--qly-surface) !important;
+  background-image: none;
+  color: var(--qly-ink) !important;
+  border: 1.5px solid var(--qly-line-2) !important;
+  border-radius: var(--qly-r) !important;
+  padding: 10px 13px !important;
+  font-family: var(--qly-font);
+  font-size: 13.5px;
+  line-height: 1.5;
+  box-shadow: none !important;
+  min-height: 0;
+  transition: border-color var(--qly-t), box-shadow var(--qly-t);
+  color-scheme: light;           /* stop UA dark-mode form painting */
+  -webkit-text-fill-color: var(--qly-ink);
+}
+.qly-settings input::placeholder,
+.qly-settings textarea::placeholder { color: var(--qly-muted) !important; opacity: 1; }
+.qly-settings input[type=text]:focus,
+.qly-settings input[type=email]:focus,
+.qly-settings input[type=url]:focus,
+.qly-settings input[type=number]:focus,
+.qly-settings input[type=password]:focus,
+.qly-settings input[type=search]:focus,
+.qly-settings select:focus,
+.qly-settings textarea:focus {
+  border-color: var(--qly-p-400) !important;
+  box-shadow: var(--qly-ring) !important;
+  outline: none;
+}
+/* One consistent field width for every single-line text input, whatever
+   class core/the plugin gave it — mixed regular-text/large-text widths
+   were making the forms look ragged. */
+.qly-settings .form-table td input[type=text],
+.qly-settings .form-table td input[type=email],
+.qly-settings .form-table td input[type=url],
+.qly-settings .form-table td input[type=password],
+.qly-settings .form-table td select { width: 100%; max-width: 460px; }
+.qly-settings .form-table td input.small-text,
+.qly-settings input.small-text { width: 96px !important; max-width: 96px !important; text-align: left; }
+.qly-settings .form-table td input[type=number] { width: 120px; max-width: 120px; }
+.qly-settings textarea { width: 100%; max-width: 620px; min-height: 96px; resize: vertical; line-height: 1.6; }
+.qly-settings textarea.large-text, .qly-settings textarea.code { width: 100%; font-family: var(--qly-mono); font-size: 12.5px; }
+.qly-settings select { padding-right: 34px !important; cursor: pointer; }
+
+/* ============================================================
+   7. CHECKBOX → TOGGLE SWITCH
+   ============================================================ */
+.qly-settings input[type=checkbox] {
+  appearance: none; -webkit-appearance: none;
+  width: 42px !important; height: 24px !important;
+  min-width: 42px;
+  border-radius: var(--qly-pill) !important;
+  background: #d7dbeb !important;
+  border: 0 !important;
+  position: relative;
+  cursor: pointer;
+  margin: 0 2px 0 0 !important;
+  padding: 0 !important;
+  transition: background var(--qly-t);
+  flex: none;
+  box-shadow: inset 0 1px 2px rgba(17,24,39,.08) !important;
+  vertical-align: middle;
+}
+.qly-settings input[type=checkbox]::before {
+  content: "" !important;
+  position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #fff !important;
+  box-shadow: 0 1px 3px rgba(17,24,39,.25);
+  transition: transform var(--qly-t);
+  margin: 0 !important;
+}
+.qly-settings input[type=checkbox]:checked {
+  background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700)) !important;
+}
+.qly-settings input[type=checkbox]:checked::before { transform: translateX(18px); }
+.qly-settings input[type=checkbox]:checked::after { display: none !important; }
+.qly-settings input[type=checkbox]:focus { box-shadow: var(--qly-ring) !important; }
+.qly-settings input[type=checkbox] + span,
+.qly-settings label > input[type=checkbox] ~ * { color: var(--qly-body); }
+.qly-settings td label { font-size: 13.5px; color: var(--qly-body) !important; }
+
+/* ---- Colour picker -------------------------------------------------------
+   wp-color-picker paints the chosen colour as the BACKGROUND of the
+   .wp-color-result button (and in its ::after swatch). The generic
+   `.qly-settings .button { background: … !important }` rule below therefore
+   erased the preview entirely — the control looked broken. Everything here
+   restores the native behaviour and just tidies the shape/spacing. */
+.qly-settings .wp-picker-container { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.qly-settings .wp-picker-input-wrap { display: inline-flex; align-items: center; gap: 6px; }
+/* Core's layout: the button carries the chosen colour as an INLINE
+   background-color and reserves 30px of left padding to expose it, while
+   .wp-color-result-text is an opaque panel holding the "Select Color" label.
+   Both halves matter — an earlier version made the label transparent, which
+   left white-ish text sitting straight on the colour and was unreadable on
+   light accents. Here we keep core's two-part structure and only restyle it. */
+.qly-settings .wp-color-result.button,
+.qly-settings .wp-picker-container .wp-color-result.button {
+  background-image: none;
+  border: 1.5px solid var(--qly-line-2) !important;
+  border-radius: var(--qly-r) !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  min-width: 116px;
+  /* 34px strip on the left is the live colour preview */
+  padding: 0 0 0 34px !important;
+  box-shadow: none !important;
+  overflow: hidden;
+  position: relative;
+}
+.qly-settings .wp-color-result-text {
+  background: var(--qly-surface) !important;
+  border: 0 !important;
+  border-left: 1.5px solid var(--qly-line-2) !important;
+  border-radius: 0 !important;
+  color: var(--qly-ink) !important;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 31px !important;
+  padding: 0 12px !important;
+  text-align: center;
+}
+/* Core dims the whole button on hover/focus, which would grey out the colour
+   strip; the inline background wins, but the label must follow our palette. */
+.qly-settings .wp-color-result:hover .wp-color-result-text,
+.qly-settings .wp-color-result:focus .wp-color-result-text {
+  background: var(--qly-ground) !important;
+  border-left-color: var(--qly-line-2) !important;
+  color: var(--qly-ink) !important;
+}
+.qly-settings .wp-color-result:focus {
+  border-color: var(--qly-p-600) !important;
+  box-shadow: 0 0 0 3px rgba(79,70,229,.18) !important;
+}
+.qly-settings .wp-picker-clear,
+.qly-settings .wp-picker-default { height: 34px !important; }
+.qly-settings .iris-picker { margin-top: 8px; border-radius: var(--qly-r-lg) !important; border-color: var(--qly-line) !important; box-shadow: var(--qly-sh-2) !important; }
+
+/* ============================================================
+   8. BUTTONS
+   ============================================================ */
+/* :not(.wp-color-result) — that button's background IS the chosen colour. */
+.qly-settings .button:not(.wp-color-result),
+.qly-submissions .button:not(.wp-color-result),
+.qly-analytics .button:not(.wp-color-result) {
+  border-radius: var(--qly-r) !important;
+  border: 1.5px solid var(--qly-line-2) !important;
+  background: var(--qly-surface) !important;
+  color: var(--qly-ink-2) !important;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 15px !important;
+  height: auto !important;
+  line-height: 1.5 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: background var(--qly-t), border-color var(--qly-t);
+}
+.qly-settings .button:hover,
+.qly-submissions .button:hover { background: var(--qly-raised) !important; border-color: var(--qly-p-300) !important; color: var(--qly-p-700) !important; }
+.qly-settings .button-primary,
+.qly-submissions .button-primary,
+.qly-analytics .button-primary {
+  background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700)) !important;
+  border: 0 !important;
+  color: #fff !important;
+  padding: 10px 22px !important;
+  font-weight: 650;
+  box-shadow: 0 4px 14px rgba(79,70,229,.28) !important;
+}
+/* No `color: #fff` here. The generic `.button:hover` rule above has the same
+   specificity (0,2,1) but comes first, so its light `--qly-raised` background
+   wins on hover — forcing white text on top of it made the label invisible.
+   Letting that rule's own colour through keeps the label readable. */
+.qly-settings .button-primary:hover { filter: brightness(1.06); }
+
+/* Sticky save bar */
+.qly-settings .submit {
+  position: sticky;
+  bottom: 0;
+  margin: 20px 0 0;
+  padding: 14px 20px;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-2);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 20;
+}
+/* Core's forms.css has:
+     table.form-table + p.submit { border-top: none; padding-top: 0; }
+   at specificity (0,2,2), which outranks `.qly-settings .submit` (0,2,0). The
+   result was that only tabs ENDING in a .form-table (General, Forms, Pro
+   Features) lost the save bar's top padding, so the button sat flush against
+   the card edge while PDF/Notifications — which end in a <div> — looked right.
+   Matching core's shape at higher specificity keeps every tab identical. */
+.qly-settings table.form-table + p.submit,
+.qly-settings table.form-table + input + p.submit,
+.qly-settings table.form-table + input + input + p.submit,
+.qly-settings p.submit {
+  padding-top: 14px;
+  border-top: 0;
+}
+
+/* ============================================================
+   9. NOTICES
+   ============================================================ */
+.qly-settings .notice, .qly-submissions .notice {
+  border-radius: var(--qly-r) !important;
+  border-left-width: 4px !important;
+  box-shadow: var(--qly-sh-1);
+  margin: 0 0 16px !important;
+  background: var(--qly-surface);
+}
+.qly-settings .notice p { color: var(--qly-ink-2) !important; }
+
+/* Pro discovery hint */
+.qly-settings .estitofo-pro-hint {
+  margin: 20px 0 0 !important;
+  padding: 14px 18px !important;
+  background: linear-gradient(112deg, #fffdf6, var(--qly-a-100));
+  border: 1px solid #fde68a;
+  border-radius: var(--qly-r-lg);
+  color: var(--qly-a-700) !important;
+  font-style: normal !important;
+  font-size: 13px;
+}
+.qly-settings .estitofo-pro-hint a { color: var(--qly-p-700); font-weight: 600; }
+
+/* ============================================================
+   10. CARDS (component)
+   ============================================================ */
+.qly-card {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  overflow: hidden;
+}
+.qly-card__head {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--qly-line);
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--qly-raised);
+  color: var(--qly-p-600);
+}
+.qly-card__head h3 {
+  margin: 0 !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  color: var(--qly-ink) !important;
+  letter-spacing: -.01em;
+}
+.qly-card__icon { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--qly-p-50); color: var(--qly-p-600); flex: none; }
+.qly-card__body { padding: 20px; color: var(--qly-body); }
+
+/* ============================================================
+   11. STAT / KPI CARDS
+   ============================================================ */
+.qly-stat {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  padding: 18px;
+  box-shadow: var(--qly-sh-1);
+  position: relative;
+  overflow: hidden;
+  min-height: 108px;
+}
+.qly-stat__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--qly-muted); }
+.qly-stat__value { font-size: 30px; font-weight: 750; letter-spacing: -.03em; color: var(--qly-ink); margin: 6px 0 8px; font-variant-numeric: tabular-nums; line-height: 1.05; }
+.qly-stat__trend { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: var(--qly-pill); }
+.qly-stat__trend.is-up { background: var(--qly-ok-bg); color: var(--qly-ok-fg); }
+.qly-stat__trend.is-down { background: var(--qly-bad-bg); color: var(--qly-bad-fg); }
+
+/* Colourful gradient KPIs (analytics) */
+.qly-stat--gradient { border: 0; color: #fff; }
+.qly-stat--gradient .qly-stat__label { color: rgba(255,255,255,.86); }
+.qly-stat--gradient .qly-stat__value { color: #fff; }
+.qly-stat--gradient .qly-stat__trend { background: rgba(255,255,255,.22); color: #fff; }
+.qly-stat--g1 { background: linear-gradient(145deg, #6366f1, #4338ca); box-shadow: 0 8px 22px rgba(79,70,229,.26); }
+.qly-stat--g2 { background: linear-gradient(145deg, #14b8a6, #0f766e); box-shadow: 0 8px 22px rgba(13,148,136,.24); }
+.qly-stat--g3 { background: linear-gradient(145deg, #fbbf24, #d97706); box-shadow: 0 8px 22px rgba(217,119,6,.24); }
+.qly-stat--g4 { background: linear-gradient(145deg, #a78bfa, #7c3aed); box-shadow: 0 8px 22px rgba(124,58,237,.24); }
+.qly-stat--g5 { background: linear-gradient(145deg, #fb7185, #e11d48); box-shadow: 0 8px 22px rgba(225,29,72,.24); }
+
+/* ============================================================
+   12. BADGES / PILLS / DOTS
+   ============================================================ */
+.qly-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: var(--qly-pill); background: var(--qly-p-50); color: var(--qly-p-700); letter-spacing: .04em; text-transform: uppercase; }
+.qly-badge--pro { background: linear-gradient(112deg, var(--qly-a-400), var(--qly-a-500)); color: #4a2f00; }
+.qly-badge--success { background: var(--qly-ok-bg); color: var(--qly-ok-fg); }
+.qly-badge--warning { background: var(--qly-warn-bg); color: var(--qly-warn-fg); }
+.qly-badge--danger { background: var(--qly-bad-bg); color: var(--qly-bad-fg); }
+.qly-badge--info { background: var(--qly-info-bg); color: var(--qly-info-fg); }
+.qly-badge--neutral { background: var(--qly-raised); color: var(--qly-body); border: 1px solid var(--qly-line); }
+.qly-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+
+/* ============================================================
+   13. ANALYTICS PAGE
+   ============================================================ */
+.qly-analytics .qly-body { padding: 0; }
+.qly-analytics h3, .qly-analytics h2 { color: var(--qly-ink) !important; }
+.qly-kpirow { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
+.qly-chartrow { display: grid; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 1400px) { .qly-kpirow { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 1100px) { .qly-chartrow { grid-template-columns: 1fr !important; } }
+@media (max-width: 782px)  { .qly-kpirow { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.qly-analytics canvas { max-width: 100%; }
+
+/* Chart bar tracks — must stay visible even at 0 value */
+.qly-track {
+  display: block; flex: 1; height: 26px;
+  background: var(--qly-raised);
+  border: 1px solid var(--qly-line);
+  border-radius: 8px; overflow: hidden;
+}
+.qly-track--thin { height: 10px; border-radius: var(--qly-pill); }
+.qly-track > span {
+  display: flex; align-items: center; height: 100%;
+  border-radius: 7px; color: #fff; font-size: 12px; font-weight: 700;
+  padding: 0 10px; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.qly-track--thin > span { border-radius: var(--qly-pill); padding: 0; }
+/* zero-value rows: keep a faint stub so the row still reads as a bar */
+.qly-track > span.is-zero { background: var(--qly-line-2) !important; color: var(--qly-body); }
+
+/* Empty state — shown when there is no data yet */
+.qly-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 34px 24px; gap: 4px; min-height: 180px;
+}
+.qly-empty__icon {
+  width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--qly-p-100), var(--qly-p-50));
+  color: var(--qly-p-600); margin-bottom: 8px;
+}
+.qly-empty__title { font-size: 14px; font-weight: 700; color: var(--qly-ink); }
+.qly-empty__text { font-size: 12.5px; color: var(--qly-muted); max-width: 320px; line-height: 1.55; }
+.qly-empty__hint {
+  margin-top: 12px; font-size: 12px; color: var(--qly-p-700);
+  background: var(--qly-p-50); border: 1px solid var(--qly-p-100);
+  padding: 7px 13px; border-radius: var(--qly-pill); font-weight: 600;
+}
+
+/* Banner shown above the KPI row on a fresh install */
+.qly-demo-note {
+  display: flex; align-items: center; gap: 11px;
+  background: linear-gradient(112deg, #fffdf6, var(--qly-a-100));
+  border: 1px solid #fde68a; color: var(--qly-a-700);
+  border-radius: var(--qly-r-lg); padding: 13px 17px; margin-bottom: 16px;
+  font-size: 13px; font-weight: 500;
+}
+
+/* ============================================================
+   14. SUBMISSIONS LIST (WP_List_Table)
+   ============================================================ */
+.qly-submissions .subsubsub { margin: 0 0 12px; padding: 0; display: flex; gap: 6px; align-items: center; font-size: 13px; }
+.qly-submissions .subsubsub li { color: var(--qly-muted); margin: 0; }
+.qly-submissions .subsubsub li::after { content: none; }
+.qly-submissions .subsubsub a { text-decoration: none; color: var(--qly-body); padding: 6px 14px; border-radius: var(--qly-pill); font-weight: 600; border: 1px solid transparent; transition: background var(--qly-t); }
+.qly-submissions .subsubsub a:hover { background: var(--qly-p-50); color: var(--qly-p-700); }
+.qly-submissions .subsubsub a.current { background: var(--qly-surface); border-color: var(--qly-line); color: var(--qly-p-700); box-shadow: var(--qly-sh-1); }
+.qly-submissions .subsubsub .count { color: var(--qly-muted); font-weight: 600; }
+
+.qly-submissions .search-box { margin-bottom: 12px; display: flex; gap: 8px; justify-content: flex-end; }
+.qly-submissions .search-box input[type=search],
+.qly-submissions .tablenav input[type=date],
+.qly-submissions .tablenav select {
+  background: var(--qly-surface) !important;
+  color: var(--qly-ink) !important;
+  border: 1.5px solid var(--qly-line-2) !important;
+  border-radius: var(--qly-r) !important;
+  padding: 8px 12px !important;
+  font-size: 13px;
+  box-shadow: none !important;
+  color-scheme: light;
+}
+.qly-submissions .search-box input[type=search]:focus,
+.qly-submissions .tablenav select:focus { border-color: var(--qly-p-400) !important; box-shadow: var(--qly-ring) !important; outline: none; }
+
+.qly-submissions .wp-list-table {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+.qly-submissions .wp-list-table thead th,
+.qly-submissions .wp-list-table thead td {
+  background: var(--qly-raised);
+  border-bottom: 1px solid var(--qly-line);
+  color: var(--qly-muted) !important;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  font-weight: 700;
+  padding: 13px 16px;
+}
+.qly-submissions .wp-list-table thead th a { color: var(--qly-muted) !important; }
+.qly-submissions .wp-list-table tbody td,
+.qly-submissions .wp-list-table tbody th {
+  border-bottom: 1px solid var(--qly-line);
+  padding: 15px 16px;
+  font-size: 13.5px;
+  color: var(--qly-body) !important;
+  vertical-align: middle;
+}
+.qly-submissions .wp-list-table tbody tr:last-child td { border-bottom: 0; }
+.qly-submissions .wp-list-table tbody tr:hover { background: #fafbff; }
+.qly-submissions .wp-list-table tbody td strong,
+.qly-submissions .wp-list-table tbody td a { color: var(--qly-ink) !important; font-weight: 600; text-decoration: none; }
+.qly-submissions .wp-list-table tbody td small { color: var(--qly-muted) !important; }
+.qly-submissions .wc-est-status {
+  border: 1.5px solid var(--qly-line-2) !important;
+  border-radius: var(--qly-pill) !important;
+  padding: 6px 14px !important;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--qly-surface) !important;
+  color: var(--qly-ink) !important;
+  color-scheme: light;
+}
+
+/* --- Compact rows -------------------------------------------------------
+   The Actions column was too narrow, so its buttons stacked vertically and
+   blew every row up to ~190px tall. Lay the actions out in a tidy inline
+   cluster, give columns sensible widths, and stop emails breaking mid-word. */
+.qly-submissions .wp-list-table { table-layout: auto; }
+.qly-submissions .wp-list-table tbody td { padding: 11px 14px; }
+.qly-submissions .column-actions { white-space: nowrap; width: 1%; text-align: right; }
+.qly-submissions .column-actions .button,
+.qly-submissions td .button {
+  display: inline-flex !important;
+  align-items: center;
+  padding: 5px 11px !important;
+  font-size: 12px;
+  margin: 2px 0 2px 4px !important;
+  vertical-align: middle;
+}
+.qly-submissions .column-actions a.button { text-decoration: none; }
+/* ID column: keep the header readable (it was clipping to "II") */
+.qly-submissions .column-id { width: 62px; min-width: 62px; white-space: nowrap; }
+.qly-submissions .wp-list-table thead th.column-id { padding-right: 6px; }
+/* Contact column: emails are long — wrap at sensible points only */
+.qly-submissions .column-contact { min-width: 190px; }
+.qly-submissions .column-contact a { overflow-wrap: anywhere; word-break: normal; }
+.qly-submissions .column-customer { min-width: 150px; }
+.qly-submissions .column-total { white-space: nowrap; }
+.qly-submissions .column-date { white-space: nowrap; color: var(--qly-muted) !important; font-size: 12.5px; }
+.qly-submissions .column-cb { width: 34px; }
+/* Keep small pills and narrow headers on one line */
+.qly-submissions .column-expires { white-space: nowrap; }
+.qly-submissions .column-expires span { white-space: nowrap !important; }
+.qly-submissions .wp-list-table thead th { white-space: nowrap; }
+.qly-submissions .column-wc_order { white-space: nowrap; }
+.qly-submissions .tablenav-pages .page-numbers { border-radius: 8px; border: 1px solid var(--qly-line); padding: 6px 11px; color: var(--qly-body); text-decoration: none; background: var(--qly-surface); margin: 0 2px; }
+.qly-submissions .tablenav-pages .page-numbers.current { background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700)); color: #fff; border-color: transparent; }
+.qly-submissions .displaying-num { color: var(--qly-muted); font-size: 12.5px; }
+.qly-submissions .qly-avatar { width: 34px; height: 34px; border-radius: 50%; display: inline-grid; place-items: center; background: var(--qly-p-100); color: var(--qly-p-700); font-weight: 700; font-size: 12px; }
+
+/* ============================================================
+   15. DASHBOARD WIDGET
+   ============================================================ */
+.qly-dash { font-family: var(--qly-font); color: var(--qly-body); }
+.qly-dash .wc-est-dash-stats { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 10px !important; margin-bottom: 16px !important; }
+.qly-dash .wc-est-dash-stats > div { background: var(--qly-raised); border: 1px solid var(--qly-line); border-radius: var(--qly-r); padding: 13px; }
+.qly-dash .wc-est-dash-stats strong { font-size: 21px !important; font-weight: 750; letter-spacing: -.025em; color: var(--qly-p-600) !important; font-variant-numeric: tabular-nums; }
+.qly-dash .wc-est-dash-stats span { color: var(--qly-muted) !important; font-size: 11.5px; }
+.qly-dash h3 { font-size: 11px !important; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--qly-muted) !important; margin: 16px 0 8px !important; }
+.qly-dash .wc-est-dash-recent li { padding: 9px 0 !important; border-bottom: 1px solid var(--qly-line) !important; }
+.qly-dash .wc-est-dash-recent a { text-decoration: none; font-weight: 600; color: var(--qly-ink) !important; }
+.qly-dash .wc-est-dash-recent span { color: var(--qly-muted) !important; font-size: 11.5px; }
+.qly-dash ol li { color: var(--qly-body); margin-bottom: 5px; }
+
+/* ============================================================
+   16. TOOLS TAB (guide cards)
+   ============================================================ */
+.qly-settings .wc-est-guide-card {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+}
+.qly-settings .wc-est-guide-card__head h2 {
+  font-size: 17px !important;
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: -.02em;
+  color: var(--qly-ink) !important;
+  margin: 0 0 4px !important;
+}
+.qly-settings .wc-est-guide-card__head h2::after { content: none; }
+.qly-settings .wc-est-guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 18px; }
+.qly-settings .wc-est-guide-block h3 { display: flex; align-items: center; gap: 9px; font-size: 13.5px !important; margin-bottom: 10px; color: var(--qly-ink) !important; }
+.qly-settings .wc-est-guide-num {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700));
+  color: #fff; font-size: 11px; font-weight: 700;
+}
+.qly-settings .wc-est-guide-list { color: var(--qly-body); font-size: 13px; padding-left: 20px; }
+.qly-settings .wc-est-guide-list li { margin-bottom: 7px; }
+/* Code snippet blocks */
+.qly-settings .wc-est-copy-row, .qly-settings pre {
+  background: #0f172a !important;
+  border: 0 !important;
+  border-radius: var(--qly-r) !important;
+  color: #e2e8f0 !important;
+  font-family: var(--qly-mono);
+  font-size: 12.5px;
+  padding: 12px 14px !important;
+  display: flex; align-items: center; gap: 10px;
+  overflow-x: auto;
+}
+.qly-settings .wc-est-copy-row code, .qly-settings pre code { background: transparent !important; color: #e2e8f0 !important; padding: 0; }
+
+/* Tools-tab action forms (test email / export / import) become cards.
+   Targeted by their admin-post.php action so the main settings <form>
+   (action="") is never double-carded around its form-table cards. */
+.qly-settings > form[action*="admin-post"] {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  padding: 18px 22px !important;
+  margin: 0 0 16px !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.qly-settings > form[action*="admin-post"] input[type=email],
+.qly-settings > form[action*="admin-post"] input[type=text] { flex: 1; min-width: 220px; max-width: 420px; }
+.qly-settings > form[action*="admin-post"] input[type=file] {
+  font-size: 13px; color: var(--qly-body);
+  background: var(--qly-raised); border: 1.5px dashed var(--qly-line-2);
+  border-radius: var(--qly-r); padding: 9px 12px;
+}
+/* Paragraph that introduces a tools section */
+.qly-settings > p { color: var(--qly-body); font-size: 13px; margin: 0 0 10px; }
+
+.qly-settings .qly-tools-section {
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r-lg);
+  box-shadow: var(--qly-sh-1);
+  padding: 20px 24px;
+  margin-bottom: 14px;
+}
+
+/* ============================================================
+   17. MODAL (submissions product detail)
+   ============================================================ */
+.estimation-products-modal { background: rgba(17,24,39,.55) !important; backdrop-filter: blur(3px); }
+.estimation-products-modal .estimation-modal-content {
+  border-radius: var(--qly-r-xl) !important;
+  box-shadow: var(--qly-sh-3) !important;
+  border: 0 !important;
+  font-family: var(--qly-font);
+}
+.estimation-products-modal .estimation-modal-header {
+  background: var(--qly-raised) !important;
+  border-bottom: 1px solid var(--qly-line) !important;
+  padding: 16px 22px !important;
+}
+.estimation-products-modal .estimation-modal-header h2 { color: var(--qly-ink) !important; font-size: 16px !important; font-weight: 700; }
+.estimation-products-modal .estimation-modal-body { padding: 22px !important; color: var(--qly-body); }
+.estimation-products-modal .estimation-modal-footer { padding: 14px 22px !important; border-top: 1px solid var(--qly-line) !important; background: var(--qly-raised) !important; }
+
+/* ============================================================
+   18. QUOTE EDITOR MODAL (Pro)
+   ============================================================ */
+body.qly-modal-open { overflow: hidden; }
+.qly-modal-overlay {
+  position: fixed; inset: 0; z-index: 160000;
+  background: rgba(17,24,39,.55);
+  backdrop-filter: blur(3px);
+  /* align-items stays flex-start and the centering is done with `margin:auto`
+     on the dialog itself. `align-items:center` would centre it too, but once a
+     tall dialog overflows the viewport a centred flex item gets its TOP cut off
+     and becomes unreachable — auto margins collapse to 0 in that case, so the
+     dialog centres when it fits and scrolls normally from the top when it
+     doesn't. */
+  display: flex; align-items: flex-start; justify-content: center;
+  /* The overlay stays inset:0 so the dim covers the whole screen, but the
+     centring box is inset by the admin bar (32px) and admin menu (160px).
+     Centring on the raw viewport puts the dialog in the middle of the WINDOW,
+     which reads as off-centre because the sidebar is chrome, not content —
+     it left roughly 130px of clearance on one side and 290px on the other. */
+  padding: 56px 20px 24px 180px;
+  overflow-y: auto;
+  font-family: var(--qly-font);
+}
+/* Collapsed menu is 36px wide. `auto-fold` only actually folds under 960px. */
+body.folded .qly-modal-overlay { padding-left: 56px; }
+@media (max-width: 960px) {
+  body.auto-fold .qly-modal-overlay { padding-left: 56px; }
+}
+.qly-modal-overlay[hidden] { display: none; }
+.qly-modal {
+  background: var(--qly-surface);
+  border-radius: var(--qly-r-xl);
+  box-shadow: var(--qly-sh-3);
+  width: 100%; max-width: 820px;
+  margin: auto;
+  overflow: hidden;
+  animation: qly-pop 160ms cubic-bezier(.2,.9,.3,1);
+}
+@keyframes qly-pop { from { opacity: 0; transform: translateY(-8px) scale(.99); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .qly-modal { animation: none; } }
+.qly-modal__head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 17px 22px;
+  border-bottom: 1px solid var(--qly-line);
+  background: linear-gradient(112deg, #fff, #f4f4ff);
+}
+.qly-modal__head h2 {
+  margin: 0; font-size: 15.5px; font-weight: 700;
+  color: var(--qly-ink); letter-spacing: -.015em; line-height: 1.3;
+}
+.qly-modal__close {
+  margin-left: auto; border: 1px solid var(--qly-line);
+  background: var(--qly-surface); color: var(--qly-body);
+  width: 32px; height: 32px; border-radius: 9px;
+  display: grid; place-items: center; cursor: pointer; flex: none;
+  transition: background var(--qly-t), color var(--qly-t);
+}
+.qly-modal__close:hover { background: var(--qly-bad-bg); color: var(--qly-bad-fg); border-color: #fecaca; }
+.qly-modal__body { padding: 20px 22px 22px; }
+.qly-modal__foot {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--qly-line);
+  background: var(--qly-ground);
+}
+.qly-modal__foot:empty { display: none; }
+
+/* ---- Free View / Notes dialog internals ------------------------------------
+   These reuse the modal shell above, so they only need content-level styling
+   to sit correctly inside it. */
+.qly-modal__body .loading-message {
+  padding: 34px 10px; text-align: center;
+  color: var(--qly-muted); font-size: 13.5px;
+}
+.qly-modal__body table {
+  width: 100%; border-collapse: collapse; font-size: 13.5px;
+}
+.qly-modal__body table th {
+  text-align: left; font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .05em;
+  color: var(--qly-muted); padding: 0 10px 8px; border-bottom: 1px solid var(--qly-line);
+}
+.qly-modal__body table td {
+  padding: 10px; border-bottom: 1px solid var(--qly-line); color: var(--qly-body);
+  vertical-align: top;
+}
+.qly-modal__body table tr:last-child td { border-bottom: 0; }
+.wc-est-notes-editor h3 {
+  margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--qly-ink);
+}
+.wc-est-notes-editor textarea {
+  width: 100%; font-family: var(--qly-font); font-size: 13.5px; line-height: 1.5;
+  padding: 11px 13px; border: 1.5px solid var(--qly-line-2);
+  border-radius: var(--qly-r); background: var(--qly-surface); color: var(--qly-ink);
+  resize: vertical; box-shadow: none;
+}
+.wc-est-notes-editor textarea:focus {
+  outline: none; border-color: var(--qly-p-500); box-shadow: var(--qly-ring);
+}
+
+/* editor internals */
+.qly-qe__loading, .qly-qe__error { padding: 34px 10px; text-align: center; color: var(--qly-muted); font-size: 13.5px; }
+.qly-qe__error { color: var(--qly-bad-fg); }
+.qly-qe__flash {
+  margin: 0 0 14px; padding: 10px 14px; border-radius: var(--qly-r);
+  background: var(--qly-ok-bg); color: var(--qly-ok-fg);
+  font-size: 13px; font-weight: 600;
+}
+.qly-qe__flash.is-error { background: var(--qly-bad-bg); color: var(--qly-bad-fg); }
+.qly-qe__meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 13px; color: var(--qly-body);
+  padding: 0 0 14px; margin: 0 0 4px;
+  border-bottom: 1px solid var(--qly-line);
+}
+.qly-qe__who { font-weight: 700; color: var(--qly-ink); }
+.qly-qe__sep { color: var(--qly-muted); }
+.qly-qe__meta a { color: var(--qly-p-600); text-decoration: none; }
+
+.qly-qe__table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 14px 0 0; }
+.qly-qe__table th {
+  text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--qly-muted); font-weight: 700; padding: 0 8px 8px;
+}
+.qly-qe__table td { padding: 5px 8px; vertical-align: middle; border-top: 1px solid var(--qly-line); }
+.qly-qe__table tbody tr:first-child td { border-top: 0; }
+.qly-qe__table input[type=text],
+.qly-qe__table input[type=number] {
+  width: 100%; background: var(--qly-surface) !important; color: var(--qly-ink) !important;
+  border: 1.5px solid var(--qly-line-2) !important; border-radius: 9px !important;
+  padding: 8px 11px !important; font-size: 13px; font-family: var(--qly-font);
+  box-shadow: none !important; color-scheme: light;
+}
+.qly-qe__table input:focus { border-color: var(--qly-p-400) !important; box-shadow: var(--qly-ring) !important; outline: none; }
+.qly-qe__table .wc-est-qe-sub {
+  text-align: right; font-weight: 700; font-variant-numeric: tabular-nums;
+  color: var(--qly-ink); font-size: 13px; white-space: nowrap;
+}
+.qly-qe__del {
+  border: 0; background: transparent; color: var(--qly-muted);
+  width: 30px; height: 30px; border-radius: 8px; cursor: pointer;
+  display: grid; place-items: center; font-size: 16px; line-height: 1;
+  transition: background var(--qly-t), color var(--qly-t);
+}
+.qly-qe__del:hover { background: var(--qly-bad-bg); color: var(--qly-bad-fg); }
+
+/* ---- Product autocomplete on a custom line ------------------------------- */
+.qly-qe__titlecell { position: relative; }
+.qly-qe__ac {
+  position: absolute; z-index: 30; left: 8px; right: 8px; top: calc(100% - 4px);
+  background: var(--qly-surface);
+  border: 1px solid var(--qly-line-2);
+  border-radius: var(--qly-r);
+  box-shadow: var(--qly-sh-3);
+  overflow: hidden auto;
+  max-height: 264px;
+}
+.qly-qe__ac[hidden] { display: none; }
+.qly-qe__ac-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 11px; border: 0; border-bottom: 1px solid var(--qly-line);
+  background: transparent; cursor: pointer; text-align: left;
+  font-family: var(--qly-font); font-size: 13px; color: var(--qly-ink);
+}
+.qly-qe__ac-item:last-child { border-bottom: 0; }
+.qly-qe__ac-item:hover,
+.qly-qe__ac-item:focus-visible { background: var(--qly-p-50, #eef2ff); outline: none; }
+.qly-qe__ac-item img,
+.qly-qe__ac-noimg {
+  width: 30px; height: 30px; border-radius: 7px; flex: none;
+  object-fit: cover; border: 1px solid var(--qly-line);
+  background: var(--qly-ground);
+}
+.qly-qe__ac-name {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.qly-qe__ac-price { flex: none; font-weight: 700; color: var(--qly-p-700); font-variant-numeric: tabular-nums; }
+.qly-qe__ac-empty { padding: 12px; font-size: 12.5px; color: var(--qly-muted); text-align: center; }
+
+.qly-qe__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; margin-top: 16px; padding-top: 15px;
+  border-top: 1px solid var(--qly-line); flex-wrap: wrap;
+}
+.qly-qe__total { display: flex; align-items: baseline; gap: 10px; margin-left: auto; }
+.qly-qe__total span { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--qly-muted); }
+.qly-qe__total strong { font-size: 21px; font-weight: 750; letter-spacing: -.02em; color: var(--qly-ink); font-variant-numeric: tabular-nums; }
+.qly-qe__cur { font-size: 15px !important; color: var(--qly-muted) !important; letter-spacing: 0 !important; margin-right: 1px; }
+.qly-qe__hint { font-size: 12px; color: var(--qly-muted); margin: 14px 0 0; line-height: 1.5; }
+.qly-qe__actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 18px; flex-wrap: wrap; }
+
+/* ---- File input ----------------------------------------------------------
+   The native control renders with the browser's own chrome, which was the one
+   remaining element on the Tools tab that ignored the design system. The button
+   part is restyled via ::file-selector-button (plus the WebKit alias for older
+   Chrome/Safari). */
+.qly-settings input[type=file] {
+  font-family: var(--qly-font);
+  font-size: 13px;
+  color: var(--qly-body);
+  background: var(--qly-surface);
+  border: 1.5px solid var(--qly-line-2);
+  border-radius: var(--qly-r);
+  padding: 7px 10px;
+  max-width: 420px;
+}
+.qly-settings input[type=file]::file-selector-button,
+.qly-settings input[type=file]::-webkit-file-upload-button {
+  font-family: var(--qly-font);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--qly-ink-2);
+  background: var(--qly-ground);
+  border: 1px solid var(--qly-line-2);
+  border-radius: 8px;
+  padding: 6px 13px;
+  margin-right: 11px;
+  cursor: pointer;
+  transition: background var(--qly-t), color var(--qly-t);
+}
+.qly-settings input[type=file]::file-selector-button:hover,
+.qly-settings input[type=file]::-webkit-file-upload-button:hover {
+  background: var(--qly-raised);
+  color: var(--qly-p-700);
+}
+.qly-settings input[type=file]:focus {
+  outline: none;
+  border-color: var(--qly-p-500);
+  box-shadow: var(--qly-ring);
+}
+
+/* ---- Tabbed editor (Edit / Preview) --------------------------------------
+   Segmented control above, content panel below. Both panes live in the same
+   .qly-editor__pane box, so the editing surface and the rendered preview are
+   always exactly the same width — comparing them is the whole point. */
+.qly-editor {
+  --qly-editor-w: 760px;
+  max-width: var(--qly-editor-w);
+}
+.qly-editor__tabs {
+  display: inline-flex;
+  gap: 3px;
+  padding: 4px;
+  margin: 0 0 12px;
+  background: var(--qly-ground);
+  border: 1px solid var(--qly-line);
+  border-radius: 11px;
+}
+.qly-editor__tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 0; background: transparent; cursor: pointer;
+  font-family: var(--qly-font); font-size: 12.5px; font-weight: 600;
+  color: var(--qly-body);
+  padding: 8px 16px; border-radius: 8px; line-height: 1;
+  transition: background var(--qly-t), color var(--qly-t), box-shadow var(--qly-t);
+}
+.qly-editor__tab .qly-icon { opacity: .85; }
+.qly-editor__tab:hover { color: var(--qly-p-700); }
+.qly-editor__tab.is-active {
+  background: var(--qly-surface);
+  color: var(--qly-p-700);
+  box-shadow: 0 1px 3px rgba(17,24,39,.10);
+}
+.qly-editor__tab:focus-visible { outline: none; box-shadow: var(--qly-ring); }
+
+.qly-editor__pane {
+  max-width: var(--qly-editor-w);
+  border: 1.5px solid var(--qly-line-2);
+  border-radius: var(--qly-r-lg);
+  background: var(--qly-surface);
+  overflow: hidden;
+}
+.qly-editor__pane[hidden] { display: none; }
+
+/* The pane supplies the frame, so the textarea drops its own chrome — and its
+   max-width, which the generic `.qly-settings textarea` rule caps at 620px and
+   would otherwise make the editor narrower than the preview. */
+.qly-settings .qly-editor__pane textarea {
+  width: 100% !important;
+  max-width: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 14px 16px !important;
+  resize: vertical;
+  font-family: var(--qly-mono) !important;
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  display: block;
+}
+.qly-settings .qly-editor__pane textarea:focus {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+.qly-editor__pane iframe {
+  width: 100%; height: 470px; border: 0; display: block; background: #f2f4f8;
+}
+
+/* design-system buttons usable outside .qly-settings (e.g. in the modal) */
+.qly-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--qly-font); font-size: 13px; font-weight: 600; line-height: 1;
+  padding: 10px 17px; border-radius: var(--qly-r); border: 1.5px solid transparent;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: background var(--qly-t), border-color var(--qly-t), filter var(--qly-t);
+}
+.qly-btn--sm { padding: 7px 13px; font-size: 12.5px; }
+.qly-btn--primary { background: linear-gradient(150deg, var(--qly-p-500), var(--qly-p-700)); color: #fff; box-shadow: 0 4px 14px rgba(79,70,229,.28); }
+.qly-btn--primary:hover { filter: brightness(1.06); color: #fff; }
+.qly-btn--secondary { background: var(--qly-surface); color: var(--qly-ink-2); border-color: var(--qly-line-2); }
+.qly-btn--secondary:hover { background: var(--qly-raised); border-color: var(--qly-p-300); color: var(--qly-p-700); }
+.qly-btn:focus-visible { outline: none; box-shadow: var(--qly-ring); }
+.qly-btn[disabled] { opacity: .6; cursor: not-allowed; }
+
+@media (max-width: 782px) {
+  /* Under 782px the menu is off-canvas and the admin bar grows to 46px. */
+  .qly-modal-overlay { padding: 60px 12px 14px 12px; }
+  .qly-qe__table th:nth-child(4), .qly-qe__table td:nth-child(4) { display: none; }
+}
+
+/* ============================================================
+   19. UTILITIES
+   ============================================================ */
+.qly-row { display: flex; align-items: center; gap: 12px; }
+.qly-row--between { justify-content: space-between; }
+.qly-muted { color: var(--qly-muted); }
+.qly-hidden { display: none !important; }
+.qly-grid { display: grid; gap: 16px; }
+.qly-grid--2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.qly-grid--3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 960px) { .qly-grid--2, .qly-grid--3 { grid-template-columns: 1fr; } }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .qly-settings *, .qly-submissions *, .qly-analytics * { transition: none !important; }
+}
+
+/* ============================================================
+   20. ROW EDITORS  (pipe-delimited Pro settings)
+   Shipping options, role pricing, discount codes and conditional
+   fields are all stored as "a | b | c" lines. pro-repeater.js hides
+   the textarea and drives it from these rows so the settings can be
+   filled in without knowing the syntax.
+   ============================================================ */
+.qly-rep { margin: 0 0 6px; }
+.qly-rep__rows { display: flex; flex-direction: column; gap: 8px; }
+
+/* Aligned on the top edge, not the bottom: the column labels are all one line
+   but only some cells carry a hint underneath, so bottom alignment would step
+   the inputs out of line with each other. */
+.qly-rep__row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 44px 12px 14px; position: relative;
+  background: var(--qly-surface); border: 1px solid var(--qly-line);
+  border-radius: var(--qly-r); box-shadow: var(--qly-sh-1);
+}
+/* Conditional fields carry seven columns — too many for one line at a normal
+   admin width — so that schema switches to a 12-track grid and pins each
+   column to its own track (see the `gc` values in pro-repeater.js). Wrapping
+   flex would let a row with no "Choices" cell pull the rest out of line. */
+.qly-rep__row.is-stacked {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px 10px;
+  align-items: start;
+}
+
+.qly-rep__field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.qly-rep__field.is-grow { min-width: 150px; }
+/* A column that does not apply to this row's type. It keeps its value in the
+   DOM (see cell() in pro-repeater.js) but takes no space, and because every
+   other column pins its own grid track the row stays aligned without it. */
+.qly-rep__field.is-off { display: none; }
+
+.qly-rep__lab {
+  font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--qly-muted);
+}
+.qly-rep__lab em { font-style: normal; font-weight: 400; text-transform: none; letter-spacing: 0; opacity: .8; }
+.qly-rep__hint { font-size: 11.5px; color: var(--qly-muted); }
+
+/* Section 6 pins every settings input to a shared measure (460px for text, a
+   fixed 120px for number) so the stock forms line up. Inside a row the cell IS
+   the measure, so those caps have to be lifted — hence the extra class in the
+   selector, which outweighs section 6 without reaching for !important.
+   Note background-COLOR, not the background shorthand: the shorthand wipes
+   core's select arrow and leaves a dropdown looking like a text box. */
+.qly-settings .form-table td .qly-rep__field input[type="text"],
+.qly-settings .form-table td .qly-rep__field input[type="number"],
+.qly-settings .form-table td .qly-rep__field input[type="date"],
+.qly-settings .form-table td .qly-rep__field select,
+.qly-rep__field input[type="text"],
+.qly-rep__field input[type="number"],
+.qly-rep__field input[type="date"],
+.qly-rep__field select {
+  width: 100%; max-width: 100%; box-sizing: border-box;
+  min-height: 34px; height: auto; margin: 0;
+  border: 1px solid var(--qly-line-2); border-radius: 7px;
+  background-color: var(--qly-surface); color: var(--qly-ink);
+}
+/* Section 6 sets background-image:none on every settings select, which also
+   removes the native dropdown arrow. Elsewhere that is a cosmetic quirk; here a
+   chooser indistinguishable from a text box defeats the point of the row
+   editor, so the caret is painted back on for these fields only. */
+.qly-settings .qly-rep__field select,
+.qly-rep__field select {
+  padding-right: 30px !important;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%236b7280%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 15px 15px;
+}
+.qly-rep__field input:focus, .qly-rep__field select:focus {
+  border-color: var(--qly-p-400); box-shadow: var(--qly-ring); outline: none;
+}
+.qly-rep__check { display: flex; align-items: center; min-height: 34px; }
+.qly-rep__check input { margin: 0; }
+
+/* The remove control sits in the row's right gutter, muted until hovered so a
+   grid of rows doesn't read as a row of red buttons. */
+.qly-rep__del {
+  position: absolute; top: 10px; right: 10px;
+  width: 24px; height: 24px; padding: 0; line-height: 1;
+  font-size: 17px; cursor: pointer;
+  background: transparent; border: 1px solid transparent; border-radius: 6px;
+  color: var(--qly-muted); transition: var(--qly-t);
+}
+.qly-rep__del:hover { background: var(--qly-bad-bg); border-color: #f3c6c6; color: var(--qly-bad); }
+
+.qly-rep__empty {
+  margin: 0; padding: 16px; text-align: center;
+  color: var(--qly-muted); font-style: italic;
+  background: var(--qly-raised); border: 1px dashed var(--qly-line-2);
+  border-radius: var(--qly-r);
+}
+
+.qly-rep__foot { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
+.qly-rep__raw {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-size: 12.5px; color: var(--qly-muted); text-decoration: underline;
+}
+.qly-rep__raw:hover { color: var(--qly-p-700); }
+.qly-rep__ta { margin-top: 8px; }
+
+@media (max-width: 782px) {
+  .qly-rep__row { flex-wrap: wrap; }
+  .qly-rep__field { flex: 1 1 100% !important; width: auto !important; }
+}
+
+/* ============================================================
+   21. TAB PANEL SWAP
+   The tab strip switches panels in place. Only a brief dimming
+   while the new panel is fetched — no spinner, since the swap is
+   usually faster than one would render.
+   ============================================================ */
+#qly-tab-panel { position: relative; }
+#qly-tab-panel.is-loading { opacity: .55; pointer-events: none; transition: opacity 120ms ease; }
+.qly-settings .nav-tab-wrapper .nav-tab { cursor: pointer; }

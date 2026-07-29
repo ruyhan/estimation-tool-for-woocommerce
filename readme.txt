@@ -5,7 +5,7 @@ Tags: woocommerce, estimation, quote, pdf, product quote
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 3.20.0
+Stable tag: 4.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,7 @@ If your business needs more, **Quotely Estimates for WooCommerce — Pro** is a 
 * **30-day analytics dashboard** — submission funnel, won/lost values, time-series chart.
 * **White-label mode** — strip the plugin author credit from PDFs.
 
-The Pro add-on is sold separately on CodeCanyon. The free plugin works fully on its own and never expires or limits functionality.
+The free plugin works fully on its own and never expires or limits functionality.
 
 == Installation ==
 
@@ -76,10 +76,13 @@ The Pro add-on is sold separately on CodeCanyon. The free plugin works fully on 
 Yes. Product data, pricing, and currency all come from WooCommerce.
 
 = Does it work with Elementor? =
-Yes. An *Estimation Tool* widget appears in the Elementor editor (Elementor 3.5 or higher).
+Yes. An *Estimation Tool* widget appears in the Elementor editor (Elementor 3.5 or higher; tested up to 4.2).
+
+= Which WooCommerce versions are supported? =
+WooCommerce 6.0 or higher, tested up to 10.9.
 
 = Is it compatible with WooCommerce High-Performance Order Storage (HPOS)? =
-Yes. The plugin declares compatibility with `custom_order_tables` and `cart_checkout_blocks`.
+Yes. The plugin declares compatibility with `custom_order_tables` and `cart_checkout_blocks`, and is tested on a site with HPOS enabled.
 
 = How are submissions stored? =
 In a dedicated database table (`wp_estimation_submissions`). Soft-deleted rows go to a trash view and can be restored or permanently deleted.
@@ -90,12 +93,33 @@ The submissions table and the plugin's options are removed. Active submissions a
 = How is the PDF generated? =
 The plugin ships TCPDF (LGPL-3.0) for PDF generation. No external service is contacted.
 
+== Screenshots ==
+
+1. The customer-facing estimate builder — search your WooCommerce catalog, set quantities and watch the running total.
+2. Step two: contact details, with international phone validation and a live summary of the selection.
+3. The branded PDF estimate — company logo, Prepared for / Issued / Prepared by band, itemised lines with SKUs, and store locations.
+4. Admin submissions list with search, workflow status, trash and CSV export.
+5. Settings — branding and appearance, applied to both the PDF and the customer emails.
+6. Settings — PDF tab: company details, footer note, PDF metadata and store locations.
+7. Settings — notifications: recipients, customer email body with token replacement, and a live preview.
+
 == Third-Party Libraries ==
 
 * **TCPDF** — LGPL-3.0 — https://tcpdf.org
 * **intl-tel-input** — MIT — https://github.com/jackocnr/intl-tel-input
 
 == Changelog ==
+
+= 4.0.0 =
+* Compatibility: tested against WordPress 7.0, WooCommerce 10.9 and Elementor 4.2 on PHP 8.4. WooCommerce HPOS (custom order tables) and Cart/Checkout Blocks compatibility re-verified.
+* New: the PDF now opens with a **Prepared for / Issued / Prepared by** detail band in place of the single "Bill To" panel, and the customer's own company name and postal address appear alongside their name. The panel measures its contents before drawing, so a long name or address wraps inside its column instead of overrunning the next one.
+* New: product **SKUs** are captured with each line and printed under the item name in the PDF.
+* New: `{{company_address}}` email token for the configured business address.
+* Fix: the customer's company, address and request notes were captured on the form and stored, but never reached the PDF or the emailed copy.
+* Fix: multi-line settings (store locations and any add-on list settings) were flattened onto one line the first time Settings was saved — `sanitize_text_field()` collapses newlines. Multi-line values now use the textarea sanitizer, which keeps them intact.
+* Fix: the issue date printed as a raw database timestamp in add-on PDF templates instead of the site's date format.
+* Improved: settings tabs switch without reloading the page, with back/forward support and an unsaved-changes prompt. The tab links still work with JavaScript disabled.
+* Improved: the admin PDF download, the tokenized customer link and the emailed attachment all pass the submission id, so add-ons can resolve per-submission data (such as a quote expiry date).
 
 = 3.20.0 =
 * New: `estitofo_display_price` filter — add-ons can adjust the prices shown in search results, suggestions and the REST API (used by Pro's role-based pricing).
